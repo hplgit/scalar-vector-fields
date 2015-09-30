@@ -1,0 +1,206 @@
+========= Plotting in three dimensions =========
+
+We will explain plotting in three dimensions using three different packages. As with plotting in chapter 5 we will go through matplotlib and scitools. 
+Then we will go through Mayavi, which contain support for doing more advanced operations when it comes to plotting. 
+
+The three packages are different in many respects, but there are some common denominators. First of all, they all support rotation of a figure by holding the mouse cursor down. 
+This functionality is often useful in order to get a better view of a surface. 
+
+======= Matplotlib =======
+The code below assumes that we have imported matplotlib as in chapter 5, i.e. that we use the prefix `plt` for matplotlib code:
+!bc pycod
+import matplotlib.pyplot as plt
+!ec
+Note that after each plot command you need to write `plt.show()` in order for the new plot to become visible.  
+
+=== Curve plots in 3D ===
+A parametrized curve can be plotted in 3D as follows
+!bc pycod
+t = np.linspace(0, 10*np.pi, 100)
+
+fig = plt.figure()
+ax = fig.gca(projection = '3d')
+ax.plot(np.sin(t), np.cos(t), t)
+!ec
+The resulting plot is shown in Figure ref{parametrizedcurvematplotlib}
+FIGURE:[images/parametrizedcurvematplotlib, height=400 width=600 frac=0.8] A parametrized curve plotted with matplotlib. label{parametrizedcurvematplotlib}
+
+=== Simple surface plots ===
+Let us start by plotting a surface $z=f(x,y)$ over an interval in the $xy$-plane. We first need to create a two-dimensional grid of values covering such an interval. A grid for the interval $[-4,4]\times[-2,2]$ 
+can be created as follows.
+!bc pycod
+x = np.arange(-4, 4, 0.05, float)
+y = np.arange(-2, 2, 0.05, float)
+X, Y = np.meshgrid(x, y, sparse = False, indexing = 'ij')
+!ec
+This code sets `X` and `Y` to be coordinates so that all pairs $(x,y)$ constitute a grid covering the entire interval in the $xy$-plane.
+Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics. 
+
+Now that we have the grid coordinates, we need to create the corresponding function values. For the function $z=f(x,y)=xy\sin(xy)$, this can be done as follows  
+!bc pycod
+Z = X*Y*sin(X*Y)
+!ec
+
+The surface can now be plotted as follows:
+!bc pycod
+fig = plt.figure() 
+ax = fig.gca(projection = '3d')
+ax.plot_surface(X, Y, Z)
+!ec
+The resulting plot is shown in Figure ref{simpleplotmatplotlib}
+FIGURE:[images/simpleplotmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib surface plot. label{simpleplotmatplotlib}
+
+=== Coloring ===
+Coloring can be used to get a better view of surfaces. We can use the `cm`-module to obtain a color map which can be used to color the surface. 
+!bc pycod
+from matplotlib import cm
+!ec
+This can then be passed to the `plot_surface` function above as follows: 
+!bc pycod
+ax.plot_surface(X, Y, Z, cmap = cm.coolwarm)
+!ec
+The resulting plot is shown in Figure ref{simpleplotcoloursmatplotlib}. One can choose from a wide range of different color maps. 
+FIGURE:[images/simpleplotcoloursmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib surface plot with colours. label{simpleplotcoloursmatplotlib}
+
+=== Contour plots ===
+In order to create a simple contour plot we can write the following
+!bc pycod 
+plt.contour(X, Y, Z)
+!ec
+The resulting plot is shown in Figure ref{simplecontourmatplotlib}
+FIGURE:[images/simplecontourmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot. label{simplecontourmatplotlib}
+
+By adding a parameter we can specify how many contour levels to plot. The contour levels will be automatically chosen.
+!bc pycod 
+plt.contour(X, Y, Z, 10)
+!ec
+The resulting plot is shown in Figure ref{contour10levelsmatplotlib}
+FIGURE:[images/contour10levelsmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot with 10 levels. label{contour10levelsmatplotlib}
+
+Normally the level curves are drawn with different colours. This is very useful on the display, but is less practical if you want to paste the figure into a black and white document. 
+If you write
+!bc pycod
+plt.contour(X, Y, Z, 10, colors = 'k')
+!ec
+The resulting plot is shown in Figure ref{contour10levelsblackmatplotlib}
+FIGURE:[images/contour10levelsblackmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot with 10 levels in black. label{contour10levelsblackmatplotlib}
+
+all level curves will be drawn in black ('k' is the symbol for black). 
+The automatically chosen levels above may not be the most interesting level curves, or may not be the levels we are interested in. We can specify which levels to include in the contour plot as follows. 
+!bc pycod
+levels = [0.1, 0.2, 0.3, 0.4]
+plt.contour(X, Y, Z, levels = levels)
+!ec
+The resulting plot is shown in Figure ref{contourspeclevelsmatplotlib}
+FIGURE:[images/contourspeclevelsmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot with specified levels. label{contourspeclevelsmatplotlib}
+
+The levels in a contour plot are not labeled with the corresponding values by default. To include a default kind of labeling of the levels, one can call the `clabel` function..
+!bc pycod
+cs = plt.contour(X, Y, Z)
+plt.clabel(cs)
+!ec
+The resulting plot is shown in Figure ref{contourclabelmatplotlib}
+FIGURE:[images/contourclabelmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot with labeled levels. label{contourclabelmatplotlib}
+
+=== Plotting vector fields ===
+Let us attempt to plot the vector field 
+$${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j}.$$
+If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows. 
+!bc pycod 
+t = np.linspace(-5, 5, 11)
+x, y = np.meshgrid(t, t, sparse = False, indexing = 'ij')
+vx = x**2 + 2*y - .5*x*y
+vy = -3*y
+!ec
+The following code 
+!bc pycod
+plt.quiver(x, y, vx, vy, angles = 'xy', scale_units = 'xy', color = 'b')
+!ec
+plots the vector field. The resulting plot is shown in Figure ref{quivermatplotlib}
+FIGURE:[images/quivermatplotlib, height=400 width=600 frac=0.8] A vector field plotted with matplotlib. label{quivermatplotlib}
+
+The parameters `angles` and `scale_units` say that the vector field should be drawn as a gradient field, i.e. that the length of the vectors coincide with that of the vector ${\bf v}$. 
+`color` indicates the colour to be used for the vectors (here blue). 
+Often the vectors need to be scaled in order for them not to collide in the plot. This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors. 
+Matplotlib will attempt to scale the plot automatically if the `scale` parameter is not set, in order to try to avoid that the vectors collide.
+
+
+
+======= Scitools =======
+The code below assumes that we have imported scitools as in chapter 5: 
+!bc pycod
+from scitools.easyviz import *
+!ec
+
+=== Curve plots in 3D ===
+TODO
+
+=== Simple surface plots ===
+Scitools has the function `ndgrid` which, just as `meshgrid`, can be used to create grids of all possible $(x,y)$-coordinate pairs from given one-dimensional coordinates.
+One can simply replace the call to `meshgrid` above with  
+!bc pycod
+X, Y = ndgrid(x, y)
+!ec
+`ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. 
+
+The surface can now be plotted simply by writing `mesh(X, Y, Z)`, so that this part of the code is shorter than the three lines needed with matplotlib.
+The resulting plot is shown in Figure ref{simpleplotscitools}
+FIGURE:[images/simpleplotscitools, height=400 width=600 frac=0.8] A simple acitools surface plot. label{simpleplotscitools}
+
+=== Coloring ===
+We can write `surf(X, Y, Z)` instead of `mesh(X, Y, Z)` to get a graph where the surface elements have been coloured. 
+The resulting plot is shown in Figure ref{simpleplotcoloursscitools}. One can choose from a wide range of different color maps. 
+FIGURE:[images/simpleplotcoloursscitools, height=400 width=600 frac=0.8] A simple scitools surface plot with colours. label{simpleplotcoloursscitools}
+
+=== Contour plots ===
+In order to create a simple contour plot we can write the following
+!bc pycod 
+contour(X, Y, Z)
+!ec
+The resulting plot is shown in Figure ref{simplecontourscitools}
+FIGURE:[images/simplecontourscitools, height=400 width=600 frac=0.8] A simple scitools contour plot. label{simplecontourscitools}
+
+By adding a parameter we can specify how many contour levels to plot. The contour levels will be automatically chosen.
+!bc pycod
+contour(X, Y, Z, 10)
+!ec
+The resulting plot is shown in Figure ref{contour10levelsscitools}
+FIGURE:[images/contour10levelsscitools, height=400 width=600 frac=0.8] A simple scitools contour plot with 10 levels. label{contour10levelsscitools}
+
+Normally the level curves are drawn with different colours. This is very useful on the display, but is less practical if you want to paste the figure into a black and white document. If you write
+!bc pycod
+contour(X, Y, Z, 10, 'k')
+!ec
+all level curves will be drawn in black ('k' is the symbol for black). 
+The resulting plot is shown in Figure ref{contour10levelsblackscitools}
+FIGURE:[images/contour10levelsblackscitools, height=400 width=600 frac=0.8] A simple scitools contour plot with 10 levels in black. label{contour10levelsblackscitools}
+
+The automatically chosen levels above may not be the most interesting level curves, or may not be the levels we are interested in. We can specify which levels to include in the contour plot as follows. 
+!bc pycod
+levels = [0.1, 0.2, 0.3, 0.4]
+contour(X, Y, Z, levels = levels)
+!ec
+The resulting plot is shown in Figure ref{contourspeclevelsscitools}
+FIGURE:[images/contourspeclevelsscitools, height=400 width=600 frac=0.8] A simple scitools contour plot with specified levels. label{contourspeclevelsscitools}
+
+The levels in a contour plot are not labeled with the corresponding values by default. To include a default kind of labeling of the levels, one can use a parameter called `clabels`.
+!bc pycod
+contour(X, Y, Z, clabels = 'on')
+!ec
+The resulting plot is shown in Figure ref{contourclabelscitools}
+FIGURE:[images/contourclabelscitools, height=400 width=600 frac=0.8] A simple matplotlib contour plot with labeled levels. label{contourclabelscitools}
+
+=== Plotting vector fields ===
+Let ur return to the vector field
+$${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j},$$
+and let us reuse the code above to produce the vectors in the vector field. With scitools one can instead write
+!bc pycod
+quiver(x, y, vx, vy, 200, 'b')
+!ec
+##TODO: I need to consult the documentation here
+to plot the vector field. The resulting plot is shown in Figure ref{quiverscitools}
+FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] The vector field from figure ref{quivermatplotlib} plotted with scitools. label{quiverscitools}
+
+The two last parameters represent scaling and color. 
+
+======= Mayavi =======
