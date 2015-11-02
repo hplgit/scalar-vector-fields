@@ -1,7 +1,7 @@
 ========= Plotting in three dimensions =========
 
 We will explain plotting in three dimensions using three different packages. As with plotting in chapter 5 we will go through matplotlib and scitools. 
-Then we will go through Mayavi, which contain support for doing more advanced operations when it comes to plotting. 
+Then we will go through Mayavi, which contain support for doing more advanced plotting operations. 
 
 The three packages are different in many respects, but there are some common denominators. First of all, they all support rotation of a figure by holding the mouse cursor down. 
 This functionality is often useful in order to get a better view of a surface. 
@@ -47,8 +47,8 @@ fig = plt.figure()
 ax = fig.gca(projection = '3d')
 ax.plot_surface(X, Y, Z)
 !ec
-The resulting plot is shown in Figure ref{simpleplotmatplotlib}
-FIGURE:[images/simpleplotmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib surface plot. label{simpleplotmatplotlib}
+The resul is shown in the left plot in Figure ref{plotmatplotlib}
+FIGURE:[images/plotmatplotlib, height=400 width=600 frac=0.8] Two matplotlib surface plots. Simple plot (left), and a plot with colours (right). label{plotmatplotlib}
 
 === Coloring ===
 Coloring can be used to get a better view of surfaces. We can use the `cm`-module to obtain a color map which can be used to color the surface. 
@@ -59,8 +59,7 @@ This can then be passed to the `plot_surface` function above as follows:
 !bc pycod
 ax.plot_surface(X, Y, Z, cmap = cm.coolwarm)
 !ec
-The resulting plot is shown in Figure ref{simpleplotcoloursmatplotlib}. One can choose from a wide range of different color maps. 
-FIGURE:[images/simpleplotcoloursmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib surface plot with colours. label{simpleplotcoloursmatplotlib}
+The result is shown in the right plot in Figure ref{plotmatplotlib}. One can choose from a wide range of different color maps. 
 
 === Contour plots ===
 In order to create a simple contour plot we can write the following
@@ -74,33 +73,29 @@ By adding a parameter we can specify how many contour levels to plot. The contou
 !bc pycod 
 plt.contour(X, Y, Z, 10)
 !ec
-The resulting plot is shown in Figure ref{contour10levelsmatplotlib}
-FIGURE:[images/contour10levelsmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot with 10 levels. label{contour10levelsmatplotlib}
+The result is shown in the upper left plot of Figure ref{advancedcontourmatplotlib}.
+FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some other matplotlib contour plots: With 10 levels (upper left), with 10 levels in black (upper right), with specified levels (lower left), and with labeled levels (lower right). label{advancedcontourmatplotlib}
 
 Normally the level curves are drawn with different colours. This is very useful on the display, but is less practical if you want to paste the figure into a black and white document. 
 If you write
 !bc pycod
 plt.contour(X, Y, Z, 10, colors = 'k')
 !ec
-The resulting plot is shown in Figure ref{contour10levelsblackmatplotlib}
-FIGURE:[images/contour10levelsblackmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot with 10 levels in black. label{contour10levelsblackmatplotlib}
+The result is shown in the upper right plot of Figure ref{advancedcontourmatplotlib}. All level curves will be drawn in black ('k' is the symbol for black). 
 
-all level curves will be drawn in black ('k' is the symbol for black). 
 The automatically chosen levels above may not be the most interesting level curves, or may not be the levels we are interested in. We can specify which levels to include in the contour plot as follows. 
 !bc pycod
 levels = [0.1, 0.2, 0.3, 0.4]
 plt.contour(X, Y, Z, levels = levels)
 !ec
-The resulting plot is shown in Figure ref{contourspeclevelsmatplotlib}
-FIGURE:[images/contourspeclevelsmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot with specified levels. label{contourspeclevelsmatplotlib}
+The result is shown in the lower left plot of Figure ref{advancedcontourmatplotlib}
 
-The levels in a contour plot are not labeled with the corresponding values by default. To include a default kind of labeling of the levels, one can call the `clabel` function..
+The levels in a contour plot are not labeled with the corresponding values by default. To include a default kind of labeling of the levels, one can call the `clabel` function.
 !bc pycod
 cs = plt.contour(X, Y, Z)
 plt.clabel(cs)
 !ec
-The resulting plot is shown in Figure ref{contourclabelmatplotlib}
-FIGURE:[images/contourclabelmatplotlib, height=400 width=600 frac=0.8] A simple matplotlib contour plot with labeled levels. label{contourclabelmatplotlib}
+The result is shown in the lower right plot in Figure ref{advancedcontourmatplotlib}
 
 === Plotting vector fields ===
 Let us attempt to plot the vector field 
@@ -116,12 +111,15 @@ The following code
 !bc pycod
 plt.quiver(x, y, vx, vy, angles = 'xy', scale_units = 'xy', color = 'b')
 !ec
-plots the vector field. The resulting plot is shown in Figure ref{quivermatplotlib}
+plots the vector field. 
+The two first parameters specify the $x$- and $y$-components of the points where vectors are to be drawn, and the next two parameters the actual components of the vectors.
+The resulting plot is shown in Figure ref{quivermatplotlib}
 FIGURE:[images/quivermatplotlib, height=400 width=600 frac=0.8] A vector field plotted with matplotlib. label{quivermatplotlib}
 
 The parameters `angles` and `scale_units` say that the vector field should be drawn as a gradient field, i.e. that the length of the vectors coincide with that of the vector ${\bf v}$. 
 `color` indicates the colour to be used for the vectors (here blue). 
-Often the vectors need to be scaled in order for them not to collide in the plot. This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors. 
+Often the vectors need to be scaled in order for them not to collide in the plot (alternatively one can have some more distance between the points in the arrays `x` and `y`. 
+This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors. 
 Matplotlib will attempt to scale the plot automatically if the `scale` parameter is not set, in order to try to avoid that the vectors collide.
 
 
@@ -144,13 +142,12 @@ X, Y = ndgrid(x, y)
 `ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. 
 
 The surface can now be plotted simply by writing `mesh(X, Y, Z)`, so that this part of the code is shorter than the three lines needed with matplotlib.
-The resulting plot is shown in Figure ref{simpleplotscitools}
-FIGURE:[images/simpleplotscitools, height=400 width=600 frac=0.8] A simple acitools surface plot. label{simpleplotscitools}
+The result is shown in the left plot in Figure ref{plotscitools}.
+FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two scitools surface plots. Simple plot (left), and a plot with colours (right). label{plotscitools}
 
 === Coloring ===
 We can write `surf(X, Y, Z)` instead of `mesh(X, Y, Z)` to get a graph where the surface elements have been coloured. 
-The resulting plot is shown in Figure ref{simpleplotcoloursscitools}. One can choose from a wide range of different color maps. 
-FIGURE:[images/simpleplotcoloursscitools, height=400 width=600 frac=0.8] A simple scitools surface plot with colours. label{simpleplotcoloursscitools}
+The result is shown in the right plot in Figure ref{simpleplotcoloursscitools}. One can choose from a wide range of different color maps. 
 
 === Contour plots ===
 In order to create a simple contour plot we can write the following
@@ -164,31 +161,28 @@ By adding a parameter we can specify how many contour levels to plot. The contou
 !bc pycod
 contour(X, Y, Z, 10)
 !ec
-The resulting plot is shown in Figure ref{contour10levelsscitools}
-FIGURE:[images/contour10levelsscitools, height=400 width=600 frac=0.8] A simple scitools contour plot with 10 levels. label{contour10levelsscitools}
+The result is shown in the upper left plot in Figure ref{advancedcontourscitools}.
+FIGURE:[images/advancedcontourscitools, height=400 width=600 frac=0.8] Some other scitools contour plots: With 10 levels (upper left), with 10 levels in black (upper right), with specified levels (lower left), and with labeled levels (lower right). label{advancedcontourscitools}
 
 Normally the level curves are drawn with different colours. This is very useful on the display, but is less practical if you want to paste the figure into a black and white document. If you write
 !bc pycod
 contour(X, Y, Z, 10, 'k')
 !ec
 all level curves will be drawn in black ('k' is the symbol for black). 
-The resulting plot is shown in Figure ref{contour10levelsblackscitools}
-FIGURE:[images/contour10levelsblackscitools, height=400 width=600 frac=0.8] A simple scitools contour plot with 10 levels in black. label{contour10levelsblackscitools}
+The result is shown in the upper right plot in Figure ref{advancedcontourscitools}.
 
 The automatically chosen levels above may not be the most interesting level curves, or may not be the levels we are interested in. We can specify which levels to include in the contour plot as follows. 
 !bc pycod
 levels = [0.1, 0.2, 0.3, 0.4]
 contour(X, Y, Z, levels = levels)
 !ec
-The resulting plot is shown in Figure ref{contourspeclevelsscitools}
-FIGURE:[images/contourspeclevelsscitools, height=400 width=600 frac=0.8] A simple scitools contour plot with specified levels. label{contourspeclevelsscitools}
+The result is shown in the lower left plot in Figure ref{contourspeclevelsscitools}.
 
 The levels in a contour plot are not labeled with the corresponding values by default. To include a default kind of labeling of the levels, one can use a parameter called `clabels`.
 !bc pycod
 contour(X, Y, Z, clabels = 'on')
 !ec
-The resulting plot is shown in Figure ref{contourclabelscitools}
-FIGURE:[images/contourclabelscitools, height=400 width=600 frac=0.8] A simple matplotlib contour plot with labeled levels. label{contourclabelscitools}
+The result is shown in the lower right plot in Figure ref{contourclabelscitools}.
 
 === Plotting vector fields ===
 Let ur return to the vector field
