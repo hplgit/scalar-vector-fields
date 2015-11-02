@@ -29,7 +29,7 @@ These first examples only use constant values. To do more general things we need
 x = sp.Symbol('x')            # Define one symbol 
 x, y, z = sp.symbols('x y z') # Define three symbols
 !ec
-Having defined symbols, we can perform symbolic operations such as differentiation and integration. When `x`is defined as a symbol as above, we can differentiate $x^5$ with respect to $x$ by writing
+Having defined symbols, we can perform symbolic operations such as differentiation and integration. When `x` is defined as a symbol as above, we can differentiate $x^5$ with respect to $x$ by writing
 !bc pycod
 expr = sp.diff(x**5, x)
 !ec
@@ -77,7 +77,7 @@ A[2,:] = A[2,:] + 2 * A[1,:]
 !ec
 for the matrix `A` as defined above, the entry `A[2, 1]` will be zeroed out, so that the resulting matrix is in row echelon form. 
 
-We can also use `sympy`to solve linear systems exactly. If you write
+We can also use `sympy` to solve linear systems exactly. If you write
 !bc pycod
 A.solve(sp.Matrix([[-1],[-1],[-1]]))
 !ec
