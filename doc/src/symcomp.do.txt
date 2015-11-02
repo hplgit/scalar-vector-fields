@@ -1,0 +1,84 @@
+========= Symbolic computations =========
+In Python one can also perform computations symbolically, using the module `sympy`. This is particularly useful when you have performed tedious calculations by hand, and you want to check if the result is correct. 
+Let us go through some examples, covering many typical calculations you do in the first university math courses. 
+
+First note that many of the functions in `numpy` are available with the same names in `sympy`, the difference lying in if numerical or symbolic values are returned. To differ between teh two, we use different names for them
+!bc pycode
+import numpy as np
+import sympy as sp
+!ec
+Examples of similar functions are 
+!bc pyprod
+np.sqrt(2), np.cos(np.pi/2), np.exp(2) # numpy
+sp.sqrt(2), sp.cos(sp.pi/2), sp.exp(2) #sympy
+!ec
+Note in particular that `sp.cos(sp.pi/2)`returns the symbolic value for 0, i.e. it does not introduce a roundoff error for $\pi$, and no roundoff error in the computation of the cosine. 
+To find the numerical values from the symbolic counterparts we can use the function `evalf()`:
+!bc pyprod
+sp.sqrt(2).evalf(), sp.exp(2).evalf()
+!ec
+
+With `sympy` you can work with rational numbers in an exact way. Rational numbers are represented by objects of type `Rational`. If you write
+!bc pycod
+expr = sp.Rational(1, 3) + sp.Rational(1, 2)
+!ec
+the result will be `sp.Rational(5, 6)`. This simple calculation simply says that $5/6 = 1/3 + 1/2$. The corresponding numerical computation can be performed by `expr.evalf()`, yielding $0.83333...$.
+
+These first examples only use constant values. To do more general things we need to use symbols. They can be defined as follows
+!bc pycod
+x = sp.Symbol('x')            # Define one symbol 
+x, y, z = sp.symbols('x y z') # Define three symbols
+!ec
+Having defined symbols, we can perform symbolic operations such as differentiation and integration. When `x`is defined as a symbol as above, we can differentiate $x^5$ with respect to $x$ by writing
+!bc pycod
+expr = sp.diff(x**5, x)
+!ec
+This yields the symbolic expression for $5x^4$. If we now want to evaluate the derivative at $x=2$ we can write 
+!bc pycod
+expr.subs(x, 2)
+!ec
+If we want the numerical value of the derivative we can again use `evalf()` on this expression. 
+
+For integration, the indefinite integral $\int x^7e^{x^2}dx$ can be computed by writing
+!bc pycod
+sp.integrate(x**7*sp.exp(x**2),x)
+!ec
+This yields the expression for $(x^6 - 3x^4 + 6x^2 - 6)e^{x^2}$. In order to obtain the same result by hand, you would need to perform integration by parts three times in succession. 
+To compute the definite integral $\int_0^1 x^7e^{x^2}dx$, one can simply write 
+!bc pycod
+sp.integrate(x**7*sp.exp(x**2), (x, 0, 1))
+!ec
+This yields the expression for $-e+3$.
+
+It is also simple to multiply or factor polynomials with the function `expand` and `factor`. The calls
+!bc pycod
+sp.expand((x+3)**3, x)
+sp.factor(x**2-4*x+4, x) 
+!ec
+yields the expressions for $x^3 + 9x^2 + 27x + 27$, and $(x-2)^2$, respectively. 
+
+To define matrices we can write
+!bc pycod
+A = sp.Matrix([[1, 2, 0],[0, 1, 1],[0, -2, 1]])
+!ec
+To find the eigenvalues and eigenvectors of $A$ exactly, we can write
+!bc pycod
+A.eigenvals()
+A.eigenvects()
+!ec
+You will see that the exact expressions are found. You are invited to verify these results by hand, although this is a rather tedious calculation. 
+The inverse matrix of $A$ can be found by writing `A**-1`. Also here `sympy` is able to find the exact mathematical expression. Since the inverse can be computed from elementary row operations, 
+and all these can be carried out exactly when the entries have exact representations, `sympy` can find the inverse exactly for any matrix size, given that the entries are rational numbers. 
+The same is the case for matrix multiplication.
+
+Elementary row operations can be carried out exactly in `sympy`. If you write 
+!bc pycod
+A[2,:] = A[2,:] + 2 * A[1,:]
+!ec
+for the matrix `A` as defined above, the entry `A[2, 1]` will be zeroed out, so that the resulting matrix is in row echelon form. 
+
+We can also use `sympy`to solve linear systems exactly. If you write
+!bc pycod
+A.solve(sp.Matrix([[-1],[-1],[-1]]))
+!ec
+The system $Ax=b$ will be solved, when the right hand side $b$ have all entries equal to $-1$.
