@@ -19,6 +19,9 @@ Z = X*Y*sin(X*Y)
 #surf(X, Y, Z, title = 'Simple plot, with colours', savefig = 'images/simpleplotcoloursscitools.pdf')
 #surf(X, Y, Z, title = 'Simple plot, with colours', savefig = 'images/simpleplotcoloursscitools.png')
 
+os.system('doconce combine_images pdf -2 images/simpleplotscitools images/simpleplotcoloursscitools images/plotscitools')
+os.system('doconce combine_images png -2 images/simpleplotscitools images/simpleplotcoloursscitools images/plotscitools')
+
 contour(X, Y, Z, title = 'Simple contour plot')
 savefig('images/simplecontourscitools.pdf')
 savefig('images/simplecontourscitools.png')
@@ -31,7 +34,7 @@ raw_input('press enter to continue')
 
 contour(X, Y, Z, 10, 'k', title = 'Contour plot, 10 levels, in black')
 savefig('images/contour10levelsblackscitools.pdf')
-savefig('contour10levelsblackscitools.png')
+savefig('images/contour10levelsblackscitools.png')
 raw_input('press enter to continue')
 
 levels = [0.1, 0.2, 0.3, 0.4]
@@ -44,6 +47,9 @@ contour(X, Y, Z, clabels = 'on', title = 'Contour plot, with labels for the leve
 savefig('images/contourclabelscitools.pdf')
 savefig('images/contourclabelscitools.png')
 raw_input('press enter to continue')
+
+os.system('doconce combine_images pdf -2 images/contour10levelsscitools images/contour10levelsblackscitools images/contourspeclevelsscitools images/contourclabelscitools images/advancedcontourscitools')
+os.system('doconce combine_images png -2 images/contour10levelsscitools images/contour10levelsblackscitools images/contourspeclevelsscitools images/contourclabelscitools images/advancedcontourscitools')
 
 t = np.linspace(-5, 5, 11)
 x,y = ndgrid(t, t)

@@ -1,3 +1,4 @@
+import os
 from math import *
 import numpy as np
 
@@ -37,6 +38,9 @@ plt.savefig('images/simpleplotcoloursmatplotlib.pdf')
 plt.savefig('images/simpleplotcoloursmatplotlib.png')
 plt.show()
 
+os.system('doconce combine_images pdf -2 images/simpleplotmatplotlib images/simpleplotcoloursmatplotlib images/plotmatplotlib')
+os.system('doconce combine_images png -2 images/simpleplotmatplotlib images/simpleplotcoloursmatplotlib images/plotmatplotlib')
+
 plt.contour(X, Y, Z)
 plt.title('Simple contour plot')
 plt.savefig('images/simplecontourmatplotlib.pdf')
@@ -70,8 +74,8 @@ plt.savefig('images/contourclabelmatplotlib.pdf')
 plt.savefig('images/contourclabelmatplotlib.png')
 plt.show()
 
-
-
+os.system('doconce combine_images pdf -2 images/contour10levelsmatplotlib images/contour10levelsblackmatplotlib images/contourspeclevelsmatplotlib images/contourclabelmatplotlib images/advancedcontourmatplotlib')
+os.system('doconce combine_images png -2 images/contour10levelsmatplotlib images/contour10levelsblackmatplotlib images/contourspeclevelsmatplotlib images/contourclabelmatplotlib images/advancedcontourmatplotlib')
 
 t = np.linspace(-5, 5, 11)
 x, y = np.meshgrid(t, t, sparse = False, indexing = 'ij')
