@@ -2,6 +2,7 @@
 
  * Follow Python programming standard, especially the use of spaces
 
+TOC: on
 
 # #include "linalg.do.txt"
 

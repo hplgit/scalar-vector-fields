@@ -47,7 +47,7 @@ fig = plt.figure()
 ax = fig.gca(projection = '3d')
 ax.plot_surface(X, Y, Z)
 !ec
-The resul is shown in the left plot in Figure ref{plotmatplotlib}
+The result is shown in the left plot in Figure ref{plotmatplotlib}
 FIGURE:[images/plotmatplotlib, height=400 width=600 frac=0.8] Two matplotlib surface plots. Simple plot (left), and a plot with colours (right). label{plotmatplotlib}
 
 === Coloring ===
@@ -122,6 +122,8 @@ Often the vectors need to be scaled in order for them not to collide in the plot
 This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors. 
 Matplotlib will attempt to scale the plot automatically if the `scale` parameter is not set, in order to try to avoid that the vectors collide.
 
+=== Flow plots ===
+Wih the function `streamplot` in matplotlib we can create flow plots. 
 
 
 ======= Scitools =======
@@ -147,7 +149,7 @@ FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two scitools surface
 
 === Coloring ===
 We can write `surf(X, Y, Z)` instead of `mesh(X, Y, Z)` to get a graph where the surface elements have been coloured. 
-The result is shown in the right plot in Figure ref{simpleplotcoloursscitools}. One can choose from a wide range of different color maps. 
+The result is shown in the right plot in Figure ref{plotscitools}. One can choose from a wide range of different color maps. 
 
 === Contour plots ===
 In order to create a simple contour plot we can write the following
@@ -176,13 +178,13 @@ The automatically chosen levels above may not be the most interesting level curv
 levels = [0.1, 0.2, 0.3, 0.4]
 contour(X, Y, Z, levels = levels)
 !ec
-The result is shown in the lower left plot in Figure ref{contourspeclevelsscitools}.
+The result is shown in the lower left plot in Figure ref{advancedcontourscitools}.
 
 The levels in a contour plot are not labeled with the corresponding values by default. To include a default kind of labeling of the levels, one can use a parameter called `clabels`.
 !bc pycod
 contour(X, Y, Z, clabels = 'on')
 !ec
-The result is shown in the lower right plot in Figure ref{contourclabelscitools}.
+The result is shown in the lower right plot in Figure ref{advancedcontourscitools}.
 
 === Plotting vector fields ===
 Let ur return to the vector field
@@ -198,3 +200,164 @@ FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] The vector field f
 The two last parameters represent scaling and color. 
 
 ======= Mayavi =======
+Mayavi is an advanced, free, easy to use, scientific data visualizer, with an emphasis on 3D visualization. 
+It is written in Python, and uses the Visualization Toolkit (VTK) for the graphics. 
+It is cross platform and should run on any platform where both Python and VTK are available (this includes Mac OSX and windows).
+To obtain a full environment for Mayavi, which contains Python , VTK, and all its dependencies, you can install Canopy. 
+This gives you access to install not only Mayavi, but also a whole list of packages from what is called a package index.
+While Mayavi will work right out of the box with Canopy, you can also install all components by hand (more on this). 
+
+We will only consider the Mayavi-functionality for simple plotting, such as the functionality we considered for matplotlib and scitools. 
+The `mayavi.mlab` module provides a simple interface to such plotting, with an emphasis on 3D visualization. 
+The following code will assume that we have imported everything from this module. 
+
+=== Basisc ===
+We first need to cover some of the `mlab` basics. Not that much of this is similar to the bascis found in matplotlib, and we will try to focus mainly on the differences. 
+
+The plotting commands you do in mlab will go to the current figure, also called a scene. This means that several plot commands will be shown together. 
+You can work with several figure instances simultaneously. A figure can be accessed in three different ways:
+o as a `Figure` object representing it,
+o by a name representing it, 
+o by a number representing the index of the plot
+When either a Figure object, a name or an integer is supplied as parameter to the function `figure()`, `mlab` sets the current figure to be that particular Figure object, 
+or the Figure object with that name or index. If no figure existed with the given name/index, a new figure object will be created with that name/index, and set as the current figure.  
+
+In the same way, the function `close()` closes a figure with the given handle, name, or index. 
+To clear (not close) the current figure before the next plot, we can run the command `clf()`. 
+The function `gcf()` returns the current figure object. You will need to call this in order to get the object where you can set some the figure properties, 
+such as the foreground or background colour (the foreground colour is used for text and labels included in the plot). This can also be done directly by writing
+!bc pycod
+figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
+!ec
+Here colours are represented as RGB-values, where the components are floating points between zero and one. In the above code the foreground and background colour 
+for the current figure is set to black and white, respectively.
+
+Many of the other functions are also similar to what we are used to.
+* `savefig(filename)` saves the current figure to file. The type of the file (png, jpeg, etc) is deduced fom the file extension  
+* `show()` makes the current figure visible (it may be that the environment does this by itself).
+* `title` to decorate the current figure  with a title.
+* `axes` for creating axes with labels and given colors, we can use the function   axes(xlabel = 'x', ylabel = 'y')
+
+The following code examplifies all the above in one plot. 
+!bc pycod
+clf() # Clear
+# Create figure with white background, black foreground
+figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0)) 
+... Create and plot your figure
+title('My first plot')
+axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
+show()
+savefig('plot.png')
+!ec
+
+=== Curve plots in 3D ===
+A parametrized curve can be plotted in 3D by replacing the plotting command above as follows
+!bc pycod
+t = np.linspace(0, 10*np.pi, 100)
+
+plot3d(np.sin(t), np.cos(t), t)
+!ec
+while keeping the rest of the code above for decorating the axes. The resulting plot is shown in Figure ref{parametrizedcurvemayavi}. 
+FIGURE:[images/parametrizedcurvemayavi, height=400 width=600 frac=0.8] A parametrized curve plotted with Mayavi. label{parametrizedcurvemayavi}
+
+=== Simple surface plots ===
+The surface $z=f(x,y)=xy\sin(xy)$ can now be plotted by replacing the plotting command above with
+!bc pycod
+mesh(X, Y, Z)
+!ec
+The result is shown in the left plot in Figure ref{plotmayavi}.
+FIGURE:[images/plotmayavi, height=400 width=600 frac=0.8] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right). label{plotmayavi}
+For coloring the surface we can use the similar `surf` as follows. 
+!bc pycod
+surf(X, Y, Z)
+!ec
+The result is shown in the right plot in Figure ref{plotmayavi}. 
+
+The two plots in figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure, so that one figure is generated with several subplots. Consider the following code.
+!bc pycod
+surf1 = mesh(X - 10, Y, Z, color = (.5, .5, .5))
+cat1_extent = (-14, -6, -2, 3, 0, 5)
+outline(surf1, extent=cat1_extent)
+
+surf2 = mesh(X, Y, Z, colormap = 'Accent')
+cat2_extent = (-4, 4, -2, 3, 0, 5)
+outline(surf2, extent=cat2_extent)
+
+surf3 = mesh(X + 10, Y, Z, colormap = 'prism')
+cat3_extent = (6, 14, -2, 3, 0, 5)
+outline(surf3, extent=cat3_extent, color = (0.5, 0.5, 0.5))
+!ec
+The result is shown in the left plot in Figure ref{subplot}.
+FIGURE:[images/subplot, height=400 width=600 frac=0.8] A plot with three subplots created with mayavi, consisting of the same surface drawn with different color maps. label{subplot}
+
+Here three separate `mesh` commands are run, each producing a new plot in the current figure. The $x$-coordinates are seen to be `X - 10`, `X`, and `X + 10`, so that the three plotting areas do not overlap. 
+The handles to the three plots are stored in the variables `surf1`, `surf2`, and `surf3`, and bounding boxes `cat1_extent`, `cat2_extent`, and `cat3_extent` are defined, which contain coordinates which bound the three different plots.   
+The function `outline` finally draws the corresponding box for the plot in question. We have dropped the axes and the title here. 
+
+Note that the surfaces in Figure ref{subplot} are drawn with different colors. This is due to the `colormap` and `color` attributes in the call to `mesh`, which adjusts the colors when the surface is drawn. The `color` attribute, which we see also can be used as a 
+parameter to `outline`, adjusts the surface so that it is colored with small variations from the provided base-color. 
+One can choose from a wide range of different color maps. 
+
+
+=== Contour plots ===
+In order to create a simple contour plot we can write the following
+!bc pycod 
+contour_surf(X, Y, Z)
+!ec
+The result is shown in the upper left plot in Figure ref{advancedcontourmayavi}. 
+FIGURE:[images/advancedcontourmayavi, height=400 width=600 frac=0.8] Some mayavi contour plots: Simple plot (upper left), with 10 levels (upper right), with 10 levels in black (lower left), and with specified levels (lower right). label{advancedcontourmayavi}
+
+By adding a parameter we can specify how many contour levels to plot. The contour levels will be automatically chosen by the application.
+!bc pycod 
+contour_surf(X, Y, Z, contours = 10)
+!ec
+The result is shown in the upper right plot of Figure ref{advancedcontourmayavi}.
+
+
+Normally the level curves are drawn with different colours. This is very useful on the display, but is less practical if you want to paste the figure into a black and white document. 
+If you write
+!bc pycod
+contour_surf(X, Y, Z, contours = 10, color = (0., 0., 0.))
+!ec
+The result is shown in the lower left plot of Figure ref{advancedcontourmayavi}. All level curves will be drawn in black, as described by the components in the color `(0., 0., 0.)`. 
+
+The automatically chosen levels above may not be the most interesting level curves, or may not be the levels we are interested in. We can specify which levels to include in the contour plot as follows. 
+!bc pycod
+levels = [0.1, 0.2, 0.3, 0.4]
+contour_surf(X, Y, Z, contours = levels)
+!ec
+The result is shown in the lower right plot of Figure ref{advancedcontourmayavi}
+
+=== Plotting vector fields ===
+Let us attempt to plot the vector field 
+$${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j}.$$
+If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows. 
+!bc pycod 
+t = np.linspace(-5, 5, 11)
+x, y = np.meshgrid(t, t, sparse = False, indexing = 'ij')
+z = np.zeros_like(x)
+vx = x**2 + 2*y - .5*x*y
+vy = -3*y
+vz = np.zeros_like(vx)
+!ec
+The following code 
+!bc pycod
+quiver3d(x, y, z, vx, vy, vz)
+!ec
+plots the vector field. 
+The two first parameters specify the $x$-, $y$-, and $z$-components of the points where vectors are to be drawn (since this function is intended for three dimensions, a $z$-parameter set to 0 has been added to our original two-dimensional data), 
+and the next three parameters are the actual components of the vectors.
+The resulting plot is shown in Figure ref{quivermayavi}.
+FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] A vector field plotted with mayavi. label{quivermayavi}
+
+=== Animations ===
+We have previously seen how to produce animations with maplotlib and scitools. 
+With the function `animate` in `mlab` we can also create animations. 
+
+=== Flow plots ===
+The function `flow` creates a trajectory of particles following the flow of a vector field. This function is also intended for three dimensions, and the syntax is similar to `quiver3d`. Replacing with 
+!bc pycod
+flow(x, y, z, vx, vy, vz)
+!ec
+we get Figure ref{flowmayavi}. 
+FIGURE:[images/flowmayavi, height=400 width=600 frac=0.8] A vector field plotted with mayavi. label{flowmayavi}

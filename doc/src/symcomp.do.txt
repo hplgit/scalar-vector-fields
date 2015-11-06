@@ -3,18 +3,18 @@ In Python one can also perform computations symbolically, using the module `symp
 Let us go through some examples, covering many typical calculations you do in the first university math courses. 
 
 First note that many of the functions in `numpy` are available with the same names in `sympy`, the difference lying in if numerical or symbolic values are returned. To differ between teh two, we use different names for them
-!bc pycode
+!bc pycod
 import numpy as np
 import sympy as sp
 !ec
 Examples of similar functions are 
-!bc pyprod
+!bc pycod
 np.sqrt(2), np.cos(np.pi/2), np.exp(2) # numpy
 sp.sqrt(2), sp.cos(sp.pi/2), sp.exp(2) #sympy
 !ec
 Note in particular that `sp.cos(sp.pi/2)`returns the symbolic value for 0, i.e. it does not introduce a roundoff error for $\pi$, and no roundoff error in the computation of the cosine. 
 To find the numerical values from the symbolic counterparts we can use the function `evalf()`:
-!bc pyprod
+!bc pycod
 sp.sqrt(2).evalf(), sp.exp(2).evalf()
 !ec
 
