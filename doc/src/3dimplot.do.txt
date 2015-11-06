@@ -25,7 +25,7 @@ ax.plot(np.sin(t), np.cos(t), t)
 The resulting plot is shown in Figure ref{parametrizedcurvematplotlib}
 FIGURE:[images/parametrizedcurvematplotlib, height=400 width=600 frac=0.8] A parametrized curve plotted with matplotlib. label{parametrizedcurvematplotlib}
 
-=== Simple surface plots ===
+===== Simple surface plots =====
 Let us start by plotting a surface $z=f(x,y)$ over an interval in the $xy$-plane. We first need to create a two-dimensional grid of values covering such an interval. A grid for the interval $[-4,4]\times[-2,2]$ 
 can be created as follows.
 !bc pycod
@@ -50,7 +50,6 @@ ax.plot_surface(X, Y, Z)
 The result is shown in the left plot in Figure ref{plotmatplotlib}
 FIGURE:[images/plotmatplotlib, height=400 width=600 frac=0.8] Two matplotlib surface plots. Simple plot (left), and a plot with colours (right). label{plotmatplotlib}
 
-=== Coloring ===
 Coloring can be used to get a better view of surfaces. We can use the `cm`-module to obtain a color map which can be used to color the surface. 
 !bc pycod
 from matplotlib import cm
@@ -61,7 +60,7 @@ ax.plot_surface(X, Y, Z, cmap = cm.coolwarm)
 !ec
 The result is shown in the right plot in Figure ref{plotmatplotlib}. One can choose from a wide range of different color maps. 
 
-=== Contour plots ===
+===== Contour plots =====
 In order to create a simple contour plot we can write the following
 !bc pycod 
 plt.contour(X, Y, Z)
@@ -97,7 +96,7 @@ plt.clabel(cs)
 !ec
 The result is shown in the lower right plot in Figure ref{advancedcontourmatplotlib}
 
-=== Plotting vector fields ===
+===== Plotting vector fields and flow plots =====
 Let us attempt to plot the vector field 
 $${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j}.$$
 If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows. 
@@ -122,7 +121,6 @@ Often the vectors need to be scaled in order for them not to collide in the plot
 This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors. 
 Matplotlib will attempt to scale the plot automatically if the `scale` parameter is not set, in order to try to avoid that the vectors collide.
 
-=== Flow plots ===
 Wih the function `streamplot` in matplotlib we can create flow plots. 
 
 
@@ -135,7 +133,7 @@ from scitools.easyviz import *
 === Curve plots in 3D ===
 TODO
 
-=== Simple surface plots ===
+===== Simple surface plots =====
 Scitools has the function `ndgrid` which, just as `meshgrid`, can be used to create grids of all possible $(x,y)$-coordinate pairs from given one-dimensional coordinates.
 One can simply replace the call to `meshgrid` above with  
 !bc pycod
@@ -147,11 +145,10 @@ The surface can now be plotted simply by writing `mesh(X, Y, Z)`, so that this p
 The result is shown in the left plot in Figure ref{plotscitools}.
 FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two scitools surface plots. Simple plot (left), and a plot with colours (right). label{plotscitools}
 
-=== Coloring ===
 We can write `surf(X, Y, Z)` instead of `mesh(X, Y, Z)` to get a graph where the surface elements have been coloured. 
 The result is shown in the right plot in Figure ref{plotscitools}. One can choose from a wide range of different color maps. 
 
-=== Contour plots ===
+===== Contour plots =====
 In order to create a simple contour plot we can write the following
 !bc pycod 
 contour(X, Y, Z)
@@ -186,7 +183,7 @@ contour(X, Y, Z, clabels = 'on')
 !ec
 The result is shown in the lower right plot in Figure ref{advancedcontourscitools}.
 
-=== Plotting vector fields ===
+===== Plotting vector fields and flow plots =====
 Let ur return to the vector field
 $${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j},$$
 and let us reuse the code above to produce the vectors in the vector field. With scitools one can instead write
@@ -211,7 +208,7 @@ We will only consider the Mayavi-functionality for simple plotting, such as the 
 The `mayavi.mlab` module provides a simple interface to such plotting, with an emphasis on 3D visualization. 
 The following code will assume that we have imported everything from this module. 
 
-=== Basisc ===
+===== The basics =====
 We first need to cover some of the `mlab` basics. Not that much of this is similar to the bascis found in matplotlib, and we will try to focus mainly on the differences. 
 
 The plotting commands you do in mlab will go to the current figure, also called a scene. This means that several plot commands will be shown together. 
@@ -260,7 +257,7 @@ plot3d(np.sin(t), np.cos(t), t)
 while keeping the rest of the code above for decorating the axes. The resulting plot is shown in Figure ref{parametrizedcurvemayavi}. 
 FIGURE:[images/parametrizedcurvemayavi, height=400 width=600 frac=0.8] A parametrized curve plotted with Mayavi. label{parametrizedcurvemayavi}
 
-=== Simple surface plots ===
+===== Simple surface plots and subplots =====
 The surface $z=f(x,y)=xy\sin(xy)$ can now be plotted by replacing the plotting command above with
 !bc pycod
 mesh(X, Y, Z)
@@ -299,7 +296,7 @@ parameter to `outline`, adjusts the surface so that it is colored with small var
 One can choose from a wide range of different color maps. 
 
 
-=== Contour plots ===
+===== Contour plots =====
 In order to create a simple contour plot we can write the following
 !bc pycod 
 contour_surf(X, Y, Z)
@@ -328,7 +325,7 @@ contour_surf(X, Y, Z, contours = levels)
 !ec
 The result is shown in the lower right plot of Figure ref{advancedcontourmayavi}
 
-=== Plotting vector fields ===
+===== Plotting vector fields and flow plots =====
 Let us attempt to plot the vector field 
 $${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j}.$$
 If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows. 
@@ -350,14 +347,13 @@ and the next three parameters are the actual components of the vectors.
 The resulting plot is shown in Figure ref{quivermayavi}.
 FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] A vector field plotted with mayavi. label{quivermayavi}
 
-=== Animations ===
-We have previously seen how to produce animations with maplotlib and scitools. 
-With the function `animate` in `mlab` we can also create animations. 
-
-=== Flow plots ===
 The function `flow` creates a trajectory of particles following the flow of a vector field. This function is also intended for three dimensions, and the syntax is similar to `quiver3d`. Replacing with 
 !bc pycod
 flow(x, y, z, vx, vy, vz)
 !ec
 we get Figure ref{flowmayavi}. 
 FIGURE:[images/flowmayavi, height=400 width=600 frac=0.8] A vector field plotted with mayavi. label{flowmayavi}
+
+===== Animations =====
+We have previously seen how to produce animations with maplotlib and scitools. 
+With the function `animate` in `mlab` we can also create animations. 
