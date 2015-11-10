@@ -67,22 +67,10 @@ savefig('images/contourspeclevelsmayavi.png')
 
 #os.system('doconce combine_images png -2 images/simplecontourmayavi images/contour10levelsmayavi images/contour10levelsblackmayavi images/contourspeclevelsmayavi images/advancedcontourmayavi')
 
-t = np.linspace(-5, 5, 11)
-x, y = np.meshgrid(t, t, sparse = False, indexing = 'ij')
-z = np.zeros_like(x)
-vx = x**2 + 2*y - .5*x*y
-vy = -3*y
-vz = np.zeros_like(vx)
+x, y, z = np.mgrid[.5:2:.2, .5:2:.2, .5:2:.2]
+r3 = np.sqrt(x**2 + y**2 + z**2)**3
 clf()
-quiver3d(x, y, z, vx, vy, vz) #, angles = 'xy', scale_units = 'xy', color = 'b')
-#quiver(x, y, vx, vy, units='xy', scale=20, color='b') # skalareringsfaktor 1.5, blaa farge
+figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0)) 
+quiver3d(x, y, z, -x/r3, -y/r3, -z/r3, mode = 'arrow', colormap = 'jet', scale_factor = .5)
+axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
 savefig('images/quivermayavi.png')
-#quiver3d(x, y, z, u, v, w, line_width=3, scale_factor=1)
-
-x, y, z = np.mgrid[-5:6, -5:6, -2:2:0.1]
-vx = x**2 + 2*y - .5*x*y
-vy = -3*y
-vz = 0*z
-clf()
-flow(x, y, z, vx, vy, vz)
-savefig('images/flowmayavi.png')

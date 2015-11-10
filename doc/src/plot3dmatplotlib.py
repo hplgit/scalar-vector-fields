@@ -83,7 +83,33 @@ vx = x**2 + 2*y - .5*x*y
 vy = -3*y
 plt.quiver(x, y, vx, vy, angles = 'xy', scale_units = 'xy', color = 'b')
 #plt.quiver(x, y, vx, vy, units='xy', scale=20, color='b') # skalareringsfaktor 1.5, blaa farge
-plt.savefig('images/quivermatplotlib.pdf')
-plt.savefig('images/quivermatplotlib.png')
+plt.savefig('images/quivermatplotlibsimple.pdf')
+plt.savefig('images/quivermatplotlibsimple.png')
 plt.show()
 #axis('equal')
+
+h0 = 2277.  # Hoyden av toppen av fjellet (m)
+R = 4.      # Maal for radius av fjellet (km)
+tt = np.linspace(-10., 10., 11)
+xx, yy = np.meshgrid(tt, tt)       # Definer et grovere grid til vektorfeltet
+hh = h0/(1+(xx**2 + yy**2)/(R**2)) # Beregn hoyden med det nye griddet
+dhx, dhy = np.gradient(hh)         # Beregn gradientvektoren (dh/dx,dh/dy)
+# Plott vektorfeltet (rod farge) og skaler vektorlengden med en faktor
+# En bedre skaleringsfaktor er .75, men fungerer kanskje ikke?
+plt.quiver(xx, yy, dhy, dhx, color = 'r', angles = 'xy')#, scale_units = 'xy') #, )
+
+plt.hold('on')                     # Behold konturlinjene og akse-egenskapene
+t = np.linspace(-10.,10.,21)
+
+x, y = np.meshgrid(t, t)           # Grid for x- og y-verdiene (km)
+h = h0/(1+(x**2+y**2)/(R**2))      # Beregn hoyden h (m)
+plt.contour(x, y, h)               # Kontur og sett akseenhetene like
+plt.xlabel('x')
+plt.ylabel('y')
+plt.axis('equal')
+plt.savefig('images/quivermatplotlibadvanced.pdf')
+plt.savefig('images/quivermatplotlibadvanced.png')
+plt.show()
+
+os.system('doconce combine_images pdf -2 images/quivermatplotlibsimple images/quivermatplotlibadvanced images/quivermatplotlib')
+os.system('doconce combine_images png -2 images/quivermatplotlibsimple images/quivermatplotlibadvanced images/quivermatplotlib')

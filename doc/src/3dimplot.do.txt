@@ -96,7 +96,7 @@ plt.clabel(cs)
 !ec
 The result is shown in the lower right plot in Figure ref{advancedcontourmatplotlib}
 
-===== Plotting vector fields and flow plots =====
+===== Plotting vector fields =====
 Let us attempt to plot the vector field 
 $${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j}.$$
 If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows. 
@@ -112,8 +112,8 @@ plt.quiver(x, y, vx, vy, angles = 'xy', scale_units = 'xy', color = 'b')
 !ec
 plots the vector field. 
 The two first parameters specify the $x$- and $y$-components of the points where vectors are to be drawn, and the next two parameters the actual components of the vectors.
-The resulting plot is shown in Figure ref{quivermatplotlib}
-FIGURE:[images/quivermatplotlib, height=400 width=600 frac=0.8] A vector field plotted with matplotlib. label{quivermatplotlib}
+The result is shown in the left plot in Figure ref{quivermatplotlib}
+FIGURE:[images/quivermatplotlib, height=400 width=600 frac=0.8] A vector field plotted with matplotlib (left), and contours together with the gradients (right). label{quivermatplotlib}
 
 The parameters `angles` and `scale_units` say that the vector field should be drawn as a gradient field, i.e. that the length of the vectors coincide with that of the vector ${\bf v}$. 
 `color` indicates the colour to be used for the vectors (here blue). 
@@ -121,8 +121,33 @@ Often the vectors need to be scaled in order for them not to collide in the plot
 This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors. 
 Matplotlib will attempt to scale the plot automatically if the `scale` parameter is not set, in order to try to avoid that the vectors collide.
 
-Wih the function `streamplot` in matplotlib we can create flow plots. 
+Let us round off by considering an example where we plot the contour lines of a function together with the gradient field of that function. 
+The gradients are orthogonal to the contour lines, so let us see if we can observe this in our plot. As our function we will use 
+$$h = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}}.$$
+This formula describes the height of an isolated mountain, where $h$ is the height above sea level, $h_0$ is the height at the top of the mountain, and $R$ describes the radius of the mountain. 
+we will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to the code below we have set $h_0=2277$ and $R=4$. 
+We first define a grid for the area closer to the mountain top than 10km in any direction.
+!bc pycod
+tt = np.linspace(-10., 10., 11)
+xx, yy = np.meshgrid(tt, tt)       
+hh = h0/(1+(xx**2 + yy**2)/(R**2))
+!ec
+We then compute the gradient using the built-in function `gradient` in `numpy`. 
+!bc pycod
+dhx, dhy = np.gradient(hh)         # Beregn gradientvektoren (dh/dx,dh/dy)
+!ec
+Finally we plot the vector field together with the contour lines in the same plot as follows. 
+!bc pycod
+plt.quiver(xx, yy, dhy, dhx, color = 'r', angles = 'xy')               
 
+t = np.linspace(-10.,10.,21)
+x, y = np.meshgrid(t, t)           
+h = h0/(1+(x**2+y**2)/(R**2)) 
+plt.hold('on')
+plt.contour(x, y, h)
+!ec
+Here we have created a new grid which is finer, for plotting the surface. The result is shown in the right plot in Figure ref{quivermatplotlib}.
+Note that in the call to `quiver` the vector components `dhy` and `dhx` were reversed. This seems to be an error in `matplotlib`.
 
 ======= Scitools =======
 The code below assumes that we have imported scitools as in chapter 5: 
@@ -183,7 +208,7 @@ contour(X, Y, Z, clabels = 'on')
 !ec
 The result is shown in the lower right plot in Figure ref{advancedcontourscitools}.
 
-===== Plotting vector fields and flow plots =====
+===== Plotting vector fields =====
 Let ur return to the vector field
 $${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j},$$
 and let us reuse the code above to produce the vectors in the vector field. With scitools one can instead write
@@ -191,10 +216,34 @@ and let us reuse the code above to produce the vectors in the vector field. With
 quiver(x, y, vx, vy, 200, 'b')
 !ec
 ##TODO: I need to consult the documentation here
-to plot the vector field. The resulting plot is shown in Figure ref{quiverscitools}
-FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] The vector field from figure ref{quivermatplotlib} plotted with scitools. label{quiverscitools}
+to plot the vector field. The two last parameters represent scaling and color. The resulting plot is shown in Figure ref{quiverscitools}
+FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] A vector field plotted with scitools (left), and contours together with the gradients (right). label{quiverscitools}
 
-The two last parameters represent scaling and color. 
+Let us round off by considering again the previous example of contour/gradient plot. 
+We again define a grid for the area closer to the mountain top than 10km in any direction, but this time we use `ndgrid` in `scitools`.
+!bc pycod
+tt = linspace(-10., 10., 11)
+xx, yy = ndgrid(tt, tt)      
+hh = h0/(1 + (xx**2 + yy**2)/(R**2)) 
+!ec
+and we compute the gradient as before. 
+Finally we plot the vector field together with the contour lines in the same plot as follows. 
+!bc pycod
+quiver(xx, yy, dhx, dhy, 0, 'r')        
+       
+t = linspace(-10., 10., 21)
+x,y = ndgrid(t,t)             
+h = h0/(1+(x**2+y**2)/(R**2)) 
+hold('on')     
+contour(x, y, h, daspectmode = 'equal') 
+!ec
+The result is shown in the right plot in Figure ref{quiverscitools}.
+
+
+
+
+
+
 
 ======= Mayavi =======
 Mayavi is an advanced, free, easy to use, scientific data visualizer, with an emphasis on 3D visualization. 
@@ -325,34 +374,39 @@ contour_surf(X, Y, Z, contours = levels)
 !ec
 The result is shown in the lower right plot of Figure ref{advancedcontourmayavi}
 
-===== Plotting vector fields and flow plots =====
-Let us attempt to plot the vector field 
-$${\bf v} = \left( x^2 + 2y - \frac{1}{2} xy \right){\bf i}  - 3y{\bf j}.$$
+===== Plotting vector fields in 3D =====
+Mayavis functionality for plotting vector fields is primarily intended for 3D also. As an example, let us attempt to plot a gravitational field. 
+Newtons law of gravitation says that the gravitational force is proportional to 
+$$-{\bf r}/|{\bf r}|^3 = -( x,y,z)/\sqrt{x^2+y^2+z^2}^3,$$
+where ${\bf r}=(x,y,z)$ is the position vector. Let us attempt to plot this vector field. 
+We need a three-dimensional grid, so that `meshgrid` will not work. We can either use `ndgrid` from `scitools`, or `mgrid` from `numpy` as follows
 If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows. 
 !bc pycod 
-t = np.linspace(-5, 5, 11)
-x, y = np.meshgrid(t, t, sparse = False, indexing = 'ij')
-z = np.zeros_like(x)
-vx = x**2 + 2*y - .5*x*y
-vy = -3*y
-vz = np.zeros_like(vx)
+x, y, z = np.mgrid[.5:2:.2, .5:2:.2, .5:2:.2]
+r3 = np.sqrt(x**2 + y**2 + z**2)**3
+vx = -x/r3
+vy = -y/r3
+vz = -z/r3
 !ec
-The following code 
+The cube of the distance (`r3`) has here been computed once, since all three components are divided by this. 
+Also we compute the vector field for a section in the first octant only, where all three components are between $0.5$ and $2$, and we do not make the grid too dense, so that individual vectors have smaller chance of colliding. 
+The vector field can now be vizualized as follows. 
 !bc pycod
-quiver3d(x, y, z, vx, vy, vz)
+figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0)) 
+quiver3d(x, y, z, -x/r3, -y/r3, -z/r3, \\
+         mode = 'arrow', colormap = 'jet', scale_factor = .5)
+axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', \\
+     nb_labels = 5, color = (0., 0., 0.))
 !ec
-plots the vector field. 
-The two first parameters specify the $x$-, $y$-, and $z$-components of the points where vectors are to be drawn (since this function is intended for three dimensions, a $z$-parameter set to 0 has been added to our original two-dimensional data), 
-and the next three parameters are the actual components of the vectors.
-The resulting plot is shown in Figure ref{quivermayavi}.
+The three first parameters to `quiver3d`, the function which actually plots the vector field, specify the $x$-, $y$-, and $z$-components of the points where vectors are to be drawn. 
+The next three parameters are the actual components of the vectors.
+To improve the visualization of the field, we have set some of the optional properties to `quiver3d`:
+* The `mode` parameter ensures that the vectors are drawn as arrow. 
+* The `colormap` parameter controls how the vectors are colored.
+* The `scale_factor` parameter lets us manually scale the vector lengths, to ensure that they do not collide. 
+In addition we have set a foreground and background color for the figure, and added axes as above. 
+The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting vecto fiels in 3D dimensions. It may be challenging to create instructive plots, since vectors are drawn over an area in 3D rather than 2D. 
 FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] A vector field plotted with mayavi. label{quivermayavi}
-
-The function `flow` creates a trajectory of particles following the flow of a vector field. This function is also intended for three dimensions, and the syntax is similar to `quiver3d`. Replacing with 
-!bc pycod
-flow(x, y, z, vx, vy, vz)
-!ec
-we get Figure ref{flowmayavi}. 
-FIGURE:[images/flowmayavi, height=400 width=600 frac=0.8] A vector field plotted with mayavi. label{flowmayavi}
 
 ===== Animations =====
 We have previously seen how to produce animations with maplotlib and scitools. 

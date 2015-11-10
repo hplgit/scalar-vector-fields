@@ -58,6 +58,36 @@ vy = -3*y
 
 quiver(x, y, vx, vy, 200, 'b')
 axis('equal')
-savefig('images/quiverscitools.pdf')
-savefig('images/quiverscitools.png')
+savefig('images/quiverscitoolssimple.pdf')
+savefig('images/quiverscitoolssimple.png')
 raw_input('press enter to continue')
+
+
+h0 = 2277  # Hoyden av toppen av fjellet (m)
+R = 4      # Maal for radius av fjellet (km)
+tt = linspace(-10.,10.,11)
+xx,yy = ndgrid(tt, tt)      # Definer et grovere grid til vektorfeltet
+hh = h0/(1+(xx**2+yy**2)/(R**2)) # Beregn hoyden med det nye griddet
+dhx, dhy = np.gradient(hh)         # Beregn gradientvektoren (dh/dx,dh/dy)
+# Plott vektorfeltet (rod farge) og skaler vektorlengden med en faktor
+# En bedre skaleringsfaktor er .75, men fungerer kanskje ikke?
+quiver(xx, yy, dhx, dhy, 0, 'r')
+hold('on')                    # Behold konturlinjene og akse-egenskapene
+t = linspace(-10., 10., 21)
+
+x,y = ndgrid(t,t)             # Grid for x- og y-verdiene (km)
+h = h0/(1+(x**2+y**2)/(R**2)) # Beregn hoyden h (m)
+contour(x, y, h, daspectmode = 'equal')  # Kontur og sett akseenhetene like
+xlabel('x')
+ylabel('y')
+axis('equal')
+hold('off')
+# Sett aksenavn
+# Sett akseenhetene like
+# Trenger ikke flere plott i denne figuren
+savefig('images/quiverscitoolsadvanced.pdf')
+savefig('images/quiverscitoolsadvanced.png')
+raw_input('Press enter to continue')
+
+os.system('doconce combine_images pdf -2 images/quiverscitoolssimple images/quiverscitoolsadvanced images/quiverscitools')
+os.system('doconce combine_images png -2 images/quiverscitoolssimple images/quiverscitoolsadvanced images/quiverscitools')
