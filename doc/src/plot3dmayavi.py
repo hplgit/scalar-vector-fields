@@ -1,76 +1,73 @@
-from mayavi.mlab import *
+import mayavi.mlab as ml
 import os
 from math import *
 import numpy as np
 
+h0 = 2277.
+R = 4.
+
+x, y = np.mgrid[-10.:10.:.5, -10.:10.:.5] 
+h = h0/(1 + (x**2+y**2)/(R**2))
+
+ml.figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
+ml.mesh(x, y, h, extent = (0,1,0,1,0,1))
+ml.axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
+ml.savefig('images/simpleplotmayavi.png')
 
 
-clf()
-figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
-t = np.linspace(0, 10*np.pi, 100)
-plot3d(np.sin(t), np.cos(t), t)
-axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
-title('My first plot')
-savefig('images/parametrizedcurvemayavi.png')
+ml.figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
+ml.surf(x, y, h, extent = (0,1,0,1,0,1))
 
+t = np.linspace(0, 2*np.pi, 100)
+xcoords = 10*(1 - t/(2*np.pi))*np.cos(t)
+ycoords = 10*(1 - t/(2*np.pi))*np.sin(t)
+zcoords = h0/(1 + 100*(1 - t/(2*np.pi))**2/(R**2))
+ml.plot3d(xcoords, ycoords, zcoords, tube_radius = 0.2, extent = (0,1,0,1,0,1))
 
-x = np.arange(-4, 4, 0.05, float)
-y = np.arange(-2, 2, 0.05, float)
-X, Y = np.meshgrid(x, y, sparse = False, indexing = 'ij')
-Z = X*Y*np.sin(X*Y)
-
-clf()
-mesh(X, Y, Z)
-title('Using mesh')
-axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
-savefig('images/simpleplotmayavi.png')
-
-clf()
-surf(X, Y, Z)
-title('Using surf')
-axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
-savefig('images/simpleplotcoloursmayavi.png')
-
+ml.axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
+ml.savefig('images/simpleplotcoloursmayavi.png')
 #os.system('doconce combine_images png -2 images/simpleplotmayavi images/simpleplotcoloursmayavi images/plotmayavi')
 
-clf()
-surf1 = mesh(X-10, Y, Z, color = (.5, .5, .5))
-cat1_extent = (-14, -6, -2, 2, -8, 8)
-outline(surf1, extent=cat1_extent)
+R2 = 10.
+ml.figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
+surf1 = ml.mesh(x, y, h, extent = (0, 0.25, 0, 0.25, 0, 0.25), color = (.5, .5, .5))
+cat1_extent = (0, 0.25, 0, 0.25, 0, 0.25)
+ml.outline(surf1, extent = cat1_extent)
 
-surf2 = mesh(X, Y, Z, colormap = 'Accent')
-cat2_extent = (-4, 4, -2, 2, -8, 8)
-outline(surf2, extent=cat2_extent)
+surf2 = ml.mesh(x, y, h, extent = (0.375, 0.625, 0, 0.25, 0, 0.25), colormap = 'Accent')
+cat2_extent = (0.375, 0.625, 0, 0.25, 0, 0.25)
+ml.outline(surf2, extent = cat2_extent)
 
-surf3 = mesh(X+10, Y, Z, colormap = 'prism')
-cat3_extent = (6, 14, -2, 2, -8, 8)
-outline(surf3, extent=cat3_extent, color=(0.5, 0.5, 0.5))
-savefig('images/subplot.png')
+surf3 = ml.mesh(x, y, h, extent = (0.75, 1, 0, 0.25, 0, 0.25), colormap = 'prism')
+cat3_extent = (0.75, 1, 0, 0.25, 0, 0.25)
+ml.outline(surf3, extent = cat3_extent, color = (0.5, 0.5, 0.5))
+ml.savefig('images/subplot.png')
 
 
-clf()
-contour_surf(X, Y, Z)
-savefig('images/simplecontourmayavi.png')
+ml.figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
+ml.surf(x, y, h, extent = (0,1,0,1,0,1))
+ml.contour_surf(x, y, h, extent = (0,1,0,1,0,1))
+ml.savefig('images/simplecontourmayavi.png')
 
-clf()
-contour_surf(X, Y, Z, contours = 10)
-savefig('images/contour10levelsmayavi.png')
+ml.figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
+ml.contour_surf(x, y, h, extent = (0,1,0,1,0,1), contours = 10)
+ml.savefig('images/contour10levelsmayavi.png')
 
-clf()
-contour_surf(X, Y, Z, contours = 10, color = (0., 0., 0.))
-savefig('images/contour10levelsblackmayavi.png')
+ml.figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
+ml.surf(x, y, h, extent = (0,1,0,1,0,1))
+ml.contour_surf(x, y, h, extent = (0,1,0,1,0,1), contours = 10, color = (0., 0., 0.))
+ml.savefig('images/contour10levelsblackmayavi.png')
 
-clf()
-levels = [0.1, 0.2, 0.3, 0.4]
-contour_surf(X, Y, Z, contours = levels)
-savefig('images/contourspeclevelsmayavi.png')
+ml.figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0))
+levels = [500., 1000., 1500., 2000.]
+ml.contour_surf(x, y, h, extent = (0,1,0,1,0,1), contours = levels)
+ml.savefig('images/contourspeclevelsmayavi.png')
 
 #os.system('doconce combine_images png -2 images/simplecontourmayavi images/contour10levelsmayavi images/contour10levelsblackmayavi images/contourspeclevelsmayavi images/advancedcontourmayavi')
 
 x, y, z = np.mgrid[.5:2:.2, .5:2:.2, .5:2:.2]
 r3 = np.sqrt(x**2 + y**2 + z**2)**3
-clf()
-figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0)) 
-quiver3d(x, y, z, -x/r3, -y/r3, -z/r3, mode = 'arrow', colormap = 'jet', scale_factor = .5)
-axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
-savefig('images/quivermayavi.png')
+ml.figure(fgcolor = (.0, .0, .0), bgcolor = (1.0, 1.0, 1.0)) 
+ml.quiver3d(x, y, z, -x/r3, -y/r3, -z/r3, mode = 'arrow', colormap = 'jet', scale_factor = .5)
+ml.axes(xlabel = 'x', ylabel = 'y', zlabel = 'z', nb_labels = 5, color = (0., 0., 0.))
+ml.savefig('images/quivermayavi.png')

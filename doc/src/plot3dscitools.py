@@ -8,10 +8,13 @@ from scitools.easyviz import *
 #plot3(np.sin(t), np.cos(t), t, title = 'Parametrized curve')
 #raw_input('press enter to continue')
 
-x = np.arange(-4, 4, 0.05, float)
-y = np.arange(-2, 2, 0.05, float)
-X, Y = ndgrid(x, y)
-Z = X*Y*sin(X*Y)
+h0 = 2277.  # Hoyden av toppen av fjellet (m)
+R = 4.      # Maal for radius av fjellet (km)
+
+t = linspace(-10., 10., 41)
+
+x,y = ndgrid(t,t)             # Grid for x- og y-verdiene (km)
+h = h0/(1+(x**2+y**2)/(R**2)) # Beregn hoyden h (m)
 
 # The following four plots must run one at a time
 #mesh(X, Y, Z, title = 'Simple plot, no colours', savefig = 'images/simpleplotscitools.pdf')
@@ -22,28 +25,28 @@ Z = X*Y*sin(X*Y)
 os.system('doconce combine_images pdf -2 images/simpleplotscitools images/simpleplotcoloursscitools images/plotscitools')
 os.system('doconce combine_images png -2 images/simpleplotscitools images/simpleplotcoloursscitools images/plotscitools')
 
-contour(X, Y, Z, title = 'Simple contour plot')
+contour(x, y, h)
 savefig('images/simplecontourscitools.pdf')
 savefig('images/simplecontourscitools.png')
 raw_input('press enter to continue')
 
-contour(X, Y, Z, 10, title = 'Contour plot, 10 levels')
+contour(x, y, h, 10)
 savefig('images/contour10levelsscitools.pdf')
 savefig('images/contour10levelsscitools.png')
 raw_input('press enter to continue')
 
-contour(X, Y, Z, 10, 'k', title = 'Contour plot, 10 levels, in black')
+contour(x, y, h, 10, 'k')
 savefig('images/contour10levelsblackscitools.pdf')
 savefig('images/contour10levelsblackscitools.png')
 raw_input('press enter to continue')
 
-levels = [0.1, 0.2, 0.3, 0.4]
-contour(X, Y, Z, levels = levels, title = 'Contour plot, with given levels')
+levels = [500., 1000., 1500., 2000.]
+contour(x, y, h, levels = levels)
 savefig('images/contourspeclevelsscitools.pdf')
 savefig('images/contourspeclevelsscitools.png')
 raw_input('press enter to continue')
 
-contour(X, Y, Z, clabels = 'on', title = 'Contour plot, with labels for the levels')
+contour(x, y, h, clabels = 'on')
 savefig('images/contourclabelscitools.pdf')
 savefig('images/contourclabelscitools.png')
 raw_input('press enter to continue')
@@ -63,8 +66,6 @@ savefig('images/quiverscitoolssimple.png')
 raw_input('press enter to continue')
 
 
-h0 = 2277  # Hoyden av toppen av fjellet (m)
-R = 4      # Maal for radius av fjellet (km)
 tt = linspace(-10.,10.,11)
 xx,yy = ndgrid(tt, tt)      # Definer et grovere grid til vektorfeltet
 hh = h0/(1+(xx**2+yy**2)/(R**2)) # Beregn hoyden med det nye griddet
@@ -77,7 +78,7 @@ t = linspace(-10., 10., 21)
 
 x,y = ndgrid(t,t)             # Grid for x- og y-verdiene (km)
 h = h0/(1+(x**2+y**2)/(R**2)) # Beregn hoyden h (m)
-contour(x, y, h, daspectmode = 'equal')  # Kontur og sett akseenhetene like
+contour(x, y, h)  # Kontur og sett akseenhetene like
 xlabel('x')
 ylabel('y')
 axis('equal')
