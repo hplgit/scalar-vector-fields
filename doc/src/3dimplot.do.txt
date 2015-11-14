@@ -255,7 +255,7 @@ The following code will assume that we have imported everything from this module
 !bc pycod 
 import mayavi.mlab as ml
 !ec 
-Several of the functions in `mlab` have teh same name as the counterparts in SciTools and Matplotlib, so it is smart to separate them using prefixes.
+Several of the functions in `mlab` have the same name as the counterparts in SciTools and Matplotlib, so it is smart to separate them using prefixes.
 
 ===== The basics =====
 We first need to cover some of the basics in the `mayavi.mlab` module. Much of this is similar to the bascis for Matplotlib and SciTools, and we will therefore try to focus mainly on the differences. 
@@ -267,7 +267,7 @@ o by a name representing it,
 o by a number representing the index of the plot
 When either a Figure object, a name or an integer is supplied as parameter to the function `figure()`, `mlab` sets the current figure to be that particular Figure object, 
 or the Figure object with that name or index. If no figure existed with the given name/index, a new figure object will be created with that name/index, and set as the current figure.  
-[TODO: Include this more general description of teh usage of figure() in chapter 5 instead? This is a more natural place for this, as it is nice to know how to jump between a set of figures.]
+[TODO: Include this more general description of the usage of figure() in chapter 5 instead? This is a more natural place for this, as it is nice to know how to jump between a set of figures.]
 
 In the same way, the function `close()` closes a figure with the given handle, name, or index. 
 To clear (not close) the current figure before the next plot, we can run the command `clf()`. 
@@ -305,45 +305,53 @@ Let us return to plotting the surface $h(x,y)$. Mayavi also has commands `mesh` 
 ml.mesh(x, y, h)
 ml.surf(x, y, h)
 !ec
-Both functions color the surface, and accept many of the same parameters. For some purposes `surf` seems to be more general. Assume that the magnitudes in the vertical and horizontal directions are very different. 
-It seems to be difficult to get `mesh` to reflect this, without rescaling values of the same magnitude. With `surf`, however the axes can be auto-scaled in the following way to address this:
-!bc pycod
-ml.surf(x, y, h, warp_scale = 'auto')
-!ec
-The different plotting commands in Mayavi seem to handle such autoscaling parameters differently, however: 
-`mesh` does not seem to perform any auto-scaling of the plots, while `countour_surf`, described below, also accepts a `warp_scale` parameter, but here this needs to attain a value describing a scaling factor. 
-The behaviour may also be unexpected when combining different plots with different types of rescaling. In the following we have therefore scaled the values for $h(x,y)$, so that they are of comparable magnitudes.  
-[TODO: Handle autoscaling in the right way.] 
+Both functions color the surface, and accept many of the same parameters. For some purposes `surf` seems to be more general. 
+The left plot of figure ref{plotmayavi} shows the result when `mesh` is used.
+FIGURE:[images/plotmayavi] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right). The right plot also shows our parametrized curve. label{plotmayavi}
 
-The left plot of figure ref{plotmayavi} shows the result when `mesh` is used, while the right plot shows the result when `surf` is used. In this plot we have also added our parametrized curve, 
-obtained by climbing the mountain so that the angular speed is constant. The points on this curve are created as before, but now the plotting is done as follows. 
+If the magnitudes in the vertical and horizontal directions are very different, the plots above will whow a plot which is very concentrated in one direction. 
+The reason is that Mayavi does no auto-scaling of the axes per default (corresponding to `axis("equal")` in Matplotlib and Matlab). To ensure 
+that the axes are auto-scaled to fit the contents of the surface one can include the parameter `extent` in the following way
+!bc pycod
+ml.surf(x, y, h, extent = (0, 1, 0, 1, 0, 1))
+!ec
+Below we will return to what the six values in `extent` mean. 
+Note that the behaviour may be unexpected when combining different plots which both have been auto-scaled. 
+To illustrate this let us also autoscale our parametrized curve, obtained by climbing the mountain so that the angular speed is constant. 
+For this we can use the `plot3d` command as folllows.
 !bc pycod
 ml.plot3d(xcoords, ycoords, zcoords, tube_radius = 0.2)
 !ec
 The additional parameter `tube_radius` controls the width of the parametrized curve, and was increased here in order to make the curve more visible when shown together with `surf`.  
-FIGURE:[images/plotmayavi] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right). The right plot also shows our parametrized curve. label{plotmayavi}
+The right plot of figure ref{plotmayavi} shows the result when both `surf` and `plot3d` are combined in the same plot. We see that the curce does not lie on the surface, as it should. 
+The reason is that the ranges of the $x$-, $y$-, and $z$-values differ for the the curve and the surface, so that autoscaling will use different scales when placing them on the scene. 
+We therefore have to be a bit cautious when applying the autoscaling in Mayavi, and in the following contour plots we will avoid this autoscaling problem by scaling everything 
+first so that the coordinates are of comparable magnitude, so that there is no need for autoscaling in the first case. 
+ 
+One can also use other properties to scale the cases. Some of the plotting commands below accept a `warp_scale` parameter, which tells us how the the vertical scaling should be performed. 
 
-The two plots in figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure, so that one figure is generated with several subplots. Consider the following code.
+The two plots in figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure, so that one figure is generated with several subplots. 
+Consider the following code.
 !bc pycod
-R2 = 10.
-surf1 = ml.mesh(x - 3*R2, y, h, color = (.5, .5, .5))
-cat1_extent = (-4*R2, -2*R2, -R2, R2, 0, 25)
-ml.outline(surf1, extent = cat1_extent)
+surf1 = ml.mesh(x, y, h, extent = (0, 0.25, 0, 0.25, 0, 0.25), \\
+                color = (.5, .5, .5))
+ml.outline(surf1)
 
-surf2 = ml.mesh(x, y, h, colormap = 'Accent')
-cat2_extent = (-R2, R2, -R2, R2, 0, 25)
-ml.outline(surf2, extent = cat2_extent)
+surf2 = ml.mesh(x, y, h, extent = (0.375, 0.625, 0, 0.25, 0, 0.25), \\
+                colormap = 'Accent')
+ml.outline(surf2)
 
-surf3 = ml.mesh(x + 3*R2, y, h, colormap = 'prism')
-cat3_extent = (2*R2, 4*R2, -R2, R2, 0, 25)
-ml.outline(surf3, extent = cat3_extent, color = (0.5, 0.5, 0.5))
+surf3 = ml.mesh(x, y, h, extent = (0.75, 1, 0, 0.25, 0, 0.25), \\
+                colormap = 'prism')
+ml.outline(surf3, color = (0.5, 0.5, 0.5))
 !ec
-The result is shown in the left plot in Figure ref{subplot}.
+The result is shown in the left plot in Figure ref{subplot}. 
 FIGURE:[images/subplot] A plot with three subplots created with Mayavi, consisting of the same surface drawn with different color maps. label{subplot}
-
-Here three separate `mesh` commands are run, each producing a new plot in the current figure. The $x$-coordinates are seen to be `X - 10`, `X`, and `X + 10`, so that the three plotting areas do not overlap. 
-The handles to the three plots are stored in the variables `surf1`, `surf2`, and `surf3`, and bounding boxes `cat1_extent`, `cat2_extent`, and `cat3_extent` are defined, which contain coordinates which bound the three different plots.   
-The function `outline` finally draws the corresponding box for the plot in question. We have dropped the axes and the title in the code here. 
+From this it should be clear that the six values listed in `extent` represent fractions of the cube `(0,1,0,1,0,1)`, where the corresponding plots are placed. 
+The extents for the three plots are defined so that they do not overlap. 
+Three separate `mesh` commands are run, each producing a new plot in the current figure. 
+The handles to the three plots are stored in the variables `surf1`, `surf2`, and `surf3`, and
+the function `outline` finally draws the corresponding box for the plot in question. We have dropped the axes and the title in the code here. 
 
 Note that the surfaces in Figure ref{subplot} are drawn with different colors. This is due to the `colormap` and `color` attributes in the call to `mesh`, which adjusts the colors when the surface is drawn. The `color` attribute, which we see also can be used as a 
 parameter to `outline`, adjusts the surface so that it is colored with small variations from the provided base-color. 
