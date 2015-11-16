@@ -2,6 +2,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
+print numpy.version.version
 h0 = 2277.  # Hoyden av toppen av fjellet (m)
 R = 4.      # Maal for radius av fjellet (km)
 
