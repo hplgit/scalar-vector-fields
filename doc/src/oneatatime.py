@@ -11,7 +11,7 @@ x,y = ndgrid(t,t)
 h = h0/(1+(x**2+y**2)/(R**2)) 
 
 # The following four plots must run one at a time
-mesh(x, y, h, savefig = 'images/simpleplotscitools.pdf')
+mesh(x, y, h, savefig = 'images/simpleplotscitools.png')
 #mesh(x, y, h, savefig = 'images/simpleplotscitools.png')
 #surf(x, y, h, savefig = 'images/simpleplotcoloursscitools.pdf')
 #surf(x, y, h, savefig = 'images/simpleplotcoloursscitools.png')
