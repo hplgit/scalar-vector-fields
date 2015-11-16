@@ -2,7 +2,7 @@ from math import *
 import numpy as np
 
 from scitools.easyviz import *
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt2
 
 h0 = 2277.  # Hoyden av toppen av fjellet (m)
 R = 4.      # Maal for radius av fjellet (km)
@@ -22,5 +22,4 @@ xx, yy = np.meshgrid(tt, tt)       # Definer et grovere grid til vektorfeltet
 hh = h0/(1 + (xx**2 + yy**2)/(R**2)) # Beregn hoyden med det nye griddet
 dhx, dhy = np.gradient(hh)         # Beregn gradientvektoren (dh/dx,dh/dy)
 # Plott vektorfeltet (rod farge) og skaler vektorlengden med en faktor
-# En bedre skaleringsfaktor er .75, men fungerer kanskje ikke?
-plt.quiver(xx, yy, dhy, dhx, color = 'r', angles = 'xy')#, color = 'r', angles = 'xy')#, scale_units = 'xy') #, )
+plt2.quiver(xx, yy, dhy, dhx, color = 'r', angles = 'xy')#, color = 'r', angles = 'xy')#, scale_units = 'xy') #, )
