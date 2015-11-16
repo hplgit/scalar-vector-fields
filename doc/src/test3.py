@@ -22,6 +22,6 @@ hh = h0/(1 + (xx**2 + yy**2)/(R**2)) # Beregn hoyden med det nye griddet
 dhx, dhy = np.gradient(hh)         # Beregn gradientvektoren (dh/dx,dh/dy)
 # Plott vektorfeltet (rod farge) og skaler vektorlengden med en faktor
 # En bedre skaleringsfaktor er .75, men fungerer kanskje ikke?
-plt.quiver(xx, yy, dhy, dhx)#, color = 'r', angles = 'xy')#, scale_units = 'xy') #, )
+plt.quiver(xx, yy, dhy, dhx, angles = 'xy')#, color = 'r', angles = 'xy')#, scale_units = 'xy') #, )
 
 raw_input('press')
