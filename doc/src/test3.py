@@ -3,6 +3,9 @@ import numpy as np
 
 from scitools.easyviz import *
 
+h0 = 2277.  # Hoyden av toppen av fjellet (m)
+R = 4.      # Maal for radius av fjellet (km)
+
 tt = linspace(-10.,10.,11)
 xx,yy = ndgrid(tt, tt)      # Definer et grovere grid til vektorfeltet
 hh = h0/(1+(xx**2+yy**2)/(R**2)) # Beregn hoyden med det nye griddet
