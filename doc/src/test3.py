@@ -1,3 +1,4 @@
+from numpy import *
 from scitools.easyviz import *
 
 h0 = 2277.  # Hoyden av toppen av fjellet (m)
