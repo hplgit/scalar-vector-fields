@@ -21,9 +21,11 @@ we will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to the cod
 We first define a grid for the area closer to the mountain top than 10km in any direction.
 !bc pycod
 t = np.linspace(-10., 10., 41)
-x, y = np.meshgrid(t, t)       
+x, y = np.meshgrid(t, t, indexing = 'ij', sparse = False)       
 !ec
-TODO: sparse = False, indexing = 'ij'? Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics. 
+Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics. 
+`indexing = 'ij'` means that the coordinates are set as in a $xy$-coordinate system.
+`indexing = 'xy'` means that the coordinates are set as row/column indices in a matrix.
 
 Now that we have the grid coordinates, we need to create the corresponding function values. This can be done as follows  
 !bc pycod
@@ -138,7 +140,7 @@ Finally we plot the vector field together with the contour lines in the same plo
 plt.quiver(xx, yy, dhy, dhx, color = 'r', angles = 'xy')               
 
 t = np.linspace(-10.,10.,21)
-x, y = np.meshgrid(t, t)           
+x, y = np.meshgrid(t, t, indexing = 'ij', sparse = False)           
 h = h0/(1+(x**2+y**2)/(R**2)) 
 plt.hold('on')
 plt.contour(x, y, h)
@@ -160,7 +162,7 @@ One can simply replace the call to `meshgrid` above with
 !bc pycod
 x, y = ndgrid(tx, ty)
 !ec
-`ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. 
+`ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: They attain default values which can be used.
 
 The surface can now be plotted simply by writing `mesh(X, Y, Z)`, so that this part of the code is shorter than the three lines needed with Matplotlib.
 The result is shown in the left plot in Figure ref{plotscitools}.
@@ -242,14 +244,26 @@ The result is shown in the right plot in Figure ref{quiverscitools}.
 
 
 ======= Mayavi =======
-Mayavi is an advanced, free, easy to use, scientific data visualizer, with an emphasis on 3D visualization. 
+Mayavi[^mayaviurl] is an advanced, free, easy to use, scientific data visualizer, with an emphasis on 3D visualization. 
 It is written in Python, and uses the Visualization Toolkit (VTK) for the graphics. 
-It is cross platform and should run on any platform where both Python and VTK are available (this includes Mac OSX and windows).
-To obtain a full environment for Mayavi, which contains Python , VTK, and all its dependencies, you can install Canopy. 
-This gives you access to install not only Mayavi, but also a whole list of packages from what is called a package index.
-While Mayavi will work right out of the box with Canopy, you can also install all components by hand (more on this). 
+It is cross platform and should run on any platform where both Python and VTK are available (this includes Mac OSX and Windows).
+There are several ways you can obtain a full environment for Mayavi. 
 
-We will only consider the Mayavi-functionality for simple plotting, such as the functionality we considered for Matplotlib and SciTools. 
+[^mayaviurl]: The page URL: "http://docs.enthought.com/mayavi/mayavi/" collects pointers to all relevant documentation or Mayavi
+
+We recommend that you use Anaconda for Mayavi, since Anaconda is cross-platform. This requires that you install a list of packages which Mayavi depends on[^mayavipackagesurl]
+These are not only Python packages (which thus can be installed with `pip`), but also other types of dependencies 
+(which can be installed with `conda`, a package managament tool which handles dependencies which are outside Python, contrary to `pip`. `conda`, just as `pip`, is bundled with your Anaconda installation).
+
+You can install Canopy[^canopyurl]. Canopy contains a full Python environment, and through the package manager tool of Canopy you can install Mayavi itself, VTK, and all the other dependencies of Mayavi. 
+The package manager tool gives you access to install not only Mayavi, but also a whole list of packages from what is called a package index.
+
+[^canopyurl]: URL: "https://www.enthought.com/products/canopy/"
+[^mayavipackagesurl]: A list of the packages you need can be found on URL: "http://docs.enthought.com/mayavi/mayavi/installation.html"
+
+You can also use Ubuntu and the VMWare Fusion virtual machine, and install all components by hand (see the link for Anaconda to package dependencies).
+
+We will only consider the Mayavi-functionality for simple plotting[^simpleplotting], such as the functionality we considered for Matplotlib and SciTools. 
 The `mayavi.mlab` module provides a simple interface to such plotting, with an emphasis on 3D visualization. 
 The following code will assume that we have imported everything from this module, and that we use the `ml` prefix for this module:
 !bc pycod 
@@ -257,8 +271,13 @@ import mayavi.mlab as ml
 !ec 
 Several of the functions in `mlab` have the same name as the counterparts in SciTools and Matplotlib, so it is smart to separate them using prefixes.
 
+[^simpleplotting]: The documentation for simple plotting functions can also be found on URL: "http://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html". Further documentation can be found on URL: "http://docs.enthought.com/mayavi/mayavi/auto/mlab_other_functions.html".
+
 ===== The basics =====
-We first need to cover some of the basics in the `mayavi.mlab` module. Much of this is similar to the bascis for Matplotlib and SciTools, and we will therefore try to focus mainly on the differences. 
+We first need to cover some of the basic figure handling function in the `mayavi.mlab` module[^basicfigurehandling]. 
+Much of this is similar to the bascis for Matplotlib and SciTools, and we will therefore try to focus mainly on the differences. 
+
+[^basicfigurehandling]: The documentation for basic figure handling functions can be found on URL: "http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html"
 
 The plotting commands you do in `mlab` will go to the current figure, also called a scene. This means that several plot commands will be shown together. 
 You can work with several figure instances simultaneously. A figure can be accessed in three different ways:
@@ -333,20 +352,16 @@ One can also use other properties to scale the cases. Some of the plotting comma
 The two plots in figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure, so that one figure is generated with several subplots. 
 Consider the following code.
 !bc pycod
-surf1 = ml.mesh(x, y, h, extent = (0, 0.25, 0, 0.25, 0, 0.25), \\
-                color = (.5, .5, .5))
-ml.outline(surf1)
-
-surf2 = ml.mesh(x, y, h, extent = (0.375, 0.625, 0, 0.25, 0, 0.25), \\
-                colormap = 'Accent')
-ml.outline(surf2)
-
-surf3 = ml.mesh(x, y, h, extent = (0.75, 1, 0, 0.25, 0, 0.25), \\
-                colormap = 'prism')
-ml.outline(surf3, color = (0.5, 0.5, 0.5))
+ml.outline(ml.mesh(x, y, h, extent = (0, 0.25, 0, 0.25, 0, 0.25), \\
+           color = (.5, .5, .5)))
+ml.outline(ml.mesh(x, y, h, extent = (0.375, 0.625, 0, 0.25, 0, 0.25), \\
+           colormap = 'Accent'))
+ml.outline(ml.mesh(x, y, h, extent = (0.75, 1, 0, 0.25, 0, 0.25), \\
+           colormap = 'prism'))
 !ec
 The result is shown in the left plot in Figure ref{subplot}. 
 FIGURE:[images/subplot] A plot with three subplots created with Mayavi, consisting of the same surface drawn with different color maps. label{subplot}
+
 From this it should be clear that the six values listed in `extent` represent fractions of the cube `(0,1,0,1,0,1)`, where the corresponding plots are placed. 
 The extents for the three plots are defined so that they do not overlap. 
 Three separate `mesh` commands are run, each producing a new plot in the current figure. 
@@ -433,6 +448,7 @@ With the function `animate` in `mlab` we can also create animations.
 
 
 This code will rotate the camera continuously. f is the current graphics.
+!bc pycod
 from mayavi import mlab
 @mlab.animate
 def anim():
@@ -443,3 +459,4 @@ def anim():
         yield
 
 a = anim()
+!ec
