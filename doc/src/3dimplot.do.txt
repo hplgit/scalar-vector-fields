@@ -13,6 +13,50 @@ Many of the plots below concern the following surface:
 This describes the height of an isolated mountain, where $h$ is the height above sea level, $x$ and $y$ are cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is called the radius of the mountain. 
 We will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to all code below we have set $h_0=2277$ and $R=4$. 
 
+Prior to plotting the function $h(x,y)$, we need create a grid of the points to plot. This can be done regardless of which plotting package we will use later as follows.  
+
+!bc pycod
+t = np.linspace(-10., 10., 41)
+x, y = np.meshgrid(t, t, indexing='ij', sparse=False) # # Grid for contour plot
+h = h0/(1 + (x**2 + y**2)/(R**2)) # Compute the elevation coordinates
+!ec
+We here defined a grid for the area closer to the mountain top than 10km in any direction.
+Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics.
+`indexing='ij'` means that the coordinates are set as in an $xy$-coordinate system.
+`indexing='xy'` means that the coordinates are set as row/column indices in a matrix.
+
+We will also plot the gradient vector field of $h(x,y)$. This can be computed using the function `np.gradient` as follows. 
+
+!bc pycod
+t2 = np.linspace(-10.,10.,21)
+x2, y2 = np.meshgrid(t2, t2, indexing='ij', sparse=False) # Grid for vector field     
+h2 = h0/(1+(x2**2+y2**2)/(R**2)) 
+dhx, dhy = np.gradient(h2)         # Compute the gradient vector (dh/dx,dh/dy)
+!ec
+
+Not that here we created a new grid for the coordinates of the gradient vectors. The reason is that we will plot many vectors at the same time, so that it may be smart to use a smaller resolution for the 
+vector field coordinates than for the surface coordinates.
+
+We will also plot another vector field defined as follows.
+
+!bt
+\[\bm{v} = \left( x^2 + 2y - \frac{1}{2} xy \right)\bm{i}  - 3y\bm{j}.\]
+!et
+We will plot this over $[-5,5]$, with $0.5$ distance between the vectors. The grid can now be obtained as follows.
+
+!bc pycod
+t = np.linspace(-5, 5, 11)
+x, y = np.meshgrid(t, t, sparse=False, indexing='ij')
+vx = x**2 + 2*y - .5*x*y
+vy = -3*y
+!ec
+
+
+
+
+
+
+
 ======= Matplotlib =======
 
 Below we will use the prefix `plt` for the package `matplotlib.pyplot`:
@@ -21,30 +65,12 @@ Below we will use the prefix `plt` for the package `matplotlib.pyplot`:
 import matplotlib.pyplot as plt
 !ec
 
-Note that after each plot command you need to write `plt.show()` in order for the new plot to become visible.
+Note that with Matplotlib, after each plot command you need to write `plt.show()` in order for the new plot to become visible.
 
 
 ===== Simple surface plots =====
 
-We first define a grid for the area closer to the mountain top than 10km in any direction.
-
-!bc pycod
-t = np.linspace(-10., 10., 41)
-x, y = np.meshgrid(t, t, indexing='ij', sparse=False)       
-!ec
-
-Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics.
-`indexing='ij'` means that the coordinates are set as in a $xy$-coordinate system.
-`indexing='xy'` means that the coordinates are set as row/column indices in a matrix.
-
-
-Now that we have the grid coordinates, we need to create the corresponding function values. This can be done as follows
-
-!bc pycod
-h = h0/(1 + (x**2 + y**2)/(R**2))
-!ec
-
-The surface can now be plotted as follows:
+The surface $h(x,y)$ can be plotted as follows:
 
 !bc pycod
 fig = plt.figure()
@@ -111,21 +137,7 @@ FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some ot
 
 ===== Plotting vector fields =====
 
-Let us attempt to plot the vector field
-
-!bt
-\[\bm{v} = \left( x^2 + 2y - \frac{1}{2} xy \right)\bm{i}  - 3y\bm{j}.\]
-!et
-If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows.
-
-!bc pycod
-t = np.linspace(-5, 5, 11)
-x, y = np.meshgrid(t, t, sparse=False, indexing='ij')
-vx = x**2 + 2*y - .5*x*y
-vy = -3*y
-!ec
-
-The following code plots the vector field. 
+The following code plots the vector field $\bm{v}$ defined above. 
 
 !bc pycod
 plt.quiver(x, y, vx, vy, angles='xy', scale_units='xy', color='b')
@@ -143,31 +155,17 @@ Often the vectors need to be scaled in order for them not to collide in the plot
 This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors. 
 Matplotlib will attempt to scale the plot automatically if the `scale` parameter is not set, in order to try to avoid that the vectors collide.
 
-
-Let us round off by considering an example where we plot the contour lines of a function together with the gradient field of that function.
-The gradients are orthogonal to the contour lines, so let us see if we can observe this in our plot...
-
-
-We then compute the gradient using the built-in function `gradient` in `numpy`.
+Let us finally see how to plot the contour lines of $h(x,y)$ together with its gradient field. The following three lines do the job, once all grid coordinates and the gradient field have been computed as above. 
 
 !bc pycod
-dhx, dhy = np.gradient(hh)         # Beregn gradientvektoren (dh/dx,dh/dy)
-!ec
-
-Finally we plot the vector field together with the contour lines in the same plot as follows.
-
-!bc pycod
-plt.quiver(xx, yy, dhy, dhx, color='r', angles='xy')               
-
-t = np.linspace(-10.,10.,21)
-x, y = np.meshgrid(t, t, indexing='ij', sparse=False)           
-h = h0/(1+(x**2+y**2)/(R**2)) 
+plt.quiver(x2, y2, dhx, dhy, color='r', angles='xy')               
 plt.hold('on')
 plt.contour(x, y, h)
 !ec
+The result is shown in the right plot in Figure ref{quivermatplotlib}. In calculus one is taught that the gradients are orthogonal to the contour lines. This is easily seen in the plot.  
 
-Here we have created a new grid which is finer, for plotting the surface. The result is shown in the right plot in Figure ref{quivermatplotlib}.
-Note that in the call to `quiver` the vector components `dhy` and `dhx` were reversed. This seems to be an error in Matplotlib.
+
+
 
 ======= SciTools =======
 
@@ -183,15 +181,16 @@ import scitools.easyviz as plt
 ===== Simple surface plots =====
 
 SciTools has the function `ndgrid` which, just as `meshgrid`, can be used to create grids of all possible $(x,y)$-coordinate pairs from given one-dimensional coordinates.
-One can simply replace the call to `meshgrid` above with
+One can simply replace the calls to `meshgrid` above with
 
 !bc pycod
-x, y = plt.ndgrid(tx, ty)
+x, y = plt.ndgrid(t, t)     # Grid for contour plot
+x2, y2 = plt.ndgrid(t2, t2) # Grid for quiver plot
 !ec
 
 `ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: They attain default values which can be used.
 
-The surface can now be plotted simply by writing `plt.mesh(X, Y, Z)`, so that this part of the code is shorter than the three lines needed with Matplotlib.
+The surface can be plotted simply by writing `plt.mesh(x, y, h)`, so that this part of the code is shorter than the three lines needed with Matplotlib.
 The result is shown in the left plot in Figure ref{plotscitools}.
 
 FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface plots. Simple plot (left), and a plot with colours (right). label{plotscitools}
@@ -220,42 +219,24 @@ FIGURE:[images/advancedcontourscitools, height=400 width=600 frac=0.8] Some othe
 
 ===== Plotting vector fields =====
 
-Let ur return to the vector field
-
-!bt
-\[\bm{v} = \left( x^2 + 2y - \frac{1}{2} xy \right)\bm{i}  - 3y\bm{j},\]
-!et
-and let us reuse the code above to produce the vectors in the vector field. With SciTools one can instead write
+The following code plots the vector field $\bm{v}$ defined above. 
 
 !bc pycod
 plt.quiver(x, y, vx, vy, 200, 'b')
 !ec
 
 [TODO: I need to consult the documentation here]
-to plot the vector field. The two last parameters represent scaling and color. The resulting plot is shown in Figure ref{quiverscitools}
+The two last parameters represent scaling and color. The resulting plot is shown in Figure ref{quiverscitools}
 
 FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] A vector field plotted with SciTools (left), and contours together with the gradients (right). label{quiverscitools}
 
-Let us round off by considering again the previous example of contour/gradient plot.
-We again define a grid for the area closer to the mountain top than 10km in any direction, but this time we use `ndgrid` in SciTools.
+Let us round off by considering again the previous example of contour/gradient plot. The following three lines do the job in this case, and the result is shown in the right plot in Figure ref{quiverscitools}.
 
 !bc pycod
-tt = np.linspace(-10., 10., 11)
-xx, yy = plt.ndgrid(tt, tt)      
-hh = h0/(1 + (xx**2 + yy**2)/(R**2)) 
-!ec
-and we compute the gradient as before.
-Finally we plot the vector field together with the contour lines in the same plot as follows.
-
-!bc pycod
-plt.quiver(xx, yy, dhx, dhy, 0, 'r')
-t = np.linspace(-10., 10., 21)
-x,y = plt.ndgrid(t,t)             
-h = h0/(1+(x**2+y**2)/(R**2)) 
+plt.quiver(x2, y2, dhx, dhy, 0, 'r')
 plt.hold('on')     
 plt.contour(x, y, h, daspectmode='equal') 
 !ec
-The result is shown in the right plot in Figure ref{quiverscitools}.
 
 
 
@@ -288,6 +269,7 @@ You can also use Ubuntu and the VMWare Fusion virtual machine, and install all c
 We will only consider the Mayavi-functionality for simple plotting[^simpleplotting], such as the functionality we considered for Matplotlib and SciTools.
 The `mayavi.mlab` module provides a simple interface to such plotting, with an emphasis on 3D visualization.
 Below we will use the prefix `plt` for the package `mayavi.mlab`:
+
 !bc pycod
 import mayavi.mlab as plt
 !ec
@@ -318,6 +300,7 @@ In the same way, the function `plt.close()` closes a figure with the given handl
 To clear (not close) the current figure before the next plot, we can run the command `plt.clf()`. 
 The function `plt.gcf()` returns the current figure object. You will need to call this in order to get the object where you can set some the figure properties, 
 such as the foreground or background colour (the foreground colour is used for text and labels included in the plot). This can also be done directly by writing
+
 !bc pycod
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 !ec
@@ -332,6 +315,7 @@ Many of the other functions are also similar to what we are used to.
 * `plt.axes()` for creating axes with labels and given colors, we can use the function plt.axes(xlabel='x', ylabel='y')
 
 The following code examplifies all the above in one plot.
+
 !bc pycod
 plt.clf() # Clear
 # Create figure with white background, black foreground
@@ -348,6 +332,7 @@ plt.savefig('plot.png')
 ===== Simple surface plots and subplots =====
 
 Let us return to plotting the surface $h(x,y)$. Mayavi also has commands `mesh` and `surf`, which works similarly to Matplotlib and SciTools:
+
 !bc pycod
 plt.mesh(x, y, h)
 plt.surf(x, y, h)
@@ -360,6 +345,7 @@ FIGURE:[images/plotmayavi] Two Mayavi surface plots. Using `mesh` (left), and us
 If the magnitudes in the vertical and horizontal directions are very different, the plots above will whow a plot which is very concentrated in one direction.
 The reason is that Mayavi does no auto-scaling of the axes per default (corresponding to `axis("equal")` in Matplotlib and Matlab). To ensure
 that the axes are auto-scaled to fit the contents of the surface one can include the parameter `extent` in the following way
+
 !bc pycod
 plt.surf(x, y, h, extent=(0, 1, 0, 1, 0, 1))
 !ec
@@ -367,6 +353,7 @@ Below we will return to what the six values in `extent` mean.
 Note that the behaviour may be unexpected when combining different plots which both have been auto-scaled.
 To illustrate this let us also autoscale our parametrized curve, obtained by climbing the mountain so that the angular speed is constant.
 For this we can use the `plot3d` command as folllows.
+
 !bc pycod
 plt.plot3d(xcoords, ycoords, zcoords, tube_radius=0.2)
 !ec
@@ -380,6 +367,7 @@ One can also use other properties to scale the cases. Some of the plotting comma
 
 The two plots in figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure, so that one figure is generated with several subplots.
 Consider the following code.
+
 !bc pycod
 plt.outline(plt.mesh(x, y, h, extent=(0, 0.25, 0, 0.25, 0, 0.25), \\
            color=(.5, .5, .5)))
@@ -437,6 +425,7 @@ Newtons law of gravitation says that the gravitational force is proportional to
 where $\bm{r}=(x,y,z)$ is the position vector. Let us attempt to plot this vector field. 
 We need a three-dimensional grid, so that `meshgrid` will not work. We can either use `ndgrid` from SciTools, or `mgrid` from `numpy` as follows
 If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows.
+
 !bc pycod
 x, y, z = np.mgrid[.5:2:.2, .5:2:.2, .5:2:.2]
 r3 = np.sqrt(x**2 + y**2 + z**2)**3
@@ -447,6 +436,7 @@ vz = -z/r3
 The cube of the distance (`r3`) has here been computed once, since all three components are divided by this.
 Also we compute the vector field for a section in the first octant only, where all three components are between $0.5$ and $2$, and we do not make the grid too dense, so that individual vectors have smaller chance of colliding.
 The vector field can now be vizualized as follows.
+
 !bc pycod
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0)) 
 plt.quiver3d(x, y, z, -x/r3, -y/r3, -z/r3, \\
@@ -458,11 +448,13 @@ plt.axes(xlabel='x', ylabel='y', zlabel='z', \\
 The three first parameters to `quiver3d`, the function which actually plots the vector field, specify the $x$-, $y$-, and $z$-components of the points where vectors are to be drawn.
 The next three parameters are the actual components of the vectors.
 To improve the visualization of the field, we have set some of the optional properties to `quiver3d`:
+
 * The `mode` parameter ensures that the vectors are drawn as arrow.
 * The `colormap` parameter controls how the vectors are colored.
 * The `scale_factor` parameter lets us manually scale the vector lengths, to ensure that they do not collide.
+
 In addition we have set a foreground and background color for the figure, and added axes as above.
-The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting vecto fiels in 3D dimensions. It may be challenging to create instructive plots, since vectors are drawn over an area in 3D rather than 2D.
+The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting vector fiels in 3D dimensions. It may be challenging to create instructive plots, since vectors are drawn over an area in 3D rather than 2D.
 
 FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] A vector field plotted with Mayavi. label{quivermayavi}
 
@@ -475,6 +467,7 @@ With the function `animate` in `mlab` we can also create animations.
 
 
 This code will rotate the camera continuously. f is the current graphics.
+
 !bc pycod
 import mayavi as plt
 @mlab.animate
