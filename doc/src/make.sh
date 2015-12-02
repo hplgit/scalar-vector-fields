@@ -11,6 +11,6 @@ function system {
 }
 
 name=programming
-system doconce format pdflatex $name --latex_code_style=lst-blue1
+system doconce format pdflatex $name --latex_code_style=lst-blue1 --no_abort
 system pdflatex $name
 pdflatex $name

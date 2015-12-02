@@ -1,81 +1,249 @@
-========= Python and linear algebra =========
+========= Linear algebra =========
 
-Many people use Matlab as their primary tool for linear algebra. We will here see that all things we can do with Matlab can also be done in a simple way with Python and Numpy.
-Python also addresses some things that may seen a bit strange in Matlam: As an example, everything is viewed as a matrix in Matlab, so that if we have a tuple of numbers, is is viewed as a
-two-dimensional object. In Python we distinguish more clearly between the two, in that a list can have either one or two dimensions. This prevents Python from misinterpreting a column vector for a row
-vector and vice versa, which easily occurs with Matlab.
+Python has strong suppoert for numerical linear algebra, much like the
+functionality found in Matlab.
+#Contrary to Matlab, where the fundamental data structure is the matrix,
+#the NumPy package in Python features arrays of any dimension.
 
 
 
-======= Simple operations =======
+======= Basic operations =======
 
-If `A` is a matrix, `A.T` is its transpose.
-When we want to verify that a result is true, we often generate a matrix at random, and show that the result holds for this matrix. As an example, consider the following code.
+idx{eigenvalues} idx{eigenvectors}
 
-!bc pycod
-A = matrix(random.rand(4, 4))
-B = matrix(random.rand(4, 4))
+First we exemplify how to find
+the inverse and the determinant of a matrix, and how to
+compute the eigenvalues and eigenvectors:
 
-tol = 1E-14
-assert abs((A + B).T - A.T - B.T).max() < tol
-assert abs((A * B).T - B.T * A.T).max() < tol
+!bc pyshell
+>>> import numpy as np
+>>> A = np.array([[2, 0], [0, 5]], dtype=float)
+
+>>> np.linalg.inv(A)  # inverse matrix
+array([[ 0.5,  0. ],
+       [ 0. ,  0.2]])
+
+>>> np.linalg.det(A)  # determinant
+9.9999999999999982
+
+>>> eig_values, eig_vectors = np.linalg.eig(A)
+>>> eig_values
+array([ 2.,  5.])
+>>> eig_vectors
+array([[ 1.,  0.],
+       [ 0.,  1.]])
 !ec
-Which two known results are verified by this code?
-
-The inverse of the matrix `A` can be computed with  `linalg.inv(A)`.
-
-The eigenvectors and eigenvalues of the matrix `A` can be computed by
-writing `D,P = linalg.eig(A)`.  `A` must here be a square matrix. The
-return value `D` is an array which holds the eigenvalues of `A`, while
-the return value `P` is a matrix where the columns are the
-(corresponding) eigenvectors of `A` (the eigenvectors are normalized
+The eigenvectors are normalized
 so that they have length 1, which can make them seem more complicated
-than necessary in some cases).
+than necessary in some cases.
 
-In `numpy` we can compute the scalar product and cross product of two
-vectors (arrays) `a` and `b` by writing `dot(a, b)` and `cross(a, b)`,
-respectively. The latter assumes that the vectors are
-three-dimensional. The (Euclidean) norm of a vector can be computed
-with `linalg.norm(a)`. The angle between `a` and `b` can now be
-computed by writing
+idx{`dot` (from `numpy`)}
+idx{`cross` (from `numpy`)}
 
-!bc pycod
-arccos(dot(a, b)/(linalg.norm(a)*linalg.norm(b)))
+The `np.dot` function is used for scalar or dot product as well as
+matrix-vector and matrix-matrix products:
+
+!bc pyshell
+>>> a = np.array([4, 0])
+>>> b = np.array([0, 1])
+>>> np.dot(A, a)         # matrix vector product
+array([ 8.,  0.])
+>>> np.dot(a, b)         # dot product between vectors
+0
+>>>
+>>> B = np.ones((2, 2))  # 2x2 matrix with 1's
+>>> np.dot(A, B)         # matrix-matrix product
+array([[ 2.,  2.],
+       [ 5.,  5.]])
 !ec
 
-If `c` is an an array or matrix, the sum and product of all its
-components can be found by writing `c.sum()` and `c.prod()`. These
-functions also take an optional parameters which represents the axis
-we should sum over: `c.sum(0)` returns a row vector where each element
-is the sum of the corresponding column, and `c.sum(1)` returns a
-column vector where each element is the sum of the corresponding row.
-`sum()` can be used to compute the mean value of a matrix, and what is
-called the Frobenius norm of a matrix, as follows:
+Other typical operations in linear algebra, like the cross product $a\times b$
+(between vectors of length 3) and finding the angle between vectors,
 
-!bc pycod
-m, n = shape(A)
-A.sum()/(m*n)        # The mean value of A
-sqrt(sum(A**2))      # The Frobenius norm of A
+!bt
+\[ \theta = \cos^{-1}\left(\frac{a\cdot b}{||a||\,||b||}\right),\]
+!et
+go like
+
+!bc pyshell
+>>> np.cross([1, 1, 1], [0, 0, 1])
+array([ 1, -1,  0])
+
+>>> np.arccos(np.dot(a, b)/(np.linalg.norm(a)*np.linalg.norm(b)))
+1.5707963267948966
 !ec
 
-In the same way we can compute the maximum value in a matrix `c` by
-writing `c.max()`, and along different axes: `c.max(0)` returns a row
-vector where each element is the maximum value of the corresponding
-column, and `c.max(1)` returns a column vector where each element is
-the maximum value of the corresponding row.  The minimum can be
-computed similarly.
+idx{norms in `numpy`}
+
+Various norms of matrices and vectors are well supported by NumPy.
+Some common examples are
+
+!bc pyshell
+>>> np.linalg.norm(A)        # Frobenius norm for matrices
+5.3851648071345037
+>>> np.sqrt(np.sum(A**2))    # Frobenius norm, direct formula
+5.3851648071345037
+>>> np.linalg.norm(a)        # l2 norm for vectors
+4.0
+!ec
+See `pydoc numpy.linalg.norm` for information on other norms.
+
+idx{transpose (in `numpy`)}
+The transpose of a matrix `B` is obtained by `B.T`:
+
+!bc pyshell
+>>> B = np.array([[1, 2], [3, -4]], dtype=float)
+>>> B.T                # the transpose
+array([[ 1.,  3.],
+       [ 2., -4.]])
+!ec
+
+idx{`sum` (from `numpy`)}
+idx{`max` (from `numpy`)}
+
+The sum of all elements or of the elements in a particular row or column
+is computed by `np.sum`:
+
+!bc pyshell
+>>> np.sum(B)          # sum of all elements
+2.0
+>>> np.sum(B, axis=0)  # sum over index 0 (rows)
+array([ 4., -2.])
+>>> np.sum(B, axis=1)  # sum over index 1 (columns)
+array([ 3., -1.])
+!ec
+The maximum or minimum value of an array is also often needed:
+
+!bc pyshell
+>>> np.max(B)          # max over all elements
+3.0
+>>> B.max()            # max over all elements, alternative syntax
+3.0
+>>> np.min(B)          # min over all elements
+-4.0
+>>> B.min()            # min over all elements, alternative syntax
+-4.0
+>>> np.abs(B).min()    # min absolute value
+1.0
+!ec
+A very frequent application of computing the minimum absolute value
+occurs in test functions where we want to verify a result, e.g.,
+that $AA^{-1}=I$, where $I$ is the identity matrix:
+
+!bc pyshell
+>>> I = np.eye(2)   # identity matrix of size 2
+>>> I
+array([[ 1.,  0.],
+       [ 0.,  1.]])
+>>> np.abs(np.dot(A, np.linalg.inv(A)) - I).max()
+0.0
+!ec
+It could be tempting to test $AA^{-1}=I$ using the syntax
+
+!bc pyshell
+>>> np.dot(A, np.linalg.inv(A)) == np.eye(2)
+array([[ True,  True],
+       [ True,  True]], dtype=bool)
+!ec
+but there are two major problems with this test:
+
+ o the result is a boolean matrix, not suitable for an `if` test
+ o using `==` for matrices with float elements may fail because of
+   rounding errors
+
+The second problem must be solved by
+computing differences and comparing them against small tolerances, as we
+did above.
+Here is an example where `==` fails:
+
+!bc pyshell
+>>> A = np.array([[4, 0], [0, 49]], dtype=float)
+>>> np.dot(A, np.linalg.inv(A)) == np.eye(2)
+array([[ True,  True],
+       [ True, False]], dtype=bool)
+!ec
+(`1.0/49*49` is not exactly `1` because of rounding errors.)
+
+The first problem is solved by using the `C.all()`, which returns one
+boolean variable `True` if all elements in the boolean array `C` are `True`,
+otherwise it returns `False`, as in the case above:
+
+!bc pyshell
+>>> (np.dot(A, np.linalg.inv(A)) == np.eye(2)).all()
+False
+!ec
+
+NumPy can also strip down a matrix to its upper or lower triangular parts:
+
+!bc pyshell
+>>> np.triu(B)  # upper triangular part of B
+array([[ 1.,  2.],
+       [ 0., -4.]])
+>>> np.tril(B)  # lower triangular part of B
+array([[ 1.,  0.],
+       [ 3., -4.]])
+!ec
+
+Indexing an element is done by `B[i,j]`, and a row or column
+is extracted as
+
+!bc pyshell
+>>> A[0,:]  # first row
+array([ 2.,  0.])
+>>> A[:,1]  # second column
+array([ 0.,  5.])
+!ec
+NumPy also supports
+multiple values for the indices via the `np.ix_`
+function. Here is an example where we
+grab row 0 and 2, then column 1:
+
+!bc pyshell
+>>> C = np.array([[1,2,3],[4,5,6],[7,8,9]])
+>>> C[np.ix_([0,2], [1])]  # row 0 and 2, then column 1
+array([[2],
+       [8]])
+!ec
+
+You can also use the colon-notation to pick out other parts of a matrix.
+If `C` is a $3\times 5$-matrix,
+
+!bc pycod
+C[1:3, 0:4]
+!ec
+gives a submatrix consisting of the two rows of `C` after the first, and the first four columns of `C` (recall that the upper limits, here `3` and `4`, are
+not included).
 
 
 
-======= Elementary row operations and Gaussian elimination =======
+======= Row operations and Gaussian elimination =======
 
-Let us see how we can bring a matrix to reduced row echelon form.  We
-can swap rows `i` and `j` in a matrix `A` by writing `A[[i, j]] =
-A[[j, i]`.  We can multiply row `i` with a constant `k` by writing
-`A[i] *= k`.  We can add row `i` multiplied with `k` to row `j` by
-writing `A[j] += k*A[i]`.
+The perhaps most frequent operation in linear algebra is the solution
+of systems of linear algebraic equations: $Ax=b$, where $A$ is a coefficient
+matrix, $b$ is a given right-hand side vector, and $x$ is the solution vector.
+The function `np.linalg.solve(A, b)` does the job:
 
-The thress operations can be used to implement Gaussian elimination as follows.
+!bc pyshell
+>>> A = np.array([[1, 2], [-2, 2.5]])
+>>> x = np.array([-1, 1], dtype=float)  # solution
+>>> b = np.dot(A, x)                    # right-hand side
+
+>>> np.linalg.solve(A, b)               # will it compute x?
+array([-1.,  1.])
+!ec
+
+Implementing Gaussian elimination constitutes a good example on
+various row and column operations on a matrix. Some
+needed functionality is
+
+!bc pycod
+A[[i, j]] = A[[j, i]   # swap rows i and j
+A[i] *= k              # multiply row i by a constant k
+A[j] += k*A[i]         # add row i, multiplied by k, to row j
+!ec
+With these operations, Gaussian elimination is programmed as follows.
+
+[hpl: Here a new syntax `j:`. Must be explained.]
 
 !bc pycod
 m, n = shape(A)
@@ -88,15 +256,15 @@ first column, by adding a scaled version of the first row to the other
 rows, Then the same procedure is applied for the second row, and so
 on. The result is an upper triangular matrix. The code can fail if
 some of the entries `A[j, j]` become zero along the way. To avoid
-this, we can swap rows if this is the case.  The following code does
-this, and will not fail even if some of the columns are zero.
+this, we can swap rows if the problem arises.  The following code
+implements the idea and will not fail, even if some of the columns are zero.
 
 !bc pycod
 m, n = shape(A)
 i = 0
 for j in range(n):
     p = argmax(abs(A[i:m, j]))
-    if p > 0: # Swap rows
+    if p > 0: # swap rows
         A[[i, p + i]] = A[[p + i, i]]
     if A[i, j] != 0:
         for r in range(i + 1, m):
@@ -105,123 +273,87 @@ for j in range(n):
     if i>m:
         break
 !ec
+
+idx{rank of a matrix}
+
 The rank of a matrix can be computed by first performing Gaussian
 elimination, and then count the number of pivot columns in the code
-above.  A more reliable way to compute the rank is to compute the
+above:
+
+!bc pycod
+PROVIDE EXAMPLE!
+!ec
+A more reliable way to compute the rank is to compute the
 singular value decomposition of `A`, and check how many of the
-singular values which are larger than a threshold `epsilon`.
-
-One can ask what other use we can have for performing row operations
-manually, besides that an implementation of Gaussian elimination uses
-them.  Often one have matrices with a particular structure, where
-there for instance are many zeros (also called sparse matrices). When
-the location of the non-zeros then are known, it is more efficient to
-perform row operations for these locations manually, rather than
-perform the full Gaussian elimination.
-
-If `A` is non-singular and quadratic, and `b` is a vector, then the
-equation `Ax=b` can be solved by writing `linalg.solve(A,b)`
-
-The components in a matrix can be obtained with simple commands such as
+singular values which are larger than a threshold `epsilon`:
 
 !bc pycod
-A[0,1]    # The element in A at row 0, column 1
-A[0,:]    # The first row in A
-A[:,1]    # The second column in A
+PROVIDE EXAMPLE!
 !ec
-You can also use the colon-notation to pick out other parts of a matrix.
-If `C` is a $3\times 5$-matrix,
 
-!bc pycod
-C[1:3, 0:4]
-!ec
-gives a submatrix consisting of the two rows of `C` after the first, and the first four columns of `C`. The command
+# [hpl: I don't think this makes sense without a specific example,
+# and that's beyond the scope of the book.]
+#One can ask what other use we can have for performing row operations
+#manually, besides that an implementation of Gaussian elimination uses
+#them.  Often one have matrices with a particular structure, where
+#there for instance are many zeros (also called sparse matrices). When
+#the location of the non-zeros then are known, it is more efficient to
+#perform row operations for these locations manually, rather than
+#perform the full Gaussian elimination.
 
-!bc pycod
-C[ ix_([0,2],[1,4])]
-!ec
-gives a matrix consisting of the first and third rows and second and
-fifth column of `A`.  Note the specific function `ix\_` here to
-extract a certain set of rows/columns. You can also use this notation
+[hpl: Didn't see where this info fits well - should have some
+application since the usefullness is not obvious to readers...]
+
+You can use the `np.ix_` notation
 to permute the rows and columns in a matrix. If you write
 `C[[2,0,1]]`, the third row is placed first, follows by the first and
 second rows. If you write `C[:,[2,0,1,4,3]]`, the third column is
 placed first, followed by the first, second, fifth, and fourth,
 respectively.
 
-Here are some other commands for producing new matrices:
-
-!bc pycod
-A=ones((3,4))      # 3x4-matrix with only ones
-A=eye(3)           # 3x3-matrix with ones on the main diagonal,
-                   # zeros elsewhere
-triu(A)            # Creates an upper triangular matrix from A, i.e.
-                   # all elements under the main diagonal is set to 0
-tril(A)            # Creates a lower triangular matrix from A, i.e.
-                   # all elements over the main diagonal is set to 0
-diag(c)            # A diagonal matrix with diagonal elements
-                   # given by the vector c.
-random.permutation(5) # Creates an arbitrary permutation of the
-                      # first five numbers.
-!ec
 
 If `A` and `B` are matrices with equally many rows, the matrix where
-`A` and `B` are placed next to each other can be computed by writing
+`A` and `B` are placed next to each other or on top of each other
+can be computed by writing
 
-!bc pycod
-C=hstack([A,B])
+!bc pyshell
+>>> np.hstack([A, B]) # stack two arrays horizontally
+array([[ 1. ,  2. ,  1. ,  2. ],
+       [-2. ,  2.5,  3. , -4. ]])
+>>> np.vstack([A, B]) # stack two arrays vertically
+array([[ 1. ,  2. ],
+       [-2. ,  2.5],
+       [ 1. ,  2. ],
+       [ 3. , -4. ]])
+>>> np.vstack([a, b]) # stack two vectors vertically
+array([[ 4. ,  0. ],
+       [ 1. ,  4.5]])
 !ec
-The resulting matrix thus has the same number of rows as `A` and `B`.
-Similarly, if `A` and `B` have the same number of columns, the matrix
-where `A` and `B` are placed on top of oneanother can be computed by
-writing
+The related `np.concatenate` function is used to ``append'' arrays
+to each other:
 
-!bc pycod
-C=vstack([A,B])
+!bc pyshell
+>>> np.concatenate([A, B])
+array([[ 1. ,  2. ],
+       [-2. ,  2.5],
+       [ 1. ,  2. ],
+       [ 3. , -4. ]])
+>>> np.concatenate([a, b])
+array([ 4. ,  0. ,  1. ,  4.5])
 !ec
-The resulting matrix has the same number of columns as `A` and `B`.
-While these two functions are specifically for matrices, one also has
-the function `concatenate`, which can be applied both for vectors and
-matrcies.
 
-The operators +/- computes the componentwise sum/difference of vectors
-or matrices.
-
-Multiplication and division have different meanings for `array` and
-`matrix` objects. For array objects, mutiplication and division are
-performed componentwise, i.e. if `C=A*B`, the components of the
-matrices are related by $c_{ij}=a_{ij}*b_{ij}$ (and similarly for
-division). This is also called the {\em Hadamard product} of `A` and
-`B`. For `matrix`-objects, mutiplication is performed as defined in
-linear algebra (section 5.7.5. Include definition). The following is a
-straightforward implementation of matrix multiplication
-
-!bc pycod
-def mult(A,B):
-    m, n = shape(A)
-    n1, k =shape(B)
-    assert n == n1, 'The dimensions of the matrices do not match!'
-    C=zeros((m,k))
-    for r in xrange(m):
-        for s in xrange(k):
-            for t in xrange(n):
-                C[r,s] += A[r,t]*B[t,s]
-    return C
-!ec
-If you compare this with running `A*B`, with `A` and `B` being matrix
-objects, you will notice a huge difference, in particular when the
-matrices are large.  Clearly then, Python does not compute matrix
-multiplication with such an implementation.
-
-Since multiplication has a different meaning for arrays and matrices,
-we may need to convert between the two. A matrix `A` can be converted
-to an array by writin `A = asarray(A)`.
+[hpl: I deleted material on matrix objects and the multiplication
+operator as there is already a subsection on this topic in the book.]
 
 The determinant (include definition, perhaps only in terms of
 expansion along rows/columns, and only say some things about its
 applications) is another concept which can be implemented in a smarter
 way. The following program computes the determinant in a
 straightforward way using its definition.
+
+[hpl: This function is recursive - too complicated for the book,
+I think. We do recursive stuff in chapter 9, though. I suggest we
+leave this function out.]
 
 !bc pycod
 def detdef(A):
@@ -238,8 +370,7 @@ def detdef(A):
         return determinant
 !ec
 The `detdef` function is recursive, and calls itself until we have a
-matrix where the determinant can be computed directly. [hpl: recursive
-functions are not part of INF1100 of the book...]  The central part in
+matrix where the determinant can be computed directly. The central part in
 the code is where $(n-1)\times(n-1)$-submatrices are constructed. Note
 that in the code we check that the matrices are quadratic.  This code
 is not particularly fast either. The determinant can also be computed
@@ -264,3 +395,175 @@ computation times is then written to the display.  Run the code and
 see how much faster the built-in determinant function is!  If you
 want, also try with an arbitrary $10\times 10$-matrix, but then you
 should be patient while the code executes.
+
+[hpl: I think it's better to use `timeit` in IPython for such
+CPU time tests, but we leave the determinant code out.]
+
+===== Symbolic linear algebra =====
+
+[hpl: I have a short intro to SymPy in chapter 1 already, much like what
+you wrote in the SymPy file, so here I think we limit the attention to
+linear algebra with SymPy.]
+
+SymPy supports symbolic computations also for linear algebra operations.
+We may create a matrix and find its inverse and determinant:
+
+!bc pyshell
+>>> import sympy as sym
+>>> A = sym.Matrix([[2, 0], [0, 5]])
+
+>>> A**-1    # the inverse
+Matrix([
+[1/2,   0],
+[  0, 1/5]])
+
+>>> A.inv()  # the inverse
+Matrix([
+[1/2,   0],
+[  0, 1/5]])
+
+>>> A.det()  # the determinant
+10
+!ec
+Note that the entries in the inverse matrix are rational numbers
+(`sym.Rational` objects to be precise).
+
+Eigenvalues can also be computed exactly:
+
+!bc pyshell
+>>> A.eigenvals()
+{2: 1, 5: 1}
+!ec
+The output is a dictionary (see Chapter 6) [hpl: need exact reference here]
+meaning here that 2 is an eigenvalue with multiplicity 1 and 5 is an
+eigenvalue with multiplicity 1. We can collect them in a list by
+
+!bc pyshell
+>>> e = list(A.eigenvals().keys())
+>>> e
+[2, 5]
+!ec
+Eigenvector computations has a somewhat complicated output:
+
+!bc pyshell
+>>> A.eigenvects()
+[(2, 1, [Matrix([
+[1],
+[0]])]), (5, 1, [Matrix([
+[0],
+[1]])])]
+!ec
+The output is a list of three-tuples, one for each eigenvalue and eigenvector.
+The three-tuple contains the eigenvalue, its multiplicity, and the eigenvector
+as a `sym.Matrix` object.
+To isolate the first eigenvector, we can index the list and tuple:
+
+!bc pyshell
+>>> v1 = A.eigenvects()[0][2]
+>>> v1
+Matrix([
+[1],
+[0]])
+!ec
+The vector is a `sym.Matrix` object with two indices. To extract the
+vector elements in a plain list, we can do this:
+
+!bc pyshell
+>>> v1 = [v1[i,0] for i in range(v1.shape[0])]
+>>> v1
+[1, 0]
+!ec
+The following code extracts all eigenvectors as a list of 2-lists:
+
+!bc pyshell
+>>> v = [[t[2][0][i,0] for i in range(t[2][0].shape[0])]
+         for t in A.eigenvects()]
+>>> v
+[[1, 0], [0, 1]]
+!ec
+
+The norm of a matrix or vector is an exact expression:
+
+!bc pyshell
+>>> A.norm()
+sqrt(29)
+>>> a = sym.Matrix([1, 2])
+>>> a
+Matrix([
+[1],
+[2]])
+>>> a.norm()
+sqrt(5)
+!ec
+
+The matrix-vector product and the dot product between vectors are
+done like this:
+
+!bc pyshell
+>>> A*a
+Matrix([
+[ 2],
+[10]])
+>>> b = sym.Matrix([2, -1])
+>>> a.dot(b)
+0
+!ec
+
+Solving linear systems exactly is also possible:
+
+!bc pyshell
+>>> x = sym.Matrix([-1, 1])/2
+>>> x
+Matrix([
+[-1/2],
+[ 1/2]])
+>>> b = A*x
+>>> x = A.LUsolve(b)  # does it compute x?
+>>> x                 # x is a matrix object
+Matrix([
+[-1/2],
+[ 1/2]])
+!ec
+Sometimes one wants to convert `x` to a plain `numpy` array with
+`float` values:
+
+!bc pyshell
+>>> x = np.array([float(x[i,0].evalf()) for i in range(x.shape[0])])
+>>> x
+array([-0.5,  0.5])
+!ec
+
+Exact row operations can be done as exemplified here:
+
+!bc pyshell
+>>> A[1,:] + 2*A[0,:]  # [0,5] + 2*[2,0]
+Matrix([[4, 5]])
+!ec
+We refer to the online "SymPy linear algebra tutorial": "http://docs.sympy.org/dev/tutorial/matrices.html" for more information.
+
+======= Exercises =======
+
+===== Exercise: Verify linear algebra results =====
+label{plot:linalg:exer:verify}
+file=verify_linalg
+
+When we want to verify that a mathematical result is true, we often generate matritces or vectors with random elements and show that the result holds for
+these ``arbitrary'' mathematical objects. As an example,
+consider testing that $A+B=B+A$ for matrices $A$ and $B$:
+
+!bc pycod
+def test_addition():
+    n = 4  # matrix size
+    A = matrix(random.rand(n, n))
+    B = matrix(random.rand(n, n))
+
+    tol = 1E-14
+    result1 = A + B
+    result2 = B + A
+    assert abs(result1 - result2).max() < tol
+!ec
+Use this technique to write test functions for the following mathematical
+results:
+
+[hpl: List a set of linear algebra results here to be verified computationally!]
+

@@ -6,6 +6,4 @@ TOC: on
 
 # #include "linalg.do.txt"
 
-# #include "symcomp.do.txt"
-
 # #include "3dimplot.do.txt"
