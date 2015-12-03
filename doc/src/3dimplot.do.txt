@@ -4,44 +4,74 @@ We will explain plotting in three dimensions using three different packages. As 
 Then we will go through Mayavi, which contains support for doing more advanced plotting operations. The three packages are different in many respects, but they also have much in common, as code below shows. 
 Note that, for most backends one can plug into Matplotlib/SciTools/Mayavi, one can rotate a figure by holding the mouse cursor down. This functionality is often useful in order to get a better view of a three-dimensional plot. 
 
-Many of the plots below concern the following surface:
+Many of the plots below concern the surface defined by
 
 !bt
 \[ h(x,y) = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}}.\]
 !et
-
-This describes the height of an isolated mountain, where $h$ is the height above sea level, $x$ and $y$ are cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is called the radius of the mountain. 
+$h(x,y)$ models the height of an isolated mountain, where $h$ is the height above sea level, $x$ and $y$ are cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is called the radius of the mountain. 
 We will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to all code below we have set $h_0=2277$ and $R=4$. 
+
+We will plot $h(x,y)$ as a surface in different ways, as well as make contour plots of it. We will also plot it together with a parametrized curve which lies on the surface, and 
+which moves with constant angular and radial velocity towards the top of the mountain (i.e. it represents a climb to the top of the mountain). You can verify that the following parametrization, with $0\leq t\leq 2\pi$, is such a curve.
+
+!bt
+\[ \bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t),  10\left(1 - \frac{t}{2\pi}\right)\sin(t), \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \right). \]
+!et
+We will also plot the gradient vector field of $h(x,y)$. This is defined as the vector field which equals the gradient at each point.
+The gradient of $h(x,y)$ is defined as the vector of partial derivatives
+
+!bt
+\[ \nabla h = (\partial h/\partial x, \partial h \partial y). \]
+!et
+
 
 Prior to plotting the function $h(x,y)$, we need create a grid of the points to plot. This can be done regardless of which plotting package we will use later as follows.  
 
 !bc pycod
 t = np.linspace(-10., 10., 41)
-x, y = np.meshgrid(t, t, indexing='ij', sparse=False) # # Grid for contour plot
-h = h0/(1 + (x**2 + y**2)/(R**2)) # Compute the elevation coordinates
+# Grid for contour plot
+x, y = np.meshgrid(t, t, indexing='ij', sparse=False)
+h = h0/(1 + (x**2 + y**2)/(R**2)) # Elevation coordinates
 !ec
+
 We here defined a grid for the area closer to the mountain top than 10km in any direction.
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics.
-`indexing='ij'` means that the coordinates are set as in an $xy$-coordinate system.
+`indexing='ij'` means that the coordinates are set as in an $xy$-coordinate system, while 
 `indexing='xy'` means that the coordinates are set as row/column indices in a matrix.
 
-We will also plot the gradient vector field of $h(x,y)$. This can be computed using the function `np.gradient` as follows. 
+This coordinates of the parametrized cyrve $\bm{r}(t)$ can be produced as follows.
+
+!bc pycod
+t = np.linspace(0, 2*np.pi, 100)
+xcoords = 10*(1 - t/(2*np.pi))*np.cos(t)
+ycoords = 10*(1 - t/(2*np.pi))*np.sin(t)
+zcoords = h0/(1 + 100*(1 - t/(2*np.pi))**2/(R**2))
+!ec
+
+When we plot the gradient vector field, it is useful to make a grid of coordinates with a smaller resolution that what we used for the surface coordinates. 
+The reason is that we will plot many vectors at the same time, and if the resolution is too high the vectors may collide. 
+For the gradient field $h(x,y)$ we will use half the resolution of the surface coordinates: 
 
 !bc pycod
 t2 = np.linspace(-10.,10.,21)
-x2, y2 = np.meshgrid(t2, t2, indexing='ij', sparse=False) # Grid for vector field     
-h2 = h0/(1+(x2**2+y2**2)/(R**2)) 
-dhx, dhy = np.gradient(h2)         # Compute the gradient vector (dh/dx,dh/dy)
+# Grid for vector field   
+x2, y2 = np.meshgrid(t2, t2, indexing='ij', sparse=False)  
+h2 = h0/(1+(x2**2+y2**2)/(R**2)) # Elevation coordinates
 !ec
 
-Not that here we created a new grid for the coordinates of the gradient vectors. The reason is that we will plot many vectors at the same time, so that it may be smart to use a smaller resolution for the 
-vector field coordinates than for the surface coordinates.
+The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient` as follows. 
+
+!bc pycod
+dhx, dhy = np.gradient(h2) # Compute the gradient vector (dh/dx,dh/dy)
+!ec
 
 We will also plot another vector field defined as follows.
 
 !bt
 \[\bm{v} = \left( x^2 + 2y - \frac{1}{2} xy \right)\bm{i}  - 3y\bm{j}.\]
 !et
+
 We will plot this over $[-5,5]$, with $0.5$ distance between the vectors. The grid can now be obtained as follows.
 
 !bc pycod
@@ -86,28 +116,12 @@ Coloring can be used to get a better view of surfaces. We can use the `cm`-modul
 
 !bc pycod
 from matplotlib import cm
-!ec
-
-This can then be passed to the `plot_surface` function above as follows:
-
-!bc pycod
 ax.plot_surface(x, y, h, cmap=cm.coolwarm)
 !ec
 
 The result is shown in the right plot in Figure ref{plotmatplotlib}. One can choose from a wide range of different color maps.
 
-Several curves and surface can be included in the same plot. The previously produced surface had been combined with a plot of a parametrized curve. This curve lies on the surface,
-which moves with constant angular and radial velocity towards the top of the mountain (i.e. it represents a climb to the top of the mountain).
-This curve can be produced as follows.
-
-!bc pycod
-t = np.linspace(0, 2*np.pi, 100)
-xcoords = 10*(1 - t/(2*np.pi))*np.cos(t)
-ycoords = 10*(1 - t/(2*np.pi))*np.sin(t)
-zcoords = h0/(1 + 100*(1 - t/(2*np.pi))**2/(R**2))
-!ec
-
-and the following command plots the curve
+Several curves and surface can be included in the same plot. The previously produced surface had been combined with a plot of the parametrized curve $\bm{r}(t)$, obtained as follows.
 
 !bc pycod
 ax.plot(xcoords, ycoords, zcoords)
@@ -119,10 +133,17 @@ The following code examplifies how one can create different types of contour plo
 
 !bc pycod
 plt.contour(x, y, h)        # default: with X contour lines
-plt.contour(x, y, h, 10)    # 10 contour lines. The contour levels will be automatically chosen.
-plt.contour(x, y, h, 10, colors='k')   # 10 contour lines. Black color for contour lines
+
+# 10 contour lines. The contour levels will be automatically chosen.
+plt.contour(x, y, h, 10)
+
+# 10 contour lines. Black color for contour lines
+plt.contour(x, y, h, 10, colors='k')
+
+# Specify the contour levels
 levels = [500., 1000., 1500., 2000.]
-plt.contour(x, y, h, levels=levels)   # specify the contour levels
+plt.contour(x, y, h, levels=levels)
+
 # Add labels with the contour line values to the lines
 c = plt.contour(x, y, h, levels=levels)
 plt.clabel(c)
@@ -203,12 +224,20 @@ The result is shown in the right plot in Figure ref{plotscitools}. One can choos
 The following code examplifies how one can create the same types of contour plots as above with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set
 
 !bc pycod
-plt.contour(x, y, h)        # default: with X contour lines
-plt.contour(x, y, h, 10)    # 10 contour lines. The contour levels will be automatically chosen.
-plt.contour(x, y, h, 10, 'k')   # 10 contour lines. Black color for contour lines
+plt.contour(x, y, h) # default: with X contour lines
+
+# 10 contour lines. The contour levels will be automatically chosen.
+plt.contour(x, y, h, 10)
+
+# 10 contour lines. Black color for contour lines
+plt.contour(x, y, h, 10, 'k')
+
+# Specify the contour levels
 levels = [500., 1000., 1500., 2000.]
-plt.contour(x, y, h, levels)   # specify the contour levels
-plt.contour(x, y, h, levels, clabels='on') # Add labels with the contour line values to the lines
+plt.contour(x, y, h, levels)
+
+# Add labels with the contour line values to the lines
+plt.contour(x, y, h, levels, clabels='on')
 !ec
 
 The default contour plot is shown in Figure ref{simplecontourscitools}. The remaining 4 plots are shown in Figure ref{advancedcontourscitools}.
@@ -279,59 +308,61 @@ Several of the functions in `mlab` have the same name as the counterparts in Sci
 
 ===== The basics =====
 
-We first need to cover some of the basic figure handling function in the `mayavi.mlab` module[^basicfigurehandling].
+We first need to cover some of the basic figure handling functions in the `mayavi.mlab` module[^basicfigurehandling].
 Much of this is similar to the bascis for Matplotlib and SciTools, and we will therefore try to focus mainly on the differences.
 
 [^basicfigurehandling]: The documentation for basic figure handling functions can be found on URL: "http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html"
 
-The plotting commands you do in `mlab` will go to the current figure, also called a scene. This means that several plot commands will be shown together.
-You can work with several figure instances simultaneously. A figure can be accessed in three different ways:
-
-o as a `Figure` object representing it,
-o by a name representing it,
-o by a number representing the index of the plot
-
-When either a Figure object, a name or an integer is supplied as parameter to the function `plt.figure()`, `mlab` sets the current figure to be that particular Figure object, 
-or the Figure object with that name or index. If no figure existed with the given name/index, a new figure object will be created with that name/index, and set as the current figure.  
-
-[TODO: Include this more general description of the usage of figure() in chapter 5 instead? This is a more natural place for this, as it is nice to know how to jump between a set of figures.]
-
-In the same way, the function `plt.close()` closes a figure with the given handle, name, or index. 
-To clear (not close) the current figure before the next plot, we can run the command `plt.clf()`. 
-The function `plt.gcf()` returns the current figure object. You will need to call this in order to get the object where you can set some the figure properties, 
-such as the foreground or background colour (the foreground colour is used for text and labels included in the plot). This can also be done directly by writing
+The plotting commands you do in `mlab` will go to the current figure, also called a scene. If you make several plots, they will be shown together 
+(there is no function `hold('on')` in Mayavi, as in Matplotlib and SciTools, but it is assumed by default that several plots "hold on" to the current figure). 
+The following code explains the use of some of the basic figure handling functions.
 
 !bc pycod
+plt.clf() # Clear current figure, and return a handle to it.
+
+# Create a figure with white background, black foreground
+# Colours are represented as RGB-values, where the components 
+# are floating points between zero and one.
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-!ec
-Here colours are represented as RGB-values, where the components are floating points between zero and one. In the above code the foreground and background colour
-for the current figure is set to black and white, respectively.
 
-Many of the other functions are also similar to what we are used to.
-
-* `plt.savefig(filename)` saves the current figure to file. The type of the file (png, jpeg, etc) is deduced fom the file extension  
-* `plt.show()` makes the current figure visible (it may be that the environment does this by itself).
-* `plt.title()` to decorate the current figure  with a title.
-* `plt.axes()` for creating axes with labels and given colors, we can use the function plt.axes(xlabel='x', ylabel='y')
-
-The following code examplifies all the above in one plot.
-
-!bc pycod
-plt.clf() # Clear
-# Create figure with white background, black foreground
-plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0)) 
 ... Create and plot your figure
-plt.title('My first plot')
-plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5, color=(0., 0., 0.))
-plt.show()
-plt.savefig('plot.png')
+plt.title('My first plot') # Decorate the current figure  with a title.
+
+# Create axes with given labels, 5 ticks on each axis, and given color
+plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5, \
+         color=(0., 0., 0.)) 
+
+# Save current figure to file. File type is deduced from the extension
+plt.savefig('plot.png') 
+plt.close() # Close the current figure
 !ec
 
+Note that there is no function `plt.show()`. Instead the current figure is made visible by default. 
+Note also that the functions `clf`, `close`, `figure`, `savefig` all can take an optional parameter which identifies the figure in question. 
+In the above code this parameter was not used. A figure can be identified or created in terms of a name, an index, or the figure object itself.
+The following code shows how one can jump between figures, to create different plots.
+!bc pycod
+fig = plt.gcf()        # Return the current figure object
 
+# Set figure with index 1 to be the current one. 
+# It is created if it does not exist.
+plt.figure(1)         
 
-===== Simple surface plots and subplots =====
+# Set figure with name 'New plot' to be the current one. 
+plt.figure('New plot')
 
-Let us return to plotting the surface $h(x,y)$. Mayavi also has commands `mesh` and `surf`, which works similarly to Matplotlib and SciTools:
+# Set the previously retrieved figure again to be the current one, 
+# and set the foreground and background colour.
+plt.figure(fig, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0)) 
+!ec
+
+If there exists no figure with the given name or index, `plt.figure()` will create a new one. 
+The function `plt.gcf()` returns the current figure object. You will need to call this in order to change the properties of the current figure, 
+such as the foreground or background colour above. Note that the foreground colour is used for text and labels included in the plot.
+
+===== Simple surface plots =====
+
+Let us return to the surface $h(x,y)$. Mayavi also has commands `mesh` and `surf`, which works similarly to Matplotlib and SciTools:
 
 !bc pycod
 plt.mesh(x, y, h)
@@ -340,18 +371,18 @@ plt.surf(x, y, h)
 Both functions color the surface, and accept many of the same parameters. For some purposes `surf` seems to be more general.
 The left plot of figure ref{plotmayavi} shows the result when `mesh` is used.
 
-FIGURE:[images/plotmayavi] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right). The right plot also shows our parametrized curve. label{plotmayavi}
+FIGURE:[images/plotmayavi] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right). The right plot also shows the parametrized curve $\bm{r}(t)$. label{plotmayavi}
 
-If the magnitudes in the vertical and horizontal directions are very different, the plots above will whow a plot which is very concentrated in one direction.
-The reason is that Mayavi does no auto-scaling of the axes per default (corresponding to `axis("equal")` in Matplotlib and Matlab). To ensure
-that the axes are auto-scaled to fit the contents of the surface one can include the parameter `extent` in the following way
+If the magnitudes in the vertical and horizontal directions are very different (as they are for $h(x,y)$), the plots may be very concentrated in one direction.
+The reason is that Mayavi does no auto-scaling of the axes per default (corresponding to `axis('equal')` in Matplotlib and Matlab). To ensure
+that the axes are auto-scaled to fit the contents of the surface, one can include the parameter `extent` as follows (we will return to what the six values listed in `extent` mean).
 
 !bc pycod
 plt.surf(x, y, h, extent=(0, 1, 0, 1, 0, 1))
 !ec
-Below we will return to what the six values in `extent` mean.
-Note that the behaviour may be unexpected when combining different plots which both have been auto-scaled.
-To illustrate this let us also autoscale our parametrized curve, obtained by climbing the mountain so that the angular speed is constant.
+
+Note that the behaviour may be unexpected when combining different plots which both have been auto-scaled in this way.
+To illustrate this, let us also autoscale our parametrized curve, obtained by climbing the mountain so that the angular speed is constant.
 For this we can use the `plot3d` command as folllows.
 
 !bc pycod
@@ -365,16 +396,18 @@ first so that the coordinates are of comparable magnitude, so that there is no n
 
 One can also use other properties to scale the cases. Some of the plotting commands below accept a `warp_scale` parameter, which tells us how the the vertical scaling should be performed.
 
+===== Subplots =====
+
 The two plots in figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure, so that one figure is generated with several subplots.
 Consider the following code.
 
 !bc pycod
-plt.outline(plt.mesh(x, y, h, extent=(0, 0.25, 0, 0.25, 0, 0.25), \\
-           color=(.5, .5, .5)))
-plt.outline(plt.mesh(x, y, h, extent=(0.375, 0.625, 0, 0.25, 0, 0.25), \\
-           colormap='Accent'))
-plt.outline(plt.mesh(x, y, h, extent=(0.75, 1, 0, 0.25, 0, 0.25), \\
-           colormap='prism'))
+plt.outline(plt.mesh(x, y, h, extent=(0, 0.25, 0, 0.25, 0, 0.25),\
+            color=(.5, .5, .5)))
+plt.outline(plt.mesh(x, y, h, extent=(0.375, 0.625, 0, 0.25, 0, 0.25),\
+            colormap='Accent'))
+plt.outline(plt.mesh(x, y, h, extent=(0.75, 1, 0, 0.25, 0, 0.25),\
+            colormap='prism'))
 !ec
 The result is shown in the left plot in Figure ref{subplot}.
 
@@ -397,11 +430,17 @@ One can choose from a wide range of different color maps.
 The following code examplifies how one can create the same types of contour plots as above with Mayavi. We see again some minor differences, such as how colors here are specified by value.   
 
 !bc pycod
-plt.contour_surf(x, y, h)        # default: with X contour lines
-plt.contour_surf(x, y, h, contours=10)    # 10 contour lines. The contour levels will be automatically chosen.
-plt.contour_surf(x, y, h, contours=10, color=(0., 0., 0.))   # 10 contour lines. Black color (i.e. (0., 0., 0.)) for contour lines
+plt.contour_surf(x, y, h)        # default: with X contour lines.
+
+# 10 contour lines. The contour levels will be automatically chosen.
+plt.contour_surf(x, y, h, contours=10)    
+
+# 10 contour lines. Black color (i.e. (0., 0., 0.)) for contour lines.
+plt.contour_surf(x, y, h, contours=10, color=(0., 0., 0.))
+
+# Specify the contour levels
 levels = [500., 1000., 1500., 2000.]
-plt.contour_surf(x, y, h, contours=levels)   # specify the contour levels
+plt.contour_surf(x, y, h, contours=levels)
 !ec
 
 There seems to be no function in Mayavi which labels the contours, as we did with Matplotlib and ScitTools. 
@@ -439,9 +478,9 @@ The vector field can now be vizualized as follows.
 
 !bc pycod
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0)) 
-plt.quiver3d(x, y, z, -x/r3, -y/r3, -z/r3, \\
+plt.quiver3d(x, y, z, -x/r3, -y/r3, -z/r3, \
             mode='arrow', colormap='jet', scale_factor=.5)
-plt.axes(xlabel='x', ylabel='y', zlabel='z', \\
+plt.axes(xlabel='x', ylabel='y', zlabel='z', \
         nb_labels=5, color=(0., 0., 0.))
 
 !ec
