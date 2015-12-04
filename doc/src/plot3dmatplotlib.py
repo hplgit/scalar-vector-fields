@@ -66,6 +66,8 @@ plt.savefig('images/contourclabelmatplotlib.pdf')
 plt.savefig('images/contourclabelmatplotlib.png')
 plt.show()
 
+
+
 #t = np.linspace(-5, 5, 11)
 #x, y = np.meshgrid(t, t, sparse = False, indexing = 'ij')
 #vx = x**2 + 2*y - .5*x*y
