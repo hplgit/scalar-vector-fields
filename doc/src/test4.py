@@ -15,3 +15,5 @@ dhx, dhy = np.gradient(hh)         # Beregn gradientvektoren (dh/dx,dh/dy)
 # Plott vektorfeltet (rod farge) og skaler vektorlengden med en faktor
 plt.quiver(xx, yy, dhx, dhy, color = 'r', angles = 'xy')#, color = 'r', angles = 'xy')#, scale_units = 'xy') #, )
 plt.show()
+
+testing
