@@ -1,0 +1,74 @@
+name: newenv2
+dependencies:
+- apptools=4.2.1=py27_0
+- configobj=5.0.6=py27_0
+- cycler=0.9.0=py27_0
+- envisage=4.4.0=py27_1
+- freetype=2.5.5=0
+- libpng=1.6.17=0
+- matplotlib=1.4.3=np19py27_3
+- mayavi=4.4.0=np19py27_0
+- numpy=1.9.3=py27_0
+- openssl=1.0.2d=0
+- pip=7.1.2=py27_0
+- py-gnuplot=1.8=np19py27_0
+- pyface=4.4.0=py27_0
+- pygments=2.0.2=py27_0
+- pyparsing=2.0.3=py27_0
+- pyqt=4.11.4=py27_1
+- python=2.7.10=2
+- python-dateutil=2.4.2=py27_0
+- python.app=1.2=py27_4
+- pytz=2015.7=py27_0
+- qt=4.8.7=1
+- readline=6.2=2
+- scitools=0.9.0=np19py27_0
+- setuptools=18.5=py27_0
+- sip=4.16.9=py27_0
+- six=1.10.0=py27_0
+- sqlite=3.8.4.1=1
+- tk=8.5.18=0
+- traits=4.4.0=py27_0
+- traitsui=4.4.0=py27_0
+- vtk=5.10.1=py27_0
+- wheel=0.26.0=py27_1
+- zlib=1.2.8=0
+- pip:
+  - appnope==0.1.0
+  - backports-abc==0.4
+  - backports.ssl-match-hostname==3.4.0.2
+  - certifi==2015.11.20.1
+  - decorator==4.0.4
+  - doconce==1.2
+  - functools32==3.2.3.post2
+  - gnuplot-py==1.8
+  - gnureadline==6.3.3
+  - ipykernel==4.2.1
+  - ipython==4.0.1
+  - ipython-genutils==0.1.0
+  - ipywidgets==4.1.1
+  - jinja2==2.8
+  - jsonschema==2.5.1
+  - jupyter==1.0.0
+  - jupyter-client==4.1.1
+  - jupyter-console==4.0.3
+  - jupyter-core==4.0.6
+  - mako==1.0.3
+  - markupsafe==0.23
+  - mistune==0.7.1
+  - nbconvert==4.1.0
+  - nbformat==4.0.1
+  - notebook==4.0.6
+  - path.py==8.1.2
+  - pexpect==4.0.1
+  - pickleshare==0.5
+  - preprocess==1.1.0
+  - ptyprocess==0.5
+  - pyzmq==15.1.0
+  - qtconsole==4.1.1
+  - simplegeneric==0.8.1
+  - singledispatch==3.4.0.3
+  - terminado==0.5
+  - tornado==4.3
+  - traitlets==4.0.0
+
