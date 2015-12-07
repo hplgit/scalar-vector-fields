@@ -60,6 +60,7 @@ plt.savefig('images/contour10levelsblackmayavi.png')
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 levels = [5., 10., 15., 20.]
 plt.contour_surf(x, y, h, contours=levels)
+plt.savefig('images/contourspeclevelsmayavi.png')
 
 x, y, z = np.mgrid[.5:2:.2, .5:2:.2, .5:2:.2]
 r3 = np.sqrt(x**2 + y**2 + z**2)**3
