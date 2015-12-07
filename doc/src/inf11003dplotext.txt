@@ -1,0 +1,37 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-64
+@EXPLICIT
+https://repo.continuum.io/pkgs/free/osx-64/apptools-4.2.1-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/configobj-5.0.6-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/cycler-0.9.0-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/envisage-4.4.0-py27_1.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/freetype-2.5.5-0.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/libpng-1.6.17-0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/matplotlib-1.4.3-np19py27_3.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/mayavi-4.4.0-np19py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/numpy-1.9.3-py27_0.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/openssl-1.0.2d-0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/pip-7.1.2-py27_0.tar.bz2
+https://conda.anaconda.org/johannr/osx-64/py-gnuplot-1.8-np19py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/pyface-4.4.0-py27_0.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/pygments-2.0.2-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/pyparsing-2.0.3-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/pyqt-4.11.4-py27_1.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/python-2.7.10-2.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/python-dateutil-2.4.2-py27_0.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/python.app-1.2-py27_4.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/pytz-2015.7-py27_0.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/qt-4.8.7-1.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/readline-6.2-2.tar.bz2
+https://conda.anaconda.org/johannr/osx-64/scitools-0.9.0-np19py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/setuptools-18.5-py27_0.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/sip-4.16.9-py27_0.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/six-1.10.0-py27_0.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/sqlite-3.8.4.1-1.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/tk-8.5.18-0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/traits-4.4.0-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/traitsui-4.4.0-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/vtk-5.10.1-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/osx-64/wheel-0.26.0-py27_1.tar.bz2
+http://repo.continuum.io/pkgs/free/osx-64/zlib-1.2.8-0.tar.bz2
