@@ -1,0 +1,34 @@
+# Update conda first 
+conda update conda
+
+# Build and activate environment
+conda create --name inf11003dplot python
+conda install --name inf11003dplot matplotlib
+conda install --name inf11003dplot mayavi
+conda install --name inf11003dplot --channel johannr scitools
+source activate inf11003dplot
+pip install -e git+https://github.com/hplgit/scitools.git#egg=scitools
+pip install jupyter --upgrade
+
+# Store the environment in a file. You need to manually edit this file with some entries from https://repo.continuum.io/pkgs/free/osx-64/
+conda list --explicit > inf11003dplot.txt
+
+# Build an extended environment for building the entire document
+conda install --name inf11003dplot pygments
+pip install -e git+https://github.com/hplgit/doconce#egg=doconce --upgrade
+pip install mako --upgrade
+pip install preprocess --upgrade
+
+# Store the extended environment in a file. You need to manually edit this file with some entries from https://repo.continuum.io/pkgs/free/osx-64/
+conda list --explicit > inf11003dplotext.txt
+
+# Remove the environment, load it from file
+conda remove --name inf11003dplot --all
+conda create --name inf11003dplot --file inf11003dplot.txt
+
+# Remove the extended environment, load it from file, and execute createimgs.sh, make.sh for testing them
+conda remove --name inf11003dplot --all
+conda create --name inf11003dplot --file inf11003dplotext.txt
+
+
+
