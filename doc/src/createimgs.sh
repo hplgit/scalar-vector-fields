@@ -9,6 +9,10 @@ exit 1
 fi
 }
 
+system python plot3dscitools.py
+system python plot3dmayavi.py
+system python plot3dscitoolsgnuplot.py --SCITOOLS_easyviz_backend gnuplot
+system python plot3dmatplotlib.py
 
 system doconce combine_images pdf -2 images/simpleplotmatplotlib images/simpleplotcoloursmatplotlib images/plotmatplotlib
 system doconce combine_images png -2 images/simpleplotmatplotlib images/simpleplotcoloursmatplotlib images/plotmatplotlib
@@ -23,6 +27,7 @@ system doconce combine_images png -2 images/quivermatplotlibsimple images/quiver
 
 
 system doconce combine_images png -2 images/simpleplotscitools images/simpleplotcoloursscitools images/plotscitools
+system doconce combine_images pdf -2 images/simpleplotscitools images/simpleplotcoloursscitools images/plotscitools
 
 system doconce combine_images pdf -2 images/contour10levelsscitools images/contour10levelsblackscitools images/contourspeclevelsscitools images/contourclabelscitools images/advancedcontourscitools
 system doconce combine_images png -2 images/contour10levelsscitools images/contour10levelsblackscitools images/contourspeclevelsscitools images/contourclabelscitools images/advancedcontourscitools
