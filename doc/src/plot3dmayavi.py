@@ -62,7 +62,8 @@ levels = [5., 10., 15., 20.]
 plt.contour_surf(x, y, h, contours=levels)
 plt.savefig('images/contourspeclevelsmayavi.png')
 
-x, y, z = np.mgrid[.5:2:.2, .5:2:.2, .5:2:.2]
+t2 = np.linspace(.5, 2., 8)
+x, y, z = np.meshgrid(t2, t2, t2)
 r3 = np.sqrt(x**2 + y**2 + z**2)**3
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0)) 
 plt.quiver3d(x, y, z, -x/r3, -y/r3, -z/r3, mode='arrow', colormap='jet', scale_factor=.5)
