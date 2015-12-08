@@ -12,21 +12,11 @@ Many of the plots below concern the surface defined by
 $h(x,y)$ models the height of an isolated mountain, where $h$ is the height above sea level, $x$ and $y$ are cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is called the radius of the mountain.
 We will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to all code below we have set $h_0=2277$ and $R=4$.
 
-We will plot $h(x,y)$ as a surface in different ways, as well as make contour plots of it. We will also plot it together with a parametrized curve which lies on the surface, and
-which moves with constant angular and radial velocity towards the top of the mountain (i.e. it represents a climb to the top of the mountain). You can verify that the following parametrization, with $0\leq t\leq 2\pi$, is such a curve.
+We will plot $h(x,y)$ as a surface in different ways, make contour plots of it, plot it together with a parametrised curve moving along the surface, and plot its gradient vector field
+The following goes through the details of this setup.
 
-!bt
-\[ \bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t),  10\left(1 - \frac{t}{2\pi}\right)\sin(t), \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \right). \]
-!et
-We will also plot the gradient vector field of $h(x,y)$. This is defined as the vector field which equals the gradient at each point.
-The gradient of $h(x,y)$ is defined as the vector of partial derivatives
-
-!bt
-\[ \nabla h = (\partial h/\partial x, \partial h \partial y). \]
-!et
-
-
-Prior to plotting the function $h(x,y)$, we need create a grid of the points to plot. This can be done regardless of which plotting package we will use later as follows.
+=== Surface coordinates ===
+Prior to plotting the function $h(x,y)$, we need create a grid of the points to plot. Regardless of which plotting package we will use later on, this can be done as follows.
 
 !bc pycod
 t = np.linspace(-10., 10., 41)
@@ -40,7 +30,17 @@ Note the mysterious extra parameters to `meshgrid` here, which are needed in ord
 `indexing='ij'` means that the coordinates are set as in an $xy$-coordinate system, while
 `indexing='xy'` means that the coordinates are set as row/column indices in a matrix.
 
-This coordinates of the parametrized cyrve $\bm{r}(t)$ can be produced as follows.
+=== Parametrized curves ===
+
+We will consider a parametrized curve which lies on the surface, and
+which moves with constant angular and radial velocity towards the top of the mountain (i.e. it represents a climb to the top of the mountain). 
+You can verify that the following parametrization, with $0\leq t\leq 2\pi$, is such a curve.
+
+!bt
+\[ \bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t),  10\left(1 - \frac{t}{2\pi}\right)\sin(t), \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \right). \]
+!et
+
+The coordinates of this parametrized cyrve $\bm{r}(t)$ can be produced as follows.
 
 !bc pycod
 t = np.linspace(0, 2*np.pi, 100)
@@ -48,6 +48,17 @@ xcoords = 10*(1 - t/(2*np.pi))*np.cos(t)
 ycoords = 10*(1 - t/(2*np.pi))*np.sin(t)
 zcoords = h0/(1 + 100*(1 - t/(2*np.pi))**2/(R**2))
 !ec
+
+
+
+=== The gradient vector field ===
+
+The gradient vector field of $h(x,y)$ is defined as the vector field which equals the gradient of $h$ at each point.
+The gradient of $h(x,y)$ is defined as the vector of partial derivatives
+
+!bt
+\[ \nabla h = (\partial h/\partial x, \partial h \partial y). \]
+!et
 
 When we plot the gradient vector field, it is useful to make a grid of coordinates with a smaller resolution that what we used for the surface coordinates.
 The reason is that we will plot many vectors at the same time, and if the resolution is too high the vectors may collide.
@@ -66,13 +77,17 @@ The gradient vector field of $h(x,y)$ can now be computed using the function `np
 dhx, dhy = np.gradient(h2) # Compute the gradient vector (dh/dx,dh/dy)
 !ec
 
-We will also plot another vector field defined as follows.
+We will also plot two other vector fields, defined in the following sections. 
+
+=== A two-dimensional vector field ===
+
+We will consider the following two-dimensional vector field
 
 !bt
-\[\bm{v} = \left( x^2 + 2y - \frac{1}{2} xy \right)\bm{i}  - 3y\bm{j}.\]
+\[\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy \right)\bm{i}  - 3y\bm{j}.\]
 !et
 
-We will plot this over $[-5,5]$, with $0.5$ distance between the vectors. The grid can now be obtained as follows.
+We will plot this over $[-5,5]$, with $0.5$ distance between the vectors. The grid and the vectors in the field can be obtained as follows.
 
 !bc pycod
 t = np.linspace(-5, 5, 11)
@@ -80,6 +95,35 @@ x, y = np.meshgrid(t, t, sparse=False, indexing='ij')
 vx = x**2 + 2*y - .5*x*y
 vy = -3*y
 !ec
+
+
+=== A three-dimensional vector field ===
+
+As an example of a three-dimensional vector field we will consider a gravitational field.
+Newtons law of gravitation says that the gravitational force is proportional to
+
+!bt
+\[\bm{v}(x,y,z) = -\bm{r}/|\bm{r}|^3 = -( x,y,z)/\sqrt{x^2+y^2+z^2}^3,\]
+!et
+where $\bm{r}=(x,y,z)$ is the position vector. We first need to create a three-dimensional grid and the vectors in the field as follows.
+
+!bc pycod
+t2 = np.linspace(.5, 2., 8)
+x, y, z = np.meshgrid(t2, t2, t2)
+r3 = np.sqrt(x**2 + y**2 + z**2)**3
+vx = -x/r3
+vy = -y/r3
+vz = -z/r3
+!ec
+The cube of the distance (`r3`) has here been computed once, since all three components are divided by this.
+Also we compute the vector field for a section in the first octant only, where all three components are between $0.5$ and $2$, 
+and we do not make the grid too dense, so that individual vectors have smaller chance of colliding.
+
+
+
+
+
+
 
 
 
@@ -95,7 +139,21 @@ Below we will use the prefix `plt` for the package `matplotlib.pyplot`:
 import matplotlib.pyplot as plt
 !ec
 
-Note that with Matplotlib, after each plot command you need to write `plt.show()` in order for the new plot to become visible.
+Note that with Matplotlib, after each plot command you need to write `plt.show()` in order for the new plot to become visible. When we make a plot in 2D we need to first write the following
+
+!bc pycod
+fig = plt.figure()
+ax = fig.gca()
+!ec
+The returned object `ax` can the be used for the calls to the different plotting functions, as is examplified below. 
+If we instead want to make a plot in 3D we also need to import an additional package for this, an change the way we get the object `ax` as follows.
+
+!bc pycod
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+!ec
 
 
 ===== Simple surface plots =====
@@ -103,8 +161,6 @@ Note that with Matplotlib, after each plot command you need to write `plt.show()
 The surface $h(x,y)$ can be plotted as follows:
 
 !bc pycod
-fig = plt.figure()
-ax = fig.gca(projection='3d')
 ax.plot_surface(x, y, h)
 !ec
 
@@ -116,6 +172,7 @@ Coloring can be used to get a better view of surfaces. We can use the `cm`-modul
 
 !bc pycod
 from matplotlib import cm
+
 ax.plot_surface(x, y, h, cmap=cm.coolwarm)
 !ec
 
@@ -132,20 +189,20 @@ ax.plot(xcoords, ycoords, zcoords)
 The following code examplifies how one can create different types of contour plots.
 
 !bc pycod
-plt.contour(x, y, h)        # default: with X contour lines
+ax.contour(x, y, h)        # default: with X contour lines
 
 # 10 contour lines. The contour levels will be automatically chosen.
-plt.contour(x, y, h, 10)
+ax.contour(x, y, h, 10)
 
 # 10 contour lines. Black color for contour lines
-plt.contour(x, y, h, 10, colors='k')
+ax.contour(x, y, h, 10, colors='k')
 
 # Specify the contour levels
 levels = [500., 1000., 1500., 2000.]
-plt.contour(x, y, h, levels=levels)
+ax.contour(x, y, h, levels=levels)
 
 # Add labels with the contour line values to the lines
-c = plt.contour(x, y, h, levels=levels)
+c = ax.contour(x, y, h, levels=levels)
 plt.clabel(c)
 !ec
 
@@ -161,7 +218,7 @@ FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some ot
 The following code plots the vector field $\bm{v}$ defined above.
 
 !bc pycod
-plt.quiver(x, y, vx, vy, angles='xy', scale_units='xy', color='b')
+ax.quiver(x, y, vx, vy, angles='xy', scale_units='xy', color='b')
 !ec
 
 The two first parameters specify the $x$- and $y$-components of the points where vectors are to be drawn, and the next two parameters the actual components of the vectors.
@@ -179,12 +236,19 @@ Matplotlib will attempt to scale the plot automatically if the `scale` parameter
 Let us finally see how to plot the contour lines of $h(x,y)$ together with its gradient field. The following three lines do the job, once all grid coordinates and the gradient field have been computed as above.
 
 !bc pycod
-plt.quiver(x2, y2, dhx, dhy, color='r', angles='xy')
+ax.quiver(x2, y2, dhx, dhy, color='r', angles='xy')
 plt.hold('on')
-plt.contour(x, y, h)
+ax.contour(x, y, h)
 !ec
 The result is shown in the right plot in Figure ref{quivermatplotlib}. In calculus one is taught that the gradients are orthogonal to the contour lines. This is easily seen in the plot.
 
+Finally, the three-dimensional vector field can be plotted as follows. The resulting plot is shown in Figure ref{quivermatplotlibgr}.
+
+FIGURE:[images/quivermatplotlibgr, height=400 width=600 frac=0.8] The three-dimensional vector field plotted with Matplotlib. label{quivermatplotlibgr}
+
+!bc pycod
+ax.quiver(x, y, z, -x/r3, -y/r3, -z/r3, color='r', length=0.2)
+!ec
 
 
 
@@ -455,26 +519,8 @@ FIGURE:[images/advancedcontourmayavi, height=400 width=600 frac=0.8] Some contou
 
 ===== Plotting vector fields in 3D =====
 
-Mayavis functionality for plotting vector fields is primarily intended for 3D also. As an example, let us attempt to plot a gravitational field.
-Newtons law of gravitation says that the gravitational force is proportional to
-
-!bt
-\[-\bm{r}/|\bm{r}|^3 = -( x,y,z)/\sqrt{x^2+y^2+z^2}^3,\]
-!et
-where $\bm{r}=(x,y,z)$ is the position vector. Let us attempt to plot this vector field.
-We need a three-dimensional grid, so that `meshgrid` will not work. We can either use `ndgrid` from SciTools, or `mgrid` from `numpy` as follows
-If we want to plot this over $[-5,5]$, with $0.5$ distance between the vectors, we first need to create a two-dimensional grid as follows.
-
-!bc pycod
-x, y, z = np.mgrid[.5:2:.2, .5:2:.2, .5:2:.2]
-r3 = np.sqrt(x**2 + y**2 + z**2)**3
-vx = -x/r3
-vy = -y/r3
-vz = -z/r3
-!ec
-The cube of the distance (`r3`) has here been computed once, since all three components are divided by this.
-Also we compute the vector field for a section in the first octant only, where all three components are between $0.5$ and $2$, and we do not make the grid too dense, so that individual vectors have smaller chance of colliding.
-The vector field can now be vizualized as follows.
+Mayavis functionality for plotting vector fields is primarily intended for 3D also, so we will only plot the gravitational field.
+This can be vizualized as follows.
 
 !bc pycod
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
@@ -495,7 +541,7 @@ To improve the visualization of the field, we have set some of the optional prop
 In addition we have set a foreground and background color for the figure, and added axes as above.
 The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting vector fiels in 3D dimensions. It may be challenging to create instructive plots, since vectors are drawn over an area in 3D rather than 2D.
 
-FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] A vector field plotted with Mayavi. label{quivermayavi}
+FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] The three-dimensional vector field plotted with Mayavi. label{quivermayavi}
 
 ===== Animations =====
 
