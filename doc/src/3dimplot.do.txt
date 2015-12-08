@@ -168,21 +168,20 @@ The result is shown in the left plot in Figure ref{plotmatplotlib}.
 
 FIGURE:[images/plotmatplotlib] Two Matplotlib surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotmatplotlib}
 
-Coloring can be used to get a better view of surfaces. We can use the `cm`-module to obtain a color map which can be used to color the surface.
+Coloring can be used to get a better view of surfaces. We can use the `cm`-module to obtain a color map which can be used to color the surface (one can choose from a wide range of different color maps):
 
 !bc pycod
 from matplotlib import cm
 
 ax.plot_surface(x, y, h, cmap=cm.coolwarm)
-!ec
-
-The result is shown in the right plot in Figure ref{plotmatplotlib}. One can choose from a wide range of different color maps.
-
-Several curves and surface can be included in the same plot. The previously produced surface had been combined with a plot of the parametrized curve $\bm{r}(t)$, obtained as follows.
-
-!bc pycod
 ax.plot(xcoords, ycoords, zcoords)
 !ec
+
+Here we have illustrated two more things: How we can plot the parametrized curve $\bm{r}(t)$ defined above, and how to combine two plots in one. 
+The result is shown in the right plot in Figure ref{plotmatplotlib}.
+
+
+
 
 ===== Contour plots =====
 
@@ -254,14 +253,17 @@ ax.quiver(x, y, z, -x/r3, -y/r3, -z/r3, color='r', length=0.2)
 
 ======= SciTools =======
 
-The plots generated with SciTools below have been generated with the default backend of SciTools, which is Matplotlib in the most recent versions of SciTools.
+Most of the SciTools plots below have been generated with the default backend of SciTools, which is Matplotlib in the most recent versions of SciTools.
+The only exception is the first section on simple surface plots, where a gnuplot backend was used. The reason is that the  Matplotlib backend of SciTools does not support plotting of parametrised curves as of now. 
+We have also dropped the plot of three-dimensional vector fields, since there is only limited support for this now. 
+
 Below we will use the prefix `plt` for the package `scitools.easyviz`:
 
 !bc pycod
 import scitools.easyviz as plt
 !ec
 
-[TODO: Curve plots in 3D using SciTools]
+
 
 ===== Simple surface plots =====
 
@@ -273,15 +275,20 @@ x, y = plt.ndgrid(t, t)     # Grid for contour plot
 x2, y2 = plt.ndgrid(t2, t2) # Grid for quiver plot
 !ec
 
-`ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: They attain default values which can be used.
-
+`ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: 
+They attain default values which can be used.
 The surface can be plotted simply by writing `plt.mesh(x, y, h)`, so that this part of the code is shorter than the three lines needed with Matplotlib.
-The result is shown in the left plot in Figure ref{plotscitools}.
+The result is shown in the left plot in Figure ref{plotscitools}. To make a colour plot of the surface together with the parametric curve $\bm{r}(t)$, we can write
 
-FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface plots. Simple plot (left), and a plot with colours (right). label{plotscitools}
+!bc pycod
+plt.surf(x, y, h)
+plt.plot3(xcoords, ycoords, zcoords, 'r-')
+!ec
 
-We can write `plt.surf(x, y, h)` instead of `plt.mesh(x, y, h)` to get a graph where the surface elements have been coloured.
-The result is shown in the right plot in Figure ref{plotscitools}. One can choose from a wide range of different color maps.
+The result is shown in the right plot in Figure ref{plotscitools}. 
+
+FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotscitools}
+
 
 ===== Contour plots =====
 
@@ -507,8 +514,7 @@ levels = [500., 1000., 1500., 2000.]
 plt.contour_surf(x, y, h, contours=levels)
 !ec
 
-There seems to be no function in Mayavi which labels the contours, as we did with Matplotlib and ScitTools.
-[TODO: I can't find out out how to set label text as in clabel]
+There seems to be no function in Mayavi which labels the contours, as we did with Matplotlib and ScitTools. 
 The plots are shown in Figure ref{advancedcontourmayavi}. Contour plots in Mayavi are shown in 3D, contrary to Matplotlib and SciTools. Their visual appearance may be enhanced by also including the surface plot itself. We have here done this for two of the contour plots.
 For comparison, we have not included the surface itself for the two last contour plots. There is a clear difference in visual impression between the two, and we see that the colour of the contours can conflict with the colour of the surface.
 
