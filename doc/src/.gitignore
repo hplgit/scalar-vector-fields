@@ -5,6 +5,7 @@ programming.log
 programming.out
 programming.tex
 programming.pdf
+.programming.exerinfo
 .DS_Store
 tmp_preprocess__programming.do.txt
 test2.py
