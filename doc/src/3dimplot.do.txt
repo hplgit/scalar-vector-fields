@@ -4,10 +4,19 @@ We will explain plotting in three dimensions using three different packages. As 
 Then we will go through Mayavi, which contains support for doing more advanced plotting operations. The three packages are different in many respects, but they also have much in common, as code below shows.
 Note that, for most backends one can plug into Matplotlib/SciTools/Mayavi, one can rotate a figure by holding the mouse cursor down. This functionality is often useful in order to get a better view of a three-dimensional plot.
 
+For Mac OSX and Windows we recommend using Anaconda when testing the plotting packages we describe here. To obtain an environment for this, download the file `inf11003dplot.txt` from the book’s webpage, 
+create a conda environment named `inf11003dplot` with contents described in this file, and activate the environment. This can be done as follows. 
+!bc sys
+conda create --name inf11003dplot --file inf11003dplot.txt
+source activate inf11003dplot
+!ec
+
 Many of the plots below concern the surface defined by
 
 !bt
-\[ h(x,y) = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}}.\]
+\begin{equation}
+h(x,y) = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}}. label{heq} 
+\end{equation}
 !et
 $h(x,y)$ models the height of an isolated mountain, where $h$ is the height above sea level, $x$ and $y$ are cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is called the radius of the mountain.
 We will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to all code below we have set $h_0=2277$ and $R=4$.
@@ -42,7 +51,9 @@ which moves with constant angular and radial velocity towards the top of the mou
 You can verify that the following parametrization, with $0\leq t\leq 2\pi$, is such a curve.
 
 !bt
-\[ \bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t),  10\left(1 - \frac{t}{2\pi}\right)\sin(t), \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \right). \]
+\begin{equation}
+\bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t),  10\left(1 - \frac{t}{2\pi}\right)\sin(t), \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \right). label{req}
+\end{equation}
 !et
 
 The coordinates of this parametrized cyrve $\bm{r}(t)$ can be produced as follows.
@@ -60,10 +71,12 @@ zcoords = h0/(1 + 100*(1 - t/(2*np.pi))**2/(R**2))
 === The gradient vector field ===
 
 The gradient vector field of $h(x,y)$ is defined as the vector field which equals the gradient of $h$ at each point.
-The gradient of $h(x,y)$ is defined as the vector of partial derivatives
+The gradient of $h(x,y)$ is defined as the vector of partial derivatives.
 
 !bt
-\[ \nabla h = (\partial h/\partial x, \partial h \partial y). \]
+\begin{equation}
+\nabla h = (\partial h/\partial x, \partial h \partial y). label{gradienteq}
+\end{equation}
 !et
 
 In calculus one learns that the gradients are orthogonal to the contour lines. 
@@ -96,7 +109,9 @@ We will also plot two other vector fields, defined in the following sections.
 We will consider the following two-dimensional vector field
 
 !bt
-\[\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy,   - 3y\right).\]
+\begin{equation}
+\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy,   - 3y\right). label{2dvectorfieldeq}
+\end{equation}
 !et
 
 We will plot this over $[-5,5]$, with $0.5$ distance between the vectors. The grid and the vectors in the field can be obtained as follows.
@@ -118,7 +133,9 @@ As an example of a three-dimensional vector field we will consider a gravitation
 Newtons law of gravitation says that the gravitational force is proportional to
 
 !bt
-\[\bm{v}(x,y,z) = -\bm{r}/|\bm{r}|^3 = -( x,y,z)/\sqrt{x^2+y^2+z^2}^3,\]
+\begin{equation}
+\bm{v}(x, y, z) = -\bm{r}/|\bm{r}|^3 = -( x,y,z)/\sqrt{x^2+y^2+z^2}^3, label{3dvectorfieldeq}
+\end{equation}
 !et
 where $\bm{r}=(x,y,z)$ is the position vector. We first need to create a three-dimensional grid and the vectors in the field as follows.
 
@@ -175,7 +192,7 @@ ax = fig.gca(projection='3d')
 
 ===== Simple surface plots =====
 
-Simple surface plots of $h(x,y)$ (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$) can be produced as follows. 
+Simple surface plots of $h(x,y)$ in (ref{heq}) (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in ref{req}) can be produced as follows. 
 
 !bc pycod
 from matplotlib import cm
@@ -242,7 +259,7 @@ FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some ot
 
 ===== Vector field plots =====
 
-The following code plots the two-dimensional vector field, the gradient field together with contours, and finally the three-dimensional vector field.
+The following code plots the two-dimensional vector field ref{2dvectorfieldeq}, the gradient field ref{gradienteq} together with contours, and finally the three-dimensional vector field ref{3dvectorfieldeq}.
 
 !bc pycod
 fig = plt.figure()
@@ -305,7 +322,7 @@ x2, y2 = plt.ndgrid(t2, t2) # Grid for quiver plot
 
 `ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: 
 They attain default values which can be used.
-The simple surface plots of $h(x,y)$ (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$) can now be produced as follows. 
+The simple surface plots of $h(x,y)$ in ref{heq} (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in ref{req}) can now be produced as follows. 
 
 !bc pycod
 plt.mesh(x, y, h) # Gnuplot backend
@@ -354,7 +371,7 @@ FIGURE:[images/advancedcontourscitools, height=400 width=600 frac=0.8] Some othe
 
 ===== Vector field plots =====
 
-There seems to be limited supported for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field and the two-dimensional vector field.
+There seems to be limited supported for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field ref{gradienteq} and the two-dimensional vector field ref{2dvectorfieldeq}.
 
 !bc pycod
 plt.quiver(x, y, vx, vy, 200, 'b')
@@ -379,25 +396,12 @@ FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] Vector field plots
 
 Mayavi[^mayaviurl] is an advanced, free, easy to use, scientific data visualizer, with an emphasis on 3D visualization.
 It is written in Python, and uses the Visualization Toolkit (VTK) for rendering graphics. Since VTK can be configured with different backends, so can Mayavi.
-Mayavi is cross platform and should run on any platform where both Python and VTK are available (this includes Mac OSX and Windows).
-
-There are several ways you can obtain a full environment for Mayavi.
+Mayavi is cross platform and runs on most platforms, including Mac OSX, Windows, Linux. 
+On Ubuntu you can install Mayavi by writing or `sudo apt-get install mayavi2`, or  `sudo pip install mayavi —upgrade` (which will obtain the most recent version of it).
 
 [^mayaviurl]: The page URL: "http://docs.enthought.com/mayavi/mayavi/" collects pointers to all relevant documentation or Mayavi
 
-We recommend that you use Anaconda for Mayavi, since Anaconda is cross-platform. This requires that you install a list of packages which Mayavi depends on[^mayavipackagesurl]
-These are not only Python packages (which thus can be installed with `pip`), but also other types of dependencies
-(which can be installed with `conda`, a package managament tool which handles dependencies which are outside Python, contrary to `pip`. `conda`, just as `pip`, is bundled with your Anaconda installation).
-
-You can install Canopy[^canopyurl]. Canopy contains a full Python environment, and through the package manager tool of Canopy you can install Mayavi itself, VTK, and all the other dependencies of Mayavi.
-The package manager tool gives you access to install not only Mayavi, but also a whole list of packages from what is called a package index.
-
-[^canopyurl]: URL: "https://www.enthought.com/products/canopy/"
-[^mayavipackagesurl]: A list of the packages you need can be found on URL: "http://docs.enthought.com/mayavi/mayavi/installation.html"
-
-You can also use Ubuntu and the VMWare Fusion virtual machine, and install all components by hand (see the link for Anaconda to package dependencies).
-
-We will only consider the Mayavi-functionality for simple plotting[^simpleplotting], such as the functionality we considered for Matplotlib and SciTools.
+We will only consider the Mayavi’s functionality for simple plotting[^simpleplotting], such as the functionality we considered for Matplotlib and SciTools.
 The `mayavi.mlab` module provides a simple interface to such plotting, with an emphasis on 3D visualization.
 Below we will use the prefix `plt` for the package `mayavi.mlab`:
 
@@ -408,6 +412,8 @@ Several of the functions in `mlab` have the same name as the counterparts in Sci
 
 [^simpleplotting]: The documentation for simple plotting functions can also be found on URL: "http://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html". Further documentation can be found on URL: "http://docs.enthought.com/mayavi/mayavi/auto/mlab_other_functions.html".
 
+
+
 ===== The basics =====
 
 We first need to cover some of the basic figure handling functions in the `mayavi.mlab` module[^basicfigurehandling].
@@ -415,8 +421,8 @@ Much of this is similar to the bascis for Matplotlib and SciTools, and we will t
 
 [^basicfigurehandling]: The documentation for basic figure handling functions can be found on URL: "http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html"
 
-The plotting commands you do in `mlab` will go to the current figure, also called a scene. If you make several plots, they will be shown together
-(there is no function `hold('on')` in Mayavi, as in Matplotlib and SciTools, but it is assumed by default that several plots "hold on" to the current figure).
+
+Just as in Matplotlib, the plotting commands you do in `mlab` will go into the same figure, until you change to a new figure. 
 The following code explains the use of some of the basic figure handling functions.
 
 !bc pycod
@@ -464,7 +470,7 @@ such as the foreground or background colour above. Note that the foreground colo
 
 ===== Simple surface plots =====
 
-Let us return to the surface $h(x,y)$. Mayavi also has commands `mesh` and `surf`, which works similarly to Matplotlib and SciTools:
+Let us return to the surface $h(x,y)$ in ref{heq}. Mayavi also has commands `mesh` and `surf`, which works similarly to Matplotlib and SciTools:
 
 !bc pycod
 plt.mesh(x, y, h)
@@ -556,7 +562,7 @@ FIGURE:[images/advancedcontourmayavi, height=400 width=600 frac=0.8] Some contou
 
 ===== Plotting vector fields in 3D =====
 
-Mayavis functionality for plotting vector fields is primarily intended for 3D also, so we will only plot the gravitational field.
+Mayavis functionality for plotting vector fields is primarily intended for 3D also, so we will only plot the three dimensional field ref{3dvectorfieldeq}.
 This can be vizualized as follows.
 
 !bc pycod
