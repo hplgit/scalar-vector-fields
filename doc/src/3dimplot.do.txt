@@ -11,6 +11,8 @@ conda create --name inf11003dplot --file inf11003dplot.txt
 source activate inf11003dplot
 !ec
 
+=== Surface coordinates ===
+
 Many of the plots below concern the surface defined by
 
 !bt
@@ -24,9 +26,6 @@ We will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to all cod
 We will plot $h(x,y)$ as a surface in different ways, make contour plots of it (both in 2D and 3D), plot it together with a parametrised curve on the surface, and plot its gradient vector field
 The following goes through the details of this setup.
 
-
-
-=== Surface coordinates ===
 Prior to plotting the function $h(x,y)$, we need create a grid of the points to plot. Regardless of which plotting package we will use later on, this can be done as follows.
 
 !bc pycod
@@ -192,7 +191,7 @@ ax = fig.gca(projection='3d')
 
 ===== Simple surface plots =====
 
-Simple surface plots of $h(x,y)$ in (ref{heq}) (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in ref{req}) can be produced as follows. 
+Simple surface plots of $h(x,y)$ in (ref{heq}) (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in (ref{req})) can be produced as follows. 
 
 !bc pycod
 from matplotlib import cm
@@ -259,7 +258,7 @@ FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some ot
 
 ===== Vector field plots =====
 
-The following code plots the two-dimensional vector field ref{2dvectorfieldeq}, the gradient field ref{gradienteq} together with contours, and finally the three-dimensional vector field ref{3dvectorfieldeq}.
+The following code plots the two-dimensional vector field (ref{2dvectorfieldeq}), the gradient field (ref{gradienteq}) together with contours, and finally the three-dimensional vector field (ref{3dvectorfieldeq}).
 
 !bc pycod
 fig = plt.figure()
@@ -322,7 +321,7 @@ x2, y2 = plt.ndgrid(t2, t2) # Grid for quiver plot
 
 `ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: 
 They attain default values which can be used.
-The simple surface plots of $h(x,y)$ in ref{heq} (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in ref{req}) can now be produced as follows. 
+The simple surface plots of $h(x,y)$ in (ref{heq}) (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in (ref{req})) can now be produced as follows. 
 
 !bc pycod
 plt.mesh(x, y, h) # Gnuplot backend
@@ -371,7 +370,7 @@ FIGURE:[images/advancedcontourscitools, height=400 width=600 frac=0.8] Some othe
 
 ===== Vector field plots =====
 
-There seems to be limited supported for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field ref{gradienteq} and the two-dimensional vector field ref{2dvectorfieldeq}.
+There seems to be limited supported for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field (ref{gradienteq}) and the two-dimensional vector field (ref{2dvectorfieldeq}).
 
 !bc pycod
 plt.quiver(x, y, vx, vy, 200, 'b')
@@ -470,14 +469,14 @@ such as the foreground or background colour above. Note that the foreground colo
 
 ===== Simple surface plots =====
 
-Let us return to the surface $h(x,y)$ in ref{heq}. Mayavi also has commands `mesh` and `surf`, which works similarly to Matplotlib and SciTools:
+Let us return to the surface $h(x,y)$ in (ref{heq}). Mayavi also has commands `mesh` and `surf`, which works similarly to Matplotlib and SciTools:
 
 !bc pycod
 plt.mesh(x, y, h)
 plt.surf(x, y, h)
 !ec
 Both functions color the surface, and accept many of the same parameters. For some purposes `surf` seems to be more general.
-The left plot of figure ref{plotmayavi} shows the result when `mesh` is used.
+The left plot of Figure ref{plotmayavi} shows the result when `mesh` is used.
 
 FIGURE:[images/plotmayavi] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right). The right plot also shows the parametrized curve $\bm{r}(t)$. label{plotmayavi}
 
@@ -497,7 +496,7 @@ For this we can use the `plot3d` command as folllows.
 plt.plot3d(xcoords, ycoords, zcoords, tube_radius=0.2)
 !ec
 The additional parameter `tube_radius` controls the width of the parametrized curve, and was increased here in order to make the curve more visible when shown together with `surf`.
-The right plot of figure ref{plotmayavi} shows the result when both `surf` and `plot3d` are combined in the same plot. We see that the curce does not lie on the surface, as it should.
+The right plot of Figure ref{plotmayavi} shows the result when both `surf` and `plot3d` are combined in the same plot. We see that the curve does not lie on the surface, as it should.
 The reason is that the ranges of the $x$-, $y$-, and $z$-values differ for the the curve and the surface, so that autoscaling will use different scales when placing them on the scene.
 We therefore have to be a bit cautious when applying the autoscaling in Mayavi, and in the following contour plots we will avoid this autoscaling problem by scaling everything
 first so that the coordinates are of comparable magnitude, so that there is no need for autoscaling in the first case.
@@ -506,7 +505,7 @@ One can also use other properties to scale the cases. Some of the plotting comma
 
 ===== Subplots =====
 
-The two plots in figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure, so that one figure is generated with several subplots.
+The two plots in Figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure, so that one figure is generated with several subplots.
 Consider the following code.
 
 !bc pycod
@@ -562,7 +561,7 @@ FIGURE:[images/advancedcontourmayavi, height=400 width=600 frac=0.8] Some contou
 
 ===== Plotting vector fields in 3D =====
 
-Mayavis functionality for plotting vector fields is primarily intended for 3D also, so we will only plot the three dimensional field ref{3dvectorfieldeq}.
+Mayavis functionality for plotting vector fields is primarily intended for 3D also, so we will only plot the three dimensional field (ref{3dvectorfieldeq}).
 This can be vizualized as follows.
 
 !bc pycod
