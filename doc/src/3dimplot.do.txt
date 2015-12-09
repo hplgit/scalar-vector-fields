@@ -292,7 +292,7 @@ FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface
 
 ===== Contour plots =====
 
-The following code examplifies how one can create the same types of contour plots as above with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set
+The following code examplifies how one can create the same types of contour plots as above with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set.
 
 !bc pycod
 plt.contour(x, y, h) # default: with X contour lines
@@ -309,34 +309,35 @@ plt.contour(x, y, h, levels)
 
 # Add labels with the contour line values to the lines
 plt.contour(x, y, h, levels, clabels='on')
+
+# Three-dimensional contour plot. 10 contour lines. Gnuplot backend
+plt.contour3(x, y, h, 10)
 !ec
 
-The default contour plot is shown in Figure ref{simplecontourscitools}. The remaining 4 plots are shown in Figure ref{advancedcontourscitools}.
+The default contour plot is shown in Figure ref{simplecontourscitools}. The next 4 plots are shown in Figure ref{advancedcontourscitools}, while the three-dimensional contour plot is shown in Figure ref{contour3scitools}.
 
 FIGURE:[images/simplecontourscitools, height=400 width=600 frac=0.8]  Default contour plot with SciTools. label{simplecontourscitools}
 
 FIGURE:[images/advancedcontourscitools, height=400 width=600 frac=0.8] Some other contour plots with SciTools: With 10 contour lines (upper left), with 10 contour lines in black (upper right), with specified levels (lower left), and with labeled levels (lower right). label{advancedcontourscitools}
 
+FIGURE:[images/contour3scitools, height=400 width=600 frac=0.8]  3-dimensional contour plot with SciTools. label{contour3scitools}
+
 ===== Plotting vector fields =====
 
-The following code plots the vector field $\bm{v}$ defined above.
+There seems to be limited supported for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field and the two-dimensional vector field.
 
 !bc pycod
 plt.quiver(x, y, vx, vy, 200, 'b')
-!ec
 
-[TODO: I need to consult the documentation here]
-The two last parameters represent scaling and color. The resulting plot is shown in Figure ref{quiverscitools}
-
-FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] A vector field plotted with SciTools (left), and contours together with the gradients (right). label{quiverscitools}
-
-Let us round off by considering again the previous example of contour/gradient plot. The following three lines do the job in this case, and the result is shown in the right plot in Figure ref{quiverscitools}.
-
-!bc pycod
+plot.figure()
 plt.quiver(x2, y2, dhx, dhy, 0, 'r')
 plt.hold('on')
 plt.contour(x, y, h, daspectmode='equal')
 !ec
+
+The two last parameters in the calls to `quiver` represent scaling (0 means no scaling) and color. The results are shown in Figure ref{quiverscitools}.
+
+FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] Vector field plots with SciTools. The two-dimensional vector field (left), contour plot together with gradient field (right). label{quiverscitools}
 
 
 
