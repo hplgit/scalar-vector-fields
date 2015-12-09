@@ -17,6 +17,9 @@ system python plot3dmatplotlib.py
 system doconce combine_images pdf -2 images/simpleplotmatplotlib images/simpleplotcoloursmatplotlib images/plotmatplotlib
 system doconce combine_images png -2 images/simpleplotmatplotlib images/simpleplotcoloursmatplotlib images/plotmatplotlib
 
+system doconce combine_images pdf -2 images/defaultcontourmatplotlib images/defaultcontour3matplotlib images/simplecontourmatplotlib
+system doconce combine_images png -2 images/defaultcontourmatplotlib images/defaultcontour3matplotlib images/simplecontourmatplotlib
+
 system doconce combine_images pdf -2 images/contour10levelsmatplotlib images/contour10levelsblackmatplotlib images/contourspeclevelsmatplotlib images/contourclabelmatplotlib images/advancedcontourmatplotlib
 system doconce combine_images png -2 images/contour10levelsmatplotlib images/contour10levelsblackmatplotlib images/contourspeclevelsmatplotlib images/contourclabelmatplotlib images/advancedcontourmatplotlib
 
@@ -28,6 +31,9 @@ system doconce combine_images png -2 images/quivermatplotlibsimple images/quiver
 
 system doconce combine_images png -2 images/simpleplotscitools images/simpleplotcoloursscitools images/plotscitools
 system doconce combine_images pdf -2 images/simpleplotscitools images/simpleplotcoloursscitools images/plotscitools
+
+system doconce combine_images pdf -2 images/defaultcontourscitools images/defaultcontour3scitools images/simplecontourscitools
+system doconce combine_images png -2 images/defaultcontourscitools images/defaultcontour3scitools images/simplecontourscitools
 
 system doconce combine_images pdf -2 images/contour10levelsscitools images/contour10levelsblackscitools images/contourspeclevelsscitools images/contourclabelscitools images/advancedcontourscitools
 system doconce combine_images png -2 images/contour10levelsscitools images/contour10levelsblackscitools images/contourspeclevelsscitools images/contourclabelscitools images/advancedcontourscitools

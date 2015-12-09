@@ -53,8 +53,14 @@ plt.savefig('images/quivermatplotlibadvanced.png')
 fig = plt.figure()
 ax = fig.gca()
 ax.contour(x, y, h)
-plt.savefig('images/simplecontourmatplotlib.pdf')
-plt.savefig('images/simplecontourmatplotlib.png')
+plt.savefig('images/defaultcontourmatplotlib.pdf')
+plt.savefig('images/defaultcontourmatplotlib.png')
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+ax.contour(x, y, h)
+plt.savefig('images/defaultcontour3matplotlib.pdf')
+plt.savefig('images/defaultcontour3matplotlib.png')
 
 fig = plt.figure()
 ax = fig.gca()
@@ -81,9 +87,6 @@ cs = ax.contour(x, y, h)
 plt.clabel(cs)
 plt.savefig('images/contourclabelmatplotlib.pdf')
 plt.savefig('images/contourclabelmatplotlib.png')
-
-
-
 
 
 

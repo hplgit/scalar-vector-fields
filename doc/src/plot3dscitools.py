@@ -16,8 +16,8 @@ x,y = plt.ndgrid(t,t)             # Grid for x- og y-verdiene (km)
 h = h0/(1+(x**2+y**2)/(R**2)) # Beregn hoyden h (m)
 
 plt.contour(x, y, h)
-plt.savefig('images/simplecontourscitools.pdf')
-plt.savefig('images/simplecontourscitools.png')
+plt.savefig('images/defaultcontourscitools.pdf')
+plt.savefig('images/defaultcontourscitools.png')
 
 plt.contour(x, y, h, 10)
 plt.savefig('images/contour10levelsscitools.pdf')

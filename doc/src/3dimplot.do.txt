@@ -12,8 +12,10 @@ Many of the plots below concern the surface defined by
 $h(x,y)$ models the height of an isolated mountain, where $h$ is the height above sea level, $x$ and $y$ are cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is called the radius of the mountain.
 We will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to all code below we have set $h_0=2277$ and $R=4$.
 
-We will plot $h(x,y)$ as a surface in different ways, make contour plots of it, plot it together with a parametrised curve moving along the surface, and plot its gradient vector field
+We will plot $h(x,y)$ as a surface in different ways, make contour plots of it (both in 2D and 3D), plot it together with a parametrised curve on the surface, and plot its gradient vector field
 The following goes through the details of this setup.
+
+
 
 === Surface coordinates ===
 Prior to plotting the function $h(x,y)$, we need create a grid of the points to plot. Regardless of which plotting package we will use later on, this can be done as follows.
@@ -29,6 +31,9 @@ We here defined a grid for the area closer to the mountain top than 10km in any 
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics.
 `indexing='ij'` means that the coordinates are set as in an $xy$-coordinate system, while
 `indexing='xy'` means that the coordinates are set as row/column indices in a matrix.
+
+
+
 
 === Parametrized curves ===
 
@@ -51,6 +56,7 @@ zcoords = h0/(1 + 100*(1 - t/(2*np.pi))**2/(R**2))
 
 
 
+
 === The gradient vector field ===
 
 The gradient vector field of $h(x,y)$ is defined as the vector field which equals the gradient of $h$ at each point.
@@ -59,6 +65,9 @@ The gradient of $h(x,y)$ is defined as the vector of partial derivatives
 !bt
 \[ \nabla h = (\partial h/\partial x, \partial h \partial y). \]
 !et
+
+In calculus one learns that the gradients are orthogonal to the contour lines. 
+This is something we will easily see in our plots when when we combine the contour plot with a plot of the gradient vector field.
 
 When we plot the gradient vector field, it is useful to make a grid of coordinates with a smaller resolution that what we used for the surface coordinates.
 The reason is that we will plot many vectors at the same time, and if the resolution is too high the vectors may collide.
@@ -79,12 +88,15 @@ dhx, dhy = np.gradient(h2) # Compute the gradient vector (dh/dx,dh/dy)
 
 We will also plot two other vector fields, defined in the following sections. 
 
+
+
+
 === A two-dimensional vector field ===
 
 We will consider the following two-dimensional vector field
 
 !bt
-\[\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy \right)\bm{i}  - 3y\bm{j}.\]
+\[\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy,   - 3y\right).\]
 !et
 
 We will plot this over $[-5,5]$, with $0.5$ distance between the vectors. The grid and the vectors in the field can be obtained as follows.
@@ -95,6 +107,9 @@ x, y = np.meshgrid(t, t, sparse=False, indexing='ij')
 vx = x**2 + 2*y - .5*x*y
 vy = -3*y
 !ec
+
+
+
 
 
 === A three-dimensional vector field ===
@@ -146,7 +161,7 @@ fig = plt.figure()
 ax = fig.gca()
 !ec
 The returned object `ax` can the be used for the calls to the different plotting functions, as is examplified below. 
-If we instead want to make a plot in 3D we also need to import an additional package for this, an change the way we get the object `ax` as follows.
+If we instead want to make a plot in 3D we also need to import an additional package for this, and change the way we get the object `ax` as follows.
 
 !bc pycod
 from mpl_toolkits.mplot3d import Axes3D
@@ -156,29 +171,31 @@ ax = fig.gca(projection='3d')
 !ec
 
 
+
+
 ===== Simple surface plots =====
 
-The surface $h(x,y)$ can be plotted as follows:
-
-!bc pycod
-ax.plot_surface(x, y, h)
-!ec
-
-The result is shown in the left plot in Figure ref{plotmatplotlib}.
-
-FIGURE:[images/plotmatplotlib] Two Matplotlib surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotmatplotlib}
-
-Coloring can be used to get a better view of surfaces. We can use the `cm`-module to obtain a color map which can be used to color the surface (one can choose from a wide range of different color maps):
+Simple surface plots of $h(x,y)$ (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$) can be produced as follows. 
 
 !bc pycod
 from matplotlib import cm
 
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+ax.plot_surface(x, y, h)
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
 ax.plot_surface(x, y, h, cmap=cm.coolwarm)
-ax.plot(xcoords, ycoords, zcoords)
+ax.plot(xcoords, ycoords, zcoords) # Plot of parametrised curve
 !ec
 
-Here we have illustrated two more things: How we can plot the parametrized curve $\bm{r}(t)$ defined above, and how to combine two plots in one. 
-The result is shown in the right plot in Figure ref{plotmatplotlib}.
+Per default the plots are done into the same figure. This is why the parametrised curve ended up in the same figure as the surface plot preceding it. 
+Coloring can be used to get a better view of surfaces. Above we used the `cm`-module to obtain a color map which can be used to color the surface. 
+One can choose from a wide range of different color maps. The resulting plots are shown in Figure ref{plotmatplotlib}.
+
+FIGURE:[images/plotmatplotlib] Two Matplotlib surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotmatplotlib}
+
 
 
 
@@ -188,9 +205,17 @@ The result is shown in the right plot in Figure ref{plotmatplotlib}.
 The following code examplifies how one can create different types of contour plots.
 
 !bc pycod
-ax.contour(x, y, h)        # default: with X contour lines
+# Default two-dimensional contour plot: with X contour lines
+ax.contour(x, y, h)
+
+# Default three-dimensional contour plot
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+ax.contour(x, y, h)
 
 # 10 contour lines. The contour levels will be automatically chosen.
+fig = plt.figure()
+ax = fig.gca()
 ax.contour(x, y, h, 10)
 
 # 10 contour lines. Black color for contour lines
@@ -205,57 +230,60 @@ c = ax.contour(x, y, h, levels=levels)
 plt.clabel(c)
 !ec
 
-The default contour plot is shown in Figure ref{simplecontourmatplotlib}. The remaining 4 plots are shown in Figure ref{advancedcontourmatplotlib}.
+The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourmatplotlib}. The next 4 plots are shown in Figure ref{advancedcontourmatplotlib}.
 
-FIGURE:[images/simplecontourmatplotlib, height=400 width=600 frac=0.8]  Default contour plot with Matplotlib. label{simplecontourmatplotlib}
+FIGURE:[images/simplecontourmatplotlib, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with Matplotlib. label{simplecontourmatplotlib}
 
 FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some other contour plots with Matplotlib: With 10 contour lines (upper left), with 10 contour lines in black (upper right), with specified levels (lower left), and with labeled levels (lower right). label{advancedcontourmatplotlib}
 
 
-===== Plotting vector fields =====
 
-The following code plots the vector field $\bm{v}$ defined above.
+
+
+===== Vector field plots =====
+
+The following code plots the two-dimensional vector field, the gradient field together with contours, and finally the three-dimensional vector field.
 
 !bc pycod
+fig = plt.figure()
+ax = fig.gca()
 ax.quiver(x, y, vx, vy, angles='xy', scale_units='xy', color='b')
+
+fig = plt.figure()
+ax = fig.gca()
+ax.quiver(x2, y2, dhx, dhy, color='r', angles='xy')
+ax.contour(x, y, h)
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+ax.quiver(x, y, z, -x/r3, -y/r3, -z/r3, color='r', length=0.2)
 !ec
 
-The two first parameters specify the $x$- and $y$-components of the points where vectors are to be drawn, and the next two parameters the actual components of the vectors.
-The result is shown in the left plot in Figure ref{quivermatplotlib}
 
-FIGURE:[images/quivermatplotlib, height=400 width=600 frac=0.8] A vector field plotted with Matplotlib (left), and contours together with the gradients (right). label{quivermatplotlib}
+The first two plots are shown in Figure ref{quivermatplotlib}, and the third is shown in Figure ref{quivermatplotlibgr}.
 
+FIGURE:[images/quivermatplotlib, height=400 width=600 frac=0.8] Vector field plots with Matplotlib. The two-dimensional vector field (left), contour plot together with gradient field (right). label{quivermatplotlib}
 
-The parameters `angles` and `scale_units` say that the vector field should be drawn as a gradient field, i.e. that the length of the vectors coincide with that of the vector $\bm{v}$.
-`color` indicates the colour to be used for the vectors (here blue).
+FIGURE:[images/quivermatplotlibgr, height=400 width=600 frac=0.8] The three-dimensional vector field plotted with Matplotlib. label{quivermatplotlibgr}
+ 
+The parameters `angles` and `scale_units` above say that the vector field should be drawn as a gradient field, 
+i.e. that the length of the vectors coincide with that of the vector $\bm{v}$. `color` indicates the colour to be used for the vectors (here blue).
 Often the vectors need to be scaled in order for them not to collide in the plot (alternatively one can have some more distance between the points in the arrays `x` and `y`.
 This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors.
 Matplotlib will attempt to scale the plot automatically if the `scale` parameter is not set, in order to try to avoid that the vectors collide.
 
-Let us finally see how to plot the contour lines of $h(x,y)$ together with its gradient field. The following three lines do the job, once all grid coordinates and the gradient field have been computed as above.
 
-!bc pycod
-ax.quiver(x2, y2, dhx, dhy, color='r', angles='xy')
-plt.hold('on')
-ax.contour(x, y, h)
-!ec
-The result is shown in the right plot in Figure ref{quivermatplotlib}. In calculus one is taught that the gradients are orthogonal to the contour lines. This is easily seen in the plot.
 
-Finally, the three-dimensional vector field can be plotted as follows. The resulting plot is shown in Figure ref{quivermatplotlibgr}.
 
-FIGURE:[images/quivermatplotlibgr, height=400 width=600 frac=0.8] The three-dimensional vector field plotted with Matplotlib. label{quivermatplotlibgr}
 
-!bc pycod
-ax.quiver(x, y, z, -x/r3, -y/r3, -z/r3, color='r', length=0.2)
-!ec
+
 
 
 
 ======= SciTools =======
 
-Most of the SciTools plots below have been generated with the default backend of SciTools, which is Matplotlib in the most recent versions of SciTools.
-The only exception is the first section on simple surface plots, where a gnuplot backend was used. The reason is that the  Matplotlib backend of SciTools does not support plotting of parametrised curves as of now. 
-We have also dropped the plot of three-dimensional vector fields, since there is only limited support for this now. 
+Most of the SciTools plots below have been generated with the default backend of SciTools, which is Matplotlib in the most recent versions of SciTools. 
+In some cases a gnuplot backend had to be used. This has been mentioned in comments in the code in those cases.
 
 Below we will use the prefix `plt` for the package `scitools.easyviz`:
 
@@ -277,15 +305,17 @@ x2, y2 = plt.ndgrid(t2, t2) # Grid for quiver plot
 
 `ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: 
 They attain default values which can be used.
-The surface can be plotted simply by writing `plt.mesh(x, y, h)`, so that this part of the code is shorter than the three lines needed with Matplotlib.
-The result is shown in the left plot in Figure ref{plotscitools}. To make a colour plot of the surface together with the parametric curve $\bm{r}(t)$, we can write
+The simple surface plots of $h(x,y)$ (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$) can now be produced as follows. 
 
 !bc pycod
-plt.surf(x, y, h)
-plt.plot3(xcoords, ycoords, zcoords, 'r-')
+plt.mesh(x, y, h) # Gnuplot backend
+
+plt.surf(x, y, h) # Gnuplot backend
+plt.hold(‘on’)
+plt.plot3(xcoords, ycoords, zcoords, 'r-') # Gnuplot backend
 !ec
 
-The result is shown in the right plot in Figure ref{plotscitools}. 
+The results are shown in Figure ref{plotscitools}. 
 
 FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotscitools}
 
@@ -295,7 +325,11 @@ FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface
 The following code examplifies how one can create the same types of contour plots as above with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set.
 
 !bc pycod
-plt.contour(x, y, h) # default: with X contour lines
+# Default two-dimensional contour plot: with X contour lines
+plt.contour(x, y, h)
+
+# Default three-dimensional contour plot (Gnuplot backend)
+plt.contour3(x, y, h)
 
 # 10 contour lines. The contour levels will be automatically chosen.
 plt.contour(x, y, h, 10)
@@ -309,20 +343,16 @@ plt.contour(x, y, h, levels)
 
 # Add labels with the contour line values to the lines
 plt.contour(x, y, h, levels, clabels='on')
-
-# Three-dimensional contour plot. 10 contour lines. Gnuplot backend
-plt.contour3(x, y, h, 10)
 !ec
 
-The default contour plot is shown in Figure ref{simplecontourscitools}. The next 4 plots are shown in Figure ref{advancedcontourscitools}, while the three-dimensional contour plot is shown in Figure ref{contour3scitools}.
+The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourscitools}. The next 4 plots are shown in Figure ref{advancedcontourscitools}.
 
-FIGURE:[images/simplecontourscitools, height=400 width=600 frac=0.8]  Default contour plot with SciTools. label{simplecontourscitools}
+FIGURE:[images/simplecontourscitools, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with SciTools. label{simplecontourscitools}
 
 FIGURE:[images/advancedcontourscitools, height=400 width=600 frac=0.8] Some other contour plots with SciTools: With 10 contour lines (upper left), with 10 contour lines in black (upper right), with specified levels (lower left), and with labeled levels (lower right). label{advancedcontourscitools}
 
-FIGURE:[images/contour3scitools, height=400 width=600 frac=0.8]  3-dimensional contour plot with SciTools. label{contour3scitools}
 
-===== Plotting vector fields =====
+===== Vector field plots =====
 
 There seems to be limited supported for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field and the two-dimensional vector field.
 

@@ -16,6 +16,10 @@ plt.mesh(x, y, h)
 plt.savefig('images/simpleplotscitools.png')
 plt.savefig('images/simpleplotscitools.pdf')
 
+plt.contour3(x, y, h, 10)
+plt.savefig('images/defaultcontour3scitools.png')
+plt.savefig('images/defaultcontour3scitools.pdf')
+
 plt.surf(x, y, h)
 plt.hold('on')
 t = np.linspace(0, 2*np.pi, 100)
@@ -25,3 +29,4 @@ zcoords = h0/(1 + 100*(1 - t/(2*np.pi))**2/(R**2))
 plt.plot3(xcoords, ycoords, zcoords, 'r-')
 plt.savefig('images/simpleplotcoloursscitools.png')
 plt.savefig('images/simpleplotcoloursscitools.pdf')
+
