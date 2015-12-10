@@ -39,7 +39,6 @@ t = np.linspace(-10., 10., 41)
 x, y = np.meshgrid(t, t, indexing='ij', sparse=False)
 h = h0/(1 + (x**2 + y**2)/(R**2)) # Elevation coordinates
 !ec
-
 We here defined a grid for the area closer to the mountain top than 10km in any direction.
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics.
 `indexing='ij'` means that the coordinates are set as in an $xy$-coordinate system, while
@@ -59,7 +58,6 @@ You can verify that the following parametrization, with $0\leq t\leq 2\pi$, is s
 \bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t),  10\left(1 - \frac{t}{2\pi}\right)\sin(t), \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \right). label{req}
 \end{equation}
 !et
-
 The coordinates of this parametrized cyrve $\bm{r}(t)$ can be produced as follows.
 
 !bc pycod
@@ -82,7 +80,6 @@ The gradient of $h(x,y)$ is defined as the vector of partial derivatives.
 \nabla h = (\partial h/\partial x, \partial h \partial y). label{gradienteq}
 \end{equation}
 !et
-
 In calculus one learns that the gradients are orthogonal to the contour lines. 
 This is something we will easily see in our plots when when we combine the contour plot with a plot of the gradient vector field.
 
@@ -96,14 +93,11 @@ t2 = np.linspace(-10.,10.,21)
 x2, y2 = np.meshgrid(t2, t2, indexing='ij', sparse=False)
 h2 = h0/(1+(x2**2+y2**2)/(R**2)) # Elevation coordinates
 !ec
-
 The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient` as follows.
 
 !bc pycod
 dhx, dhy = np.gradient(h2) # Compute the gradient vector (dh/dx,dh/dy)
 !ec
-
-We will also plot two other vector fields, defined in the following sections. 
 
 
 
@@ -117,7 +111,6 @@ We will consider the following two-dimensional vector field
 \bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy,   - 3y\right). label{2dvectorfieldeq}
 \end{equation}
 !et
-
 We will plot this over $[-5,5]$, with $0.5$ distance between the vectors. The grid and the vectors in the field can be obtained as follows.
 
 !bc pycod
@@ -174,7 +167,6 @@ Below we will use the prefix `plt` for the package `matplotlib.pyplot`:
 !bc pycod
 import matplotlib.pyplot as plt
 !ec
-
 Note that with Matplotlib, after each plot command you need to write `plt.show()` in order for the new plot to become visible. When we make a plot in 2D we need to first write the following
 
 !bc pycod
@@ -210,7 +202,6 @@ ax = fig.gca(projection='3d')
 ax.plot_surface(x, y, h, cmap=cm.coolwarm)
 ax.plot(xcoords, ycoords, zcoords) # Plot of parametrised curve
 !ec
-
 Per default the plots are done into the same figure. This is why the parametrised curve ended up in the same figure as the surface plot preceding it. 
 Coloring can be used to get a better view of surfaces. Above we used the `cm`-module to obtain a color map which can be used to color the surface. 
 One can choose from a wide range of different color maps. The resulting plots are shown in Figure ref{plotmatplotlib}.
@@ -250,7 +241,6 @@ ax.contour(x, y, h, levels=levels)
 c = ax.contour(x, y, h, levels=levels)
 plt.clabel(c)
 !ec
-
 The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourmatplotlib}. The next 4 plots are shown in Figure ref{advancedcontourmatplotlib}.
 
 FIGURE:[images/simplecontourmatplotlib, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with Matplotlib. label{simplecontourmatplotlib}
@@ -279,8 +269,6 @@ fig = plt.figure()
 ax = fig.gca(projection='3d')
 ax.quiver(x, y, z, vx, vy, vz, color='r', length=0.2)
 !ec
-
-
 The first two plots are shown in Figure ref{quivermatplotlib}, and the third is shown in Figure ref{quivermatplotlibgr}.
 
 FIGURE:[images/quivermatplotlib, height=400 width=600 frac=0.8] Vector field plots with Matplotlib. The two-dimensional vector field (left), contour plot together with gradient field (right). label{quivermatplotlib}
@@ -323,7 +311,6 @@ One can simply replace the calls to `meshgrid` above with
 x, y = plt.ndgrid(t, t)     # Grid for contour plot
 x2, y2 = plt.ndgrid(t2, t2) # Grid for quiver plot
 !ec
-
 `ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: 
 They attain default values which can be used.
 The simple surface plots of $h(x,y)$ in (ref{heq}) (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in (ref{req})) can now be produced as follows. 
@@ -335,7 +322,6 @@ plt.surf(x, y, h) # Gnuplot backend
 plt.hold(‘on’)
 plt.plot3(xcoords, ycoords, zcoords, 'r-') # Gnuplot backend
 !ec
-
 The results are shown in Figure ref{plotscitools}. 
 
 FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotscitools}
@@ -365,7 +351,6 @@ plt.contour(x, y, h, levels)
 # Add labels with the contour line values to the lines
 plt.contour(x, y, h, levels, clabels='on')
 !ec
-
 The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourscitools}. The next 4 plots are shown in Figure ref{advancedcontourscitools}.
 
 FIGURE:[images/simplecontourscitools, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with SciTools. label{simplecontourscitools}
@@ -385,7 +370,6 @@ plt.quiver(x2, y2, dhx, dhy, 0, 'r')
 plt.hold('on')
 plt.contour(x, y, h, daspectmode='equal')
 !ec
-
 The two last parameters in the calls to `quiver` represent scaling (0 means no scaling) and color. The results are shown in Figure ref{quiverscitools}.
 
 FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] Vector field plots with SciTools. The two-dimensional vector field (left), contour plot together with gradient field (right). label{quiverscitools}
@@ -448,7 +432,6 @@ plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5, \
 plt.savefig('plot.png')
 plt.close() # Close the current figure
 !ec
-
 There is no function `plt.show()` in Mayavi. Instead the current figure is made visible by default.
 The functions `clf()`, `close()`, `figure()`, `savefig()` all can take an optional parameter which identifies the figure in question (this parameter was not used above). 
 Also, figure can be identified or created in terms of a name, an index, or the figure object itself.
@@ -467,7 +450,6 @@ plt.figure('New plot')
 # and set the foreground and background colour.
 plt.figure(fig, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 !ec
-
 If there exists no figure with the given name or index, `plt.figure()` will create a new one.
 The function `plt.gcf()` returns the current figure object. You will need to call this in order to change the properties of the current figure,
 such as the foreground or background colour above. Note that the foreground colour is used for text and labels included in the plot.
@@ -549,7 +531,6 @@ plt.contour_surf(x, y, h, contours=10, color=(0., 0., 0.))
 levels = [500., 1000., 1500., 2000.]
 plt.contour_surf(x, y, h, contours=levels)
 !ec
-
 There seems to be no function in Mayavi which labels the contours, as we did with Matplotlib and ScitTools. 
 The plots are shown in Figure ref{advancedcontourmayavi}. Contour plots in Mayavi are shown in 3D, contrary to Matplotlib and SciTools. Their visual appearance may be enhanced by also including the surface plot itself. We have here done this for two of the contour plots.
 For comparison, we have not included the surface itself for the two last contour plots. There is a clear difference in visual impression between the two, and we see that the colour of the contours can conflict with the colour of the surface.
@@ -565,23 +546,22 @@ Mayavis functionality for plotting vector fields is primarily intended for 3D al
 This can be vizualized as follows.
 
 !bc pycod
+# Set foreground/background colour
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.quiver3d(x, y, z, vx, vy, vz, \
             mode='arrow', colormap='jet', scale_factor=.5)
+# First three parameters are the points where vectors are drawn
+# Next three parameters are the actual components of the vectors
+# mode: ensures that the vectors are drawn as arrow.
+# colormap: controls how the vectors are colored.
+# scale_factor: manually scale vector lengths, 
+# so that vectors do not collide.
 plt.axes(xlabel='x', ylabel='y', zlabel='z', \
         nb_labels=5, color=(0., 0., 0.))
 
 !ec
-The three first parameters to `quiver3d`, the function which actually plots the vector field, specify the $x$-, $y$-, and $z$-components of the points where vectors are to be drawn.
-The next three parameters are the actual components of the vectors.
-To improve the visualization of the field, we have set some of the optional properties to `quiver3d`:
-
-* The `mode` parameter ensures that the vectors are drawn as arrow.
-* The `colormap` parameter controls how the vectors are colored.
-* The `scale_factor` parameter lets us manually scale the vector lengths, to ensure that they do not collide.
-
-In addition we have set a foreground and background color for the figure, and added axes as above.
-The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting vector fiels in 3D dimensions. It may be challenging to create instructive plots, since vectors are drawn over an area in 3D rather than 2D.
+The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting three-dimensional vector fields. 
+It may be challenging to create instructive plots, since vectors are drawn over an area in 3D rather than 2D.
 
 FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] The three-dimensional vector field plotted with Mayavi. label{quivermayavi}
 
