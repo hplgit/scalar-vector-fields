@@ -212,7 +212,16 @@ If `C` is a $3\times 5$-matrix,
 C[1:3, 0:4]
 !ec
 gives a submatrix consisting of the two rows of `C` after the first, and the first four columns of `C` (recall that the upper limits, here `3` and `4`, are
-not included).
+not included). If you are familiar with Matlab you should note that behaviour may be a bit unexpected when referring to parts of a matrix. Writing `C[[0, 2], [0, 2]]` one would expect entries residing in rows/columns $0$ and $2$. The following code shows that in Python a special command is required for this.
+ 
+!bc pyshell
+>>> C = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+>>> C[[0, 2], [0, 2]]
+[1 9]
+>>> C[np.ix_([0, 2], [0, 2])]
+[[1 3]
+ [7 9]]
+!ec
 
 
 
@@ -237,13 +246,12 @@ various row and column operations on a matrix. Some
 needed functionality is
 
 !bc pycod
-A[[i, j]] = A[[j, i]   # swap rows i and j
+A[[i, j]] = A[[j, i]]  # swap rows i and j
 A[i] *= k              # multiply row i by a constant k
 A[j] += k*A[i]         # add row i, multiplied by k, to row j
 !ec
 With these operations, Gaussian elimination is programmed as follows.
 
-[hpl: Here a new syntax `j:`. Must be explained.]
 
 !bc pycod
 m, n = shape(A)
@@ -251,7 +259,15 @@ for j in range(n - 1):
     for i in range(j + 1, m):
         A[i, j:] -= (A[i,j]/A[j,j])*A[j, j:]
 !ec
-In this code, we first eliminate the entries below the diagonal in the
+Note the special syntax `j:`, which refers to indices from j and up to the end of the array. 
+More generally, when referring to an array `a` with length `n`, the following are equivalent: 
+!bc pycod
+a[0:n]
+a[:n]
+a[0:]
+a[:]
+!ec
+In the code for Gaussian elimination, we first eliminate the entries below the diagonal in the
 first column, by adding a scaled version of the first row to the other
 rows, Then the same procedure is applied for the second row, and so
 on. The result is an upper triangular matrix. The code can fail if
@@ -260,56 +276,68 @@ this, we can swap rows if the problem arises.  The following code
 implements the idea and will not fail, even if some of the columns are zero.
 
 !bc pycod
-m, n = shape(A)
-i = 0
-for j in range(n):
-    p = argmax(abs(A[i:m, j]))
-    if p > 0: # swap rows
-        A[[i, p + i]] = A[[p + i, i]]
-    if A[i, j] != 0:
-        for r in range(i + 1, m):
-            A[r, j:] -= (A[r, j]/A[i, j])*A[i, j:]
-        i += 1
-    if i>m:
-        break
+def Gauss_Elimination(A):
+    rank = 0
+    m, n = np.shape(A)
+    i = 0
+    for j in range(n):
+        p = np.argmax(abs(A[i:m, j]))
+        if p > 0: # swap rows
+            A[[i, p + i]] = A[[p + i, i]]
+        if A[i, j] != 0:
+            # j is a pivot column
+            rank += 1
+            for r in range(i + 1, m):
+                A[r, j:] -= (A[r, j]/A[i, j])*A[i, j:]
+            i += 1
+        if i>m:
+            break
+    return rank
 !ec
 
 idx{rank of a matrix}
 
-The rank of a matrix can be computed by first performing Gaussian
-elimination, and then count the number of pivot columns in the code
-above:
+The rank of a matrix equals the number of pivot columns after Gaussian elimination. 
+The variable `rank` counts these in the code above.
 
-!bc pycod
-PROVIDE EXAMPLE!
-!ec
+Due to roundoff errors, the computed rank may be higher than the actual rank: 
+The roundoff errors may imply that `A[i, j] != 0` is true, even if Gaussian elimination 
+performed exactly gives exactly zero. 
+These kinds of situations can be avoided by replacing `if A[i, j] != 0:` with `if abs(A[i, j]) > tol:`, where 
+`tol` is some small tolerance.
+
 A more reliable way to compute the rank is to compute the
 singular value decomposition of `A`, and check how many of the
 singular values which are larger than a threshold `epsilon`:
 
+!bc pyshell
+>>> A = np.array([[1, 2.01], [2.01, 4.0401]])
+>>> U, s, V = np.linalg.svd(A) # s are the singular values of A
+>>> shape((abs(s) > tol).nonzero())[1]
+1
+# abs(s) > tol gives an array with True and False values
+# s.nonzero() lists indices k so that s[k] != 0
+>>>  Gauss_Elimination(A)
+2
+!ec  
+If you instead use a tolerance check on the form `if abs(A[i, j]) > 1E-10:` in `Gauss_Elimination`, 
+the code will say that the rank is 1, which is the correct value also found by using  
+the singular value decomposition. It seems that `np.linalg.svd(A)` also rounds small singular values to zero, 
+so that one can find the rank simply as `shape(s.nonzero())[1]` above.
+
+Using Gaussian elimination for computing the rank may not be very efficient. The following code 
+compares the computational time for a random $100\times 100$-matrix to that of using a singular value decomposition. 
+
 !bc pycod
-PROVIDE EXAMPLE!
+>>> A = np.random.rand(100, 100)
+>>> %timeit U, s, V = np.linalg.svd(A)
+100 loops, best of 3: 3.7 ms per loop
+>>> %timeit Gauss_Elimination(A)
+100 loops, best of 3: 22.3 ms per loop
 !ec
 
-# [hpl: I don't think this makes sense without a specific example,
-# and that's beyond the scope of the book.]
-#One can ask what other use we can have for performing row operations
-#manually, besides that an implementation of Gaussian elimination uses
-#them.  Often one have matrices with a particular structure, where
-#there for instance are many zeros (also called sparse matrices). When
-#the location of the non-zeros then are known, it is more efficient to
-#perform row operations for these locations manually, rather than
-#perform the full Gaussian elimination.
 
-[hpl: Didn't see where this info fits well - should have some
-application since the usefullness is not obvious to readers...]
 
-You can use the `np.ix_` notation
-to permute the rows and columns in a matrix. If you write
-`C[[2,0,1]]`, the third row is placed first, follows by the first and
-second rows. If you write `C[:,[2,0,1,4,3]]`, the third column is
-placed first, followed by the first, second, fifth, and fourth,
-respectively.
 
 
 If `A` and `B` are matrices with equally many rows, the matrix where
@@ -342,68 +370,36 @@ array([[ 1. ,  2. ],
 array([ 4. ,  0. ,  1. ,  4.5])
 !ec
 
-[hpl: I deleted material on matrix objects and the multiplication
-operator as there is already a subsection on this topic in the book.]
+The determinant of a matrix is another important concept in linear algebra with many applications. 
+The determinant of a $2\times 2$-matrix $A$ is simply
 
-The determinant (include definition, perhaps only in terms of
-expansion along rows/columns, and only say some things about its
-applications) is another concept which can be implemented in a smarter
-way. The following program computes the determinant in a
-straightforward way using its definition.
+!bt
+\begin{equation}
+\det(A)=\det\begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix} = a_{11}a_{22} - a_{21}a_{12}.
+\end{equation}
+!et
+The determinant is more generally defined for any square matrix, 
+and can be computed with the method `np.linalg.det(A)`. 
+It is known that the determinant is nonzero if and only if the rank equals the number of rows/columns. 
+For the matrix $A$ we used above, the determinant should thus be $0$, 
+but also here roundoff errors come into play:
 
-[hpl: This function is recursive - too complicated for the book,
-I think. We do recursive stuff in chapter 9, though. I suggest we
-leave this function out.]
-
-!bc pycod
-def detdef(A):
-    assert A.shape[0] == A.shape[1], 'The matrix must be quadratic!'
-    n = A.shape[0]
-    if n == 2: # The determinant of a 2x2-matrix is computed directly
-        return A[0,0]*A[1,1] - A[0,1]*A[1,0]
-    else: # For larger matrix we expand the determinant along column 0
-        determinant = 0.0
-        for k in xrange(n): # Create sub-matrix by removing column 0, row k.
-            submatrix = vstack((A[0:k,1:n],A[k+1:n,1:n]))
-            # Multiply with alternating sign
-            determinant += (-1)**k * A[k,0] * detdef(submatrix)
-        return determinant
+!bc pyshell
+>>> A = np.array([[1, 2.01], [2.01, 4.0401]])
+>>> A[0, 0]*A[1, 1] - A[0, 1]*A[1, 0] 
+8.881784197e-16 
+>>> np.linalg.det(A)
+8.92619311799e-16
 !ec
-The `detdef` function is recursive, and calls itself until we have a
-matrix where the determinant can be computed directly. The central part in
-the code is where $(n-1)\times(n-1)$-submatrices are constructed. Note
-that in the code we check that the matrices are quadratic.  This code
-is not particularly fast either. The determinant can also be computed
-with the built-in method `linlag.det(A)`, and this runs much faster,
-as the following code verifies.
 
-!bc pycod
-from numpy import *
-import time
 
-A=random.rand(9,9)
-e0=time.time()
-linalg.det(A)
-print time.time()-e0
-e0=time.time()
-detdef(A)
-print time.time()-e0
-!ec
-Here an arbitrary $9\times 9$-matrix is constructed, and the
-determinant is computed and timed in the two different ways. The
-computation times is then written to the display.  Run the code and
-see how much faster the built-in determinant function is!  If you
-want, also try with an arbitrary $10\times 10$-matrix, but then you
-should be patient while the code executes.
 
-[hpl: I think it's better to use `timeit` in IPython for such
-CPU time tests, but we leave the determinant code out.]
+
+
+
+
 
 ===== Symbolic linear algebra =====
-
-[hpl: I have a short intro to SymPy in chapter 1 already, much like what
-you wrote in the SymPy file, so here I think we limit the attention to
-linear algebra with SymPy.]
 
 SymPy supports symbolic computations also for linear algebra operations.
 We may create a matrix and find its inverse and determinant:
@@ -547,7 +543,7 @@ We refer to the online "SymPy linear algebra tutorial": "http://docs.sympy.org/d
 label{plot:linalg:exer:verify}
 file=verify_linalg
 
-When we want to verify that a mathematical result is true, we often generate matritces or vectors with random elements and show that the result holds for
+When we want to verify that a mathematical result is true, we often generate matrices or vectors with random elements and show that the result holds for
 these ``arbitrary'' mathematical objects. As an example,
 consider testing that $A+B=B+A$ for matrices $A$ and $B$:
 
@@ -565,5 +561,9 @@ def test_addition():
 Use this technique to write test functions for the following mathematical
 results:
 
-[hpl: List a set of linear algebra results here to be verified computationally!]
+o $(A + B)C = AC + BC$
+o $(AB)C = A(BC)$
+o $\text{rank}A=\text{rank}A^T$
+o $\det(AB) = \det A\det B$
+o The eigenvalues if $A$ equals the eigenvalues of $A^T$ when $A$ is square.
 
