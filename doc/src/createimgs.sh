@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 function system {
 "$@"
@@ -9,10 +10,10 @@ exit 1
 fi
 }
 
-system python plot3dscitools.py
-system python plot3dmayavi.py
-system python plot3dscitoolsgnuplot.py --SCITOOLS_easyviz_backend gnuplot
-system python plot3dmatplotlib.py
+#system python plot3d_scitools.py
+#system python plot3d_mayavi.py
+system python plot3d_scitools_gnuplot.py --SCITOOLS_easyviz_backend gnuplot
+system python plot3d_matplotlib.py
 
 system doconce combine_images pdf -2 images/simpleplotmatplotlib images/simpleplotcoloursmatplotlib images/plotmatplotlib
 system doconce combine_images png -2 images/simpleplotmatplotlib images/simpleplotcoloursmatplotlib images/plotmatplotlib

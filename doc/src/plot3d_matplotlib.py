@@ -128,3 +128,5 @@ ax = fig.gca(projection='3d')
 ax.quiver(xv, yv, zv, xv_vec, yv_vec, zv_vec, color='r', length=0.2)
 plt.savefig('images/quivermatplotlibgr.png')
 plt.savefig('images/quivermatplotlibgr.pdf')
+
+plt.show()

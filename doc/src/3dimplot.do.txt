@@ -1,79 +1,102 @@
 ========= Plotting in three dimensions =========
 
-We will explain plotting in three dimensions using three different packages. As with plotting in chapter 5, we will go through Matplotlib and SciTools.
-Then we will go through Mayavi, which contains support for doing more advanced plotting operations. The three packages are different in many respects, but they also have much in common, as code below shows.
-Note that, for most backends one can plug into Matplotlib/SciTools/Mayavi, one can rotate a figure by holding the mouse cursor down. This functionality is often useful in order to get a better view of a three-dimensional plot.
+We will explain plotting in three dimensions using three different
+packages: Matplotlib,
+SciTools, and Mayavi. The latter contains support
+for doing more advanced plotting operations in three dimensions.
+The three packages are
+different in many respects, but they also have much in common, as code
+below shows.  Note that (for most backends one can plug into
+Matplotlib, SciTools, and Mayavi) one can rotate a figure by holding the
+mouse cursor down. This functionality is often useful in order to get
+a better view of a three-dimensional plot.
 
-For Mac OSX and Windows we recommend using Anaconda when testing the plotting packages we describe here. To obtain an environment for this, download the file `inf11003dplot.txt` from the book’s webpage, 
+For Mac OSX and Windows we recommend using Anaconda when testing the plotting packages we describe here. To obtain an environment for this, download the file `inf11003dplot.txt` from the book’s webpage,
 and then create a conda environment named `inf11003dplot` with contents described in this file. This can be done by writing
 
 !bc sys
 conda create --name inf11003dplot --file inf11003dplot.txt
-!ec 
-Then one has to activate the environment. The syntax for this depends on the platform:   
+!ec
+Then one has to activate the environment. The syntax for this depends on the platform:
 
 !bc sys
 source activate inf11003dplot # Mac OSX platforms
 activate inf11003dplot        # Windows platforms
 !ec
 
-We will define a surface which we will plot in two different ways, we will make contour plots of it (both in 2D and 3D), plot it together with a parametrised curve on the surface, and plot its gradient vector field. 
-We will also consider a two- and a three-dimensional vector field unrelated to a surface. 
-Before we start, let us be clear on how variable names have bene chosen. 
+[hpl: What about Ubuntu? Our primary recommendation is virtual Ubuntu...]
 
-* We have used names such as `x`, `y`, `z` for one-dimensional coordinates. 
-* We have used names such as `xv`, `yv`, `zv` for (vectorized) coordinates in a higher dimensional grid.
-* For vector fields  we use names such as `xv_vec`, `yv_vec`, `zv_vec` for vectors at points corresponding to `xv`, `yv`, `zv`. 
+Our pedagogical example consists of plotting a scalar function in different ways.
+we will flat create contour plots as well as an elevated three-dimensional
+surface, and also plot the latter together with a parametrized curve lying
+on the surface. To illustrate plotting of
+vector fields, we simply plot the gradient of the scalar field, but will
+also illustrate two- and a three-dimensional vector fields
+unrelated to a surface.
+Before we start, let us be clear on how variable names have bene chosen.
 
-The following goes through the details in our setup.
+* We have used names such as `x`, `y`, `z` for one-dimensional coordinates.
+* We have used names such as `xv`, `yv`, `zv` for vectorized coordinates in a higher dimensional grid.
+* For vector fields, we use names such as `xv_vec`, `yv_vec`, `zv_vec` for vectors at points corresponding to `xv`, `yv`, `zv`. [hpl: Sounds fine, but it is more natural in applications to name the components of the field, like `dhdx`, `ux`, or `u`, depending on the context, see also comment below.]
 
-=== Surface plots ===
+Below are more mathematical details on the various scalar and vector fields
+we aim to plot.
 
-We will consider the surface defined by
+===== Surface plots =====
+
+We consider the surface defined by
 
 !bt
 \begin{equation}
-h(x,y) = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}}. label{heq} 
+h(x,y) = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}},
+label{heq}
 \end{equation}
 !et
-$h(x,y)$ models the height of an isolated mountain, where $h$ is the height above sea level, $x$ and $y$ are cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is called the radius of the mountain.
-We will measure $h$ and $h_0$ in meters, and $R$ in kilometers. Prior to all code below we have initialised $h_0$ and $R$ the following values:
+where $h(x,y)$ may model the height of an isolated mountain, $h$ being the height above sea level, while $x$ and $y$ are Cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is the radius of the mountain.
+Since mountains are quite low compared to the horizontal extent, we use
+meter as length unit for vertical distances ($z$ direction) and km as length
+unit for horizontal distances ($x$ and $y$ coordinates).
+Prior to all code below we have initialised $h_0$ and $R$ the following values:
 
 !bc pycod
-h0 = 2277.
-R = 4.
+h0 = 2277.  # m
+R = 4.      # km
 !ec
-Prior to plotting the function $h(x,y)$, we need create a grid of the points to plot. Regardless of which plotting package we will use later on, this can be done as follows.
+Before we can plot $h(x,y)$, we need to create a rectangular grid in the $xy$ plane with all the points used for plotting. Regardless of which plotting package we will use later on, the grid can be created as follows:
 
 !bc pycod
 x = y = np.linspace(-10., 10., 41)
 # Grid for contour plot
 xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)
 # indexing='ij' means an $xy$-coordinate system.
-# indexing='xy' means coordinates as row/column indices in a matrix. 
+# indexing='xy' means coordinates as row/column indices in a matrix.
 hv = h0/(1 + (xv**2 + yv**2)/(R**2)) # Elevation coordinates
 !ec
-We here defined a grid for the area closer to the mountain top than 10km in any direction.
-Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinate axes to have the order we would expect in mathematics.
-In Figure ref{plotmatplotlib} we have shown two plots of the surface $h(x,y)$, created with Matplotlib. In Section ref{matplotlibsurfaceplots} we will go through the code which generates these plots.
+The grid is based on equally spaced coordinates `x` and `y` in the
+intercal $[-10,10]$ km.
+Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinates to have the right order in mathematics.
+In Figure ref{plotmatplotlib} we have shown two plots of the surface $h(x,y)$, created with Matplotlib. Section ref{matplotlibsurfaceplots} presents the code which generates these plots.
 
-FIGURE:[images/plotmatplotlib] Two Matplotlib surface plots of $h(x,y)$. Plot without colours (left), and a plot with colours (right) shown together with the parametric curve $\bm{r}(t)$ which is a trajectory to the top of the mountain. label{plotmatplotlib}
+FIGURE:[images/plotmatplotlib] Plot of a mountain: contours without colors (left) and with colors (right), shown together with a curve showing a trajectory to the top of the mountain. label{plotmatplotlib}
+
+[hpl: I have removed the plot package name from the figures in this
+introduction to avoid too many details. At this stage, it is enough
+information to see the mathematics and get a visualization. Later,
+we speak about different packages and different looks of the plots.]
 
 
+===== Parametrized curve =====
 
-
-=== Parametrized curves ===
-
-We will consider a parametrized curve which lies on the surface, and
-which moves with constant angular and radial velocity towards the top of the mountain (i.e. it represents a climb to the top of the mountain). 
-You can verify that the following parametrization, with $0\leq t\leq 2\pi$, is such a curve.
+To illustrate the plotting of three-dimensional parameterized curves,
+we consider a trajectory that represents a circular climb to the top
+of the mountain:
 
 !bt
 \begin{equation}
 \bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t),  10\left(1 - \frac{t}{2\pi}\right)\sin(t), \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \right). label{req}
 \end{equation}
 !et
-The coordinates of this parametrized cyrve $\bm{r}(t)$ can be produced as follows.
+The coordinates of this parametrized curve $\bm{r}(t)$ can be produced by
 
 !bc pycod
 s = np.linspace(0, 2*np.pi, 100)
@@ -81,54 +104,66 @@ curve_x = 10*(1 - s/(2*np.pi))*np.cos(s)
 curve_y = 10*(1 - s/(2*np.pi))*np.sin(s)
 curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
 !ec
-The parametric curve is shown together with the surface $h(x,y)$ in the right plot in Figure ref{plotmatplotlib}. 
+The parametric curve is shown together with the surface $h(x,y)$ in the right plot in Figure ref{plotmatplotlib}.
 
 
 
-=== The gradient vector field ===
+===== The gradient vector field =====
 
-The gradient vector field of $h(x,y)$ is defined as the vector field which equals the gradient of $h$ at each point.
-The gradient of $h(x,y)$ is defined as the vector of partial derivatives.
+The gradient vector field $\nabla h$ of $h(x,y)$ is defined as
 
 !bt
 \begin{equation}
-\nabla h = (\partial h/\partial x, \partial h \partial y). label{gradienteq}
+\nabla h = (\partial h/\partial x, \partial h \partial y).
+label{gradienteq}
 \end{equation}
 !et
-In calculus one learns that the gradients are orthogonal to the contour lines. 
-This is something we will easily see in our plots when when we combine the contour plot with a plot of the gradient vector field.
+One learns in vector calculus
+that the gradients are orthogonal to the contour lines.
+This is something we can easily illustrate in our plots when when we combine the
+contour plot with a plot of the gradient vector field.
 
-When we plot the gradient vector field, it is useful to make a grid of coordinates with a smaller resolution that what we used for the surface coordinates.
-The reason is that we will plot many vectors at the same time, and if the resolution is too high the vectors may collide.
-For the gradient field $h(x,y)$ we will use half the resolution of the surface coordinates:
+When we plot the gradient vector field, it is useful to make a grid of coordinates with a smaller resolution that what we use for the surface coordinates.
+The reason is that an arrow is drawn at each point in the grid, and
+if the resolution is too high, the arrows will collide and result in
+a plot that is difficult to interpret.
+So, let us use a grid with 20 instead of 40 intervals in the horizontal
+directions:
 
 !bc pycod
 x2 = y2 = np.linspace(-10.,10.,21)
 # Grid for vector field
 x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
-h2v = h0/(1+(x2v**2+y2v**2)/(R**2)) # Elevation coordinates
+h2v = h0/(1+(x2v**2+y2v**2)/(R**2))
 !ec
-The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient` as follows.
+The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
 
 !bc pycod
-x2v_vec, y2v_vec = np.gradient(h2v) # The gradient vector (dh/dx,dh/dy)
+x2v_vec, y2v_vec = np.gradient(h2v)   # dh/dx, dh/dy
 !ec
-The gradient field (ref{gradienteq}), together with the contours of $h(x,y)$ has been plotted with Maplotlib in the right part of Figure ref{quivermatplotlib}. 
-In Section ref{matplotlibquiverplots} we will go through the code which generates Figure ref{quivermatplotlib}.
+[hpl: `dhdx` and `dhdy` are much more natural variable names here.]
+The gradient field (ref{gradienteq}) appears in Figure ref{quivermatplotlib}.
+Section ref{matplotlibquiverplots} explains the code needed to make these
+plots.
 
-FIGURE:[images/quivermatplotlib, height=400 width=600 frac=0.8] Vector field plots with Matplotlib. The two-dimensional vector field (ref{2dvectorfieldeq}) (left), contour plot together with gradient field (ref{gradienteq}) (right). label{quivermatplotlib}
+FIGURE:[images/quivermatplotlib, width=600 frac=0.8] 2D vector field (left), combined with contour plot (right). label{quivermatplotlib}
 
 
 === A two-dimensional vector field ===
 
-We will consider the following two-dimensional vector field
+Another vector field to be used in examples is defined by
 
 !bt
 \begin{equation}
-\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy,   - 3y\right). label{2dvectorfieldeq}
+\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy,   - 3y\right).
+label{2dvectorfieldeq}
 \end{equation}
 !et
-We will plot this over $[-5,5]$, with $0.5$ distance between the vectors. The grid and the vectors in the field can be obtained as follows.
+[hpl: Need to decide on the notation of vector fields.]
+We shall plot this field on a grid where the coordinates run over $[-5,5]$.
+The chosen resolution gives a distance $0.5$ between the grid points where
+the vector arrows are drawn. The grid and the evaluation of the vector field
+on the grid are computed by
 
 !bc pycod
 x = y = np.linspace(-5, 5, 11)
@@ -136,14 +171,15 @@ xv, yv = np.meshgrid(x, y, sparse=False, indexing='ij')
 xv_vec = xv**2 + 2*yv - .5*xv*yv
 yv_vec = -3*yv
 !ec
-The two-dimensional vector field (ref{2dvectorfieldeq}) has been plotted with Matplotlib in the left part of Figure ref{quivermatplotlib}.
-
+[hpl: Again, I would say `u` and `v` are better names for the components of this field. The name in math and code should correspond...]
+The two-dimensional vector field (ref{2dvectorfieldeq}) is illustrated
+in the left part of Figure ref{quivermatplotlib}.
 
 
 
 === A three-dimensional vector field ===
 
-As an example of a three-dimensional vector field we will consider a gravitational field.
+As an example of a three-dimensional vector field we consider a gravitational field.
 Newtons law of gravitation says that the gravitational force is proportional to
 
 !bt
@@ -151,7 +187,9 @@ Newtons law of gravitation says that the gravitational force is proportional to
 \bm{v}(x, y, z) = -\bm{r}/|\bm{r}|^3 = -( x,y,z)/\sqrt{x^2+y^2+z^2}^3, label{3dvectorfieldeq}
 \end{equation}
 !et
-where $\bm{r}=(x,y,z)$ is the position vector. We first need to create a three-dimensional grid and the vectors in the field as follows.
+where $\bm{r}=(x,y,z)$ is the position vector. In this case, we need a
+three-dimensional grid for plotting, here defined by coordinates
+$[0.5, 2]$ along each axis with only 7 intervals to avoid too dense arrows:
 
 !bc pycod
 x = y = z = np.linspace(.5, 2., 8)
@@ -161,41 +199,33 @@ xv_vec = -x/r3
 yv_vec = -y/r3
 zv_vec = -z/r3
 !ec
-The cube of the distance (`r3`) has here been computed once, since all three components are divided by this.
-Also we compute the vector field for a section in the first octant only, where all three components are between $0.5$ and $2$, 
-and we do not make the grid too dense, so that individual vectors have smaller chance of colliding. 
-The three-dimensional vector field (ref{3dvectorfieldeq}) has been plotted with Matplotlib in Figure ref{quivermatplotlibgr}.
-The code which generates Figure ref{quivermatplotlibgr} is also gone through in Section ref{matplotlibquiverplots}.
+[hpl: `meshgrid` has no special parameters, why?]
+The cube of the distance (`r3`) has here been computed once, since all three components are divided by this quantity.
+Figure ref{quivermatplotlibgr} displays this vector field,
+and the necessary code is explained in Section ref{matplotlibquiverplots}.
 
-FIGURE:[images/quivermatplotlibgr, height=400 width=600 frac=0.8] The three-dimensional vector field (ref{3dvectorfieldeq}) plotted with Matplotlib. label{quivermatplotlibgr}
-
-
-
-
-
-
-
-
-
-
+FIGURE:[images/quivermatplotlibgr, height=400 width=600 frac=0.8] A three-dimensional gravitational force field. label{quivermatplotlibgr}
 
 
 
 ======= Matplotlib =======
 
-Below we will use the prefix `plt` for the package `matplotlib.pyplot`:
+We import any visualization package under the name `plt`, so
+for Matplotlib, the import is done by
 
 !bc pycod
 import matplotlib.pyplot as plt
 !ec
-Note that with Matplotlib, after each plot command you need to write `plt.show()` in order for the new plot to become visible. When we make a plot in 2D we need to first write the following
+Note that a `plt.show()` command is necessary to force Matplotlib to show a plot on the screen. When creating two-dimensional plots of
+scalar and vector fields, we shall make use
+of a Matplotlib ``axes'' object, called `ax` and made by
 
 !bc pycod
 fig = plt.figure()
 ax = fig.gca()
 !ec
-The returned object `ax` can the be used for the calls to the different plotting functions, as is examplified below. 
-If we instead want to make a plot in 3D we also need to import an additional package for this, and change the way we get the object `ax` as follows.
+For three-dimensional visualization, we need the following alternative
+lines:
 
 !bc pycod
 from mpl_toolkits.mplot3d import Axes3D
@@ -207,38 +237,59 @@ ax = fig.gca(projection='3d')
 
 
 
-===== Simple surface plots label{matplotlibsurfaceplots} =====
+===== Simple surface plots =====
+label{matplotlibsurfaceplots}
 
-Simple surface plots of $h(x,y)$ in (ref{heq}) (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in (ref{req})) can be produced as follows. 
+A surface plot of a two-dimensional scalar field $h(x,y)$ is a visualization
+of the surface $z=h(x,y)$ in three-dimensional space.
+The Matplotlib command to produce such a surface is `ax.plot_surface`:
 
 !bc pycod
-# Used to obtain a color map which can be used to color the surface.
-# One can choose from a wide range of different color maps:
-from matplotlib import cm
-
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 ax.plot_surface(xv, yv, hv)
+!ec
+The result appears in the left part of
+Figure ref{plotmatplotlib}.
 
+A surface with colors reflecting the height of the surface (i.e., the value
+of the scalar field) needs specification of a *color map*, i.e.,
+what type of colors to be used. Below we apply the common `coolwarm`
+scheme which goes from blue (``cool'' color for minimum values) to
+red (``varm'' color for maximum values):
+
+!bc pycod
 fig = plt.figure()
 ax = fig.gca(projection='3d')
+from matplotlib import cm
 ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm)
+!ec
+There are lots of colormaps to choose from.
+
+We can add the parameterized curve $\bm{r}(t)$, defined by (ref{req}),
+to the latter plot:
+
+!bc pycod
 ax.plot(curve_x, curve_y, curve_z) # Plot of parametrised curve
 !ec
-Per default the plots are done into the same figure. This is why the parametrised curve ended up in the same figure as the surface plot preceding it. 
-Above coloring can be used to get a better view of surfaces. The resulting plots were shown in Figure ref{plotmatplotlib}.
-
-
-
+By default, Matplotlib adds plots to each other without any need
+for `plt.hold('on')`.
+The resulting color plot with the curve appears in the right part
+of Figure ref{plotmatplotlib}.
 
 
 
 ===== Contour plots =====
 
-The following code examplifies how one can create different types of contour plots.
+Contour lines are lines defined by the implicit equation $h(x,y)=C$, where
+$C$ is some constant representing the contour level.
+Different contour lines arise by the contour level.
+Very often, we let $C$ run over some equally spaced values, and the
+plotting program computes relevant $C$ values.
+The following code exemplifies how one can create different types of contour plots.
 
 !bc pycod
-# Default two-dimensional contour plot: with X contour lines
+# Default two-dimensional contour plot with 7 colored lines
 ax.contour(xv, yv, hv)
 
 # Default three-dimensional contour plot
@@ -246,46 +297,47 @@ fig = plt.figure()
 ax = fig.gca(projection='3d')
 ax.contour(xv, yv, hv)
 
-# 10 contour lines. The contour levels will be automatically chosen.
+# 10 contour lines (equally spaced contour levels)
 fig = plt.figure()
 ax = fig.gca()
 ax.contour(xv, yv, hv, 10)
 
-# 10 contour lines. Black color for contour lines
+# 10 black ('k') contour lines
 ax.contour(xv, yv, hv, 10, colors='k')
 
-# Specify the contour levels
+# Specify the contour levels explicitly as a list
 levels = [500., 1000., 1500., 2000.]
 ax.contour(xv, yv, hv, levels=levels)
 
-# Add labels with the contour line values to the lines
+# Add labels with the contour level for each contour line
 c = ax.contour(xv, yv, hv, levels=levels)
 plt.clabel(c)
 !ec
 The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourmatplotlib}. The next 4 plots are shown in Figure ref{advancedcontourmatplotlib}.
 
+[hpl: Don't we need to create new figures above to get separate plots as we refer to in the figures?]
+
 FIGURE:[images/simplecontourmatplotlib, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with Matplotlib. label{simplecontourmatplotlib}
 
-FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some other contour plots with Matplotlib: With 10 contour lines (upper left), with 10 contour lines in black (upper right), with specified levels (lower left), and with labeled levels (lower right). label{advancedcontourmatplotlib}
+FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some other contour plots with Matplotlib: 10 contour lines (upper left), 10 black contour lines (upper right), specified contour levels (lower left), and labeled levels (lower right). label{advancedcontourmatplotlib}
 
 
 
 
 
-===== Vector field plots label{matplotlibquiverplots} =====
+===== Vector field plots =====
+label{matplotlibquiverplots}
 
 The following code plots the two-dimensional vector field (ref{2dvectorfieldeq}), the gradient field (ref{gradienteq}) together with contours, and finally the three-dimensional vector field (ref{3dvectorfieldeq}).
 
 !bc pycod
 fig = plt.figure()
 ax = fig.gca()
-# angles and scale_units express that the vector field should be 
-# drawn as a gradient field, i.e. that the length of the vectors 
-# equals their actual length. 
-# color indicates the colour to be used for the vectors (here blue).
 
-
-ax.quiver(xv, yv, xv_vec, yv_vec, angles='xy', scale_units='xy', \
+# angles and scale_units express that the vector field should
+# have arrow lengths equal to the real vector lengths.
+# color indicates the color to be used for the vectors (here blue).
+ax.quiver(xv, yv, xv_vec, yv_vec, angles='xy', scale_units='xy',
           color='b')
 
 fig = plt.figure()
@@ -297,23 +349,27 @@ fig = plt.figure()
 ax = fig.gca(projection='3d')
 ax.quiver(xv, yv, zv, xv_vec, yv_vec, zv_vec, color='r', length=0.2)
 !ec
-The first two plots were shown in Figure ref{quivermatplotlib}, and the third was shown in Figure ref{quivermatplotlibgr}.
-Often the vectors need to be scaled in order for them not to collide in the plot (alternatively one can have some more distance between the points in the arrays `x` and `y`.
-This can be done manually by using the `scale` parameter. Increasing this results in shorter vectors.
-Matplotlib will attempt to scale the plot automatically if the `scale` parameter is not set, in order to try to avoid that the vectors collide.
+[hpl: What does it mean when `angles` is present but `scale_units` is left out?]
+The first two plots are shown in Figure ref{quivermatplotlib}, and the third in Figure ref{quivermatplotlibgr}.
 
-
-
-
-
-
+A challenge in plots of vector fields is to get the right arrow lengths such
+that the arrows are well visible, but they do not collide and make a
+cluttered visual impression. Since the arrows are drawn at each point in
+the 2D grid, one way of controlling the number of arrows is to control
+the resolution of the grid.
+The `ax.quiver` function also features a `scale` parameter, and
+increasing this parameter results in shorter vectors.
+[hpl: `scale` is not used in the examples!]
+Matplotlib will attempt to scale arrows automatically if the `scale` parameter is not set.
 
 
 
 ======= SciTools =======
 
-Most of the SciTools plots below have been generated with the default backend of SciTools, which is Matplotlib in the most recent versions of SciTools. 
-In some cases a gnuplot backend had to be used. This has been mentioned in comments in the code in those cases.
+SciTools can work with different plotting engines (backends).
+Usually, we employ Matplotlib
+in the forthcoming figures, but sometimes Gunplot is required to realize
+a certain feature.
 
 Below we will use the prefix `plt` for the package `scitools.easyviz`:
 
@@ -322,19 +378,19 @@ import scitools.easyviz as plt
 !ec
 
 
-
 ===== Simple surface plots =====
 
-SciTools has the function `ndgrid` which, just as `meshgrid`, can be used to create grids of all possible $(x,y)$-coordinate pairs from given one-dimensional coordinates.
-One can simply replace the calls to `meshgrid` above with
+To make the grid, one can either use `meshgrid` as shown above or
+`plt.ndgrid` which requires fewer peculiar parameters:
 
 !bc pycod
-xv, yv = plt.ndgrid(x, y)     # Grid for contour plot
-x2v, y2v = plt.ndgrid(x2, y2) # Grid for quiver plot
+xv, yv = plt.ndgrid(x, y)       # Grid for contour plot
+x2v, y2v = plt.ndgrid(x2, y2)   # Coarser grid for quiver plot
 !ec
-`ndgrid` is more flexible than `meshgrid` in the sense that it can be used to make three-dimensional grids also. Also, we see that the extra parameters `indexing` and `sparse` do not need to be set: 
-They attain default values which can be used.
-The simple surface plots of $h(x,y)$ in (ref{heq}) (uncoloured, and coloured together with the parametric curve $\bm{r}(t)$ in (ref{req})) can now be produced as follows. 
+
+Simple surface plots of $h(x,y)$ in (ref{heq}) (coloured together with the parametric curve $\bm{r}(t)$ in (ref{req})) can now be produced as follows.
+
+[hpl: This is confusing: What does Gnuplot backend as comment mean? The thing is that `mesh` and `surf` are not supported by the Matplotlib interface. Must explain what `mesh` and `surf` etc.]
 
 !bc pycod
 plt.mesh(xv, yv, hv) # Gnuplot backend
@@ -343,12 +399,14 @@ plt.surf(xv, yv, hv) # Gnuplot backend
 plt.hold(‘on’)
 plt.plot3(curve_x, curve_y, curve_z, 'r-') # Gnuplot backend
 !ec
-The results are shown in Figure ref{plotscitools}. 
+The results are shown in Figure ref{plotscitools}.
 
 FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotscitools}
 
 
 ===== Contour plots =====
+
+[hpl: Try to avoid referring to the Matplotlib examples if possible. Just say what you want to plot and show code. Update comments in the code so that they are the same (if possible) for all plotting tools.]
 
 The following code examplifies how one can create the same types of contour plots as above with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set.
 
@@ -381,10 +439,11 @@ FIGURE:[images/advancedcontourscitools, height=400 width=600 frac=0.8] Some othe
 
 ===== Vector field plots =====
 
-There seems to be limited supported for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field (ref{gradienteq}) and the two-dimensional vector field (ref{2dvectorfieldeq}).
+[hpl: Cannot use ``seems to be''.]
+There seems to be limited support for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field (ref{gradienteq}) and the two-dimensional vector field (ref{2dvectorfieldeq}).
 
 !bc pycod
-# The two last parameters represent scaling (0 means no scaling) 
+# The two last parameters represent scaling (0 means no scaling)
 # and color (‘b’ means blue).
 plt.quiver(xv, yv, xv_vec, yv_vec, 200, 'b')
 
@@ -398,19 +457,14 @@ The results are shown in Figure ref{quiverscitools}.
 FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] Vector field plots with SciTools. The two-dimensional vector field (left), contour plot together with gradient field (right). label{quiverscitools}
 
 
-
-
-
-
-
 ======= Mayavi =======
 
 Mayavi[^mayaviurl] is an advanced, free, easy to use, scientific data visualizer, with an emphasis on 3D visualization.
 It is written in Python, and uses the Visualization Toolkit (VTK) for rendering graphics. Since VTK can be configured with different backends, so can Mayavi.
-Mayavi is cross platform and runs on most platforms, including Mac OSX, Windows, Linux. 
+Mayavi is cross platform and runs on most platforms, including Mac OSX, Windows, Linux.
 On Ubuntu you can install Mayavi by writing or `sudo apt-get install mayavi2`, or  `sudo pip install mayavi —upgrade` (which will obtain the most recent version of it).
 
-[^mayaviurl]: The page URL: "http://docs.enthought.com/mayavi/mayavi/" collects pointers to all relevant documentation or Mayavi
+[^mayaviurl]: The page URL: "http://docs.enthought.com/mayavi/mayavi/" collects pointers to all relevant documentation of Mayavi.
 
 We will only consider the Mayavi’s functionality for simple plotting[^simpleplotting], such as the functionality we considered for Matplotlib and SciTools.
 The `mayavi.mlab` module provides a simple interface to such plotting, with an emphasis on 3D visualization.
@@ -433,7 +487,7 @@ Much of this is similar to the bascis for Matplotlib and SciTools, and we will t
 [^basicfigurehandling]: The documentation for basic figure handling functions can be found on URL: "http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html"
 
 
-Just as in Matplotlib, the plotting commands you do in `mlab` will go into the same figure, until you change to a new figure. 
+Just as in Matplotlib, the plotting commands you do in `mlab` will go into the same figure, until you change to a new figure.
 The following code explains the use of some of the basic figure handling functions together with a simple surface plot.
 
 !bc pycod
@@ -456,7 +510,7 @@ plt.savefig('plot.png')
 plt.close() # Close the current figure
 !ec
 There is no function `plt.show()` in Mayavi. Instead the current figure is made visible by default.
-The functions `clf()`, `close()`, `figure()`, `savefig()` all can take an optional parameter which identifies the figure in question (this parameter was not used above). 
+The functions `clf()`, `close()`, `figure()`, `savefig()` all can take an optional parameter which identifies the figure in question (this parameter was not used above).
 Also, a figure can be identified or created in terms of a name, an index, or the figure object itself.
 The following code shows how one can jump between figures, to create different plots.
 !bc pycod
@@ -479,10 +533,10 @@ such as the foreground or background colour above. Note that the foreground colo
 
 ===== Simple surface plots =====
 
-Above we called the function `mesh` to make a simple surface plot of the $h(x,y)$ in (ref{heq}). This works similarly to Matplotlib and SciTools, but note the extra parameter `extent=(0, 1, 0, 1, 0, 1)`. 
-Mayavi does no auto-scaling of the axes per default (contrary to SciTools and Matplotlib), 
+Above we called the function `mesh` to make a simple surface plot of the $h(x,y)$ in (ref{heq}). This works similarly to Matplotlib and SciTools, but note the extra parameter `extent=(0, 1, 0, 1, 0, 1)`.
+Mayavi does no auto-scaling of the axes per default (contrary to SciTools and Matplotlib),
 so if the magnitudes in the vertical and horizontal directions are very different (as they are for $h(x,y)$), the plots may be very concentrated in one direction.
-`extent` ensures that the axes are auto-scaled to fit the contents of the surface. 
+`extent` ensures that the axes are auto-scaled to fit the contents of the surface.
 We will return to what the six values listed in `extent` mean.
 
 To reproduce the coloured surface plot together with the parametric curve $\bm{r}(t)$ in (ref{req}), we can write
@@ -492,15 +546,15 @@ plt.surf(xv, yv, hv, extent=(0, 1, 0, 1, 0, 1))
 plt.plot3d(curve_x, curve_y, curve_z, tube_radius=0.2, \
            extent=(0, 1, 0, 1, 0, 1))
 # tube_radius controls the width of the parametrized curve.
-# Increased here in order to make the curve more visible 
+# Increased here in order to make the curve more visible
 # when shown together with `surf`.
 !ec
 `surf` is more general than `mesh` according to the documentation, but for this plot we really see no differences.
-Figure ref{plotmayavi} shows the resulting plots. 
-Rather unexpectedly we see that $\bm{r}(t)$ does not lie on the surface anymore. 
+Figure ref{plotmayavi} shows the resulting plots.
+Rather unexpectedly we see that $\bm{r}(t)$ does not lie on the surface anymore.
 The reason is that the ranges of the $x$-, $y$-, and $z$-values differ for the the curve and the surface, so that autoscaling will use different scales when placing them on the scene.
 We therefore have to be a bit cautious when applying the autoscaling in Mayavi, and in the following contour plots we will avoid this autoscaling problem by scaling everything
-first so that the coordinates are of comparable magnitude, so that there is no need for autoscaling in the first case. 
+first so that the coordinates are of comparable magnitude, so that there is no need for autoscaling in the first case.
 One can also use other properties to scale the cases. Some of the plotting commands below accept a `warp_scale` parameter, which tells us how the the vertical scaling should be performed.
 
 FIGURE:[images/plotmayavi] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right) together with a parametric curve which is a trajectory to the top of the mountain. label{plotmayavi}
@@ -532,8 +586,8 @@ Three separate `mesh` commands are run, each producing a new plot in the current
 The handles to the three plots are stored in the variables `surf1`, `surf2`, and `surf3`, and
 the function `outline` finally draws the corresponding box for the plot in question. We have dropped the axes and the title in the code here.
 
-Note that the surfaces in Figure ref{subplot} are drawn with different colors. This is due to the `colormap` and `color` attributes in the call to `mesh`, which adjusts the colors when the surface is drawn. 
-The `color` attribute, which we see also can be used as a parameter to `outline`, 
+Note that the surfaces in Figure ref{subplot} are drawn with different colors. This is due to the `colormap` and `color` attributes in the call to `mesh`, which adjusts the colors when the surface is drawn.
+The `color` attribute, which we see also can be used as a parameter to `outline`,
 adjusts the surface so that it is coloured with small variations from the provided base-color.
 One can choose from a wide range of different color maps.
 
@@ -555,7 +609,7 @@ plt.contour_surf(xv, yv, hv, contours=10, color=(0., 0., 0.))
 levels = [500., 1000., 1500., 2000.]
 plt.contour_surf(xv, yv, hv, contours=levels)
 !ec
-There seems to be no function in Mayavi which labels the contours, as we did with Matplotlib and ScitTools. 
+There seems to be no function in Mayavi which labels the contours, as we did with Matplotlib and ScitTools.
 The plots are shown in Figure ref{advancedcontourmayavi}. Contour plots in Mayavi are shown in 3D, contrary to Matplotlib and SciTools. Their visual appearance may be enhanced by also including the surface plot itself. We have here done this for two of the contour plots.
 For comparison, we have not included the surface itself for the two last contour plots. There is a clear difference in visual impression between the two, and we see that the colour of the contours can conflict with the colour of the surface.
 
@@ -578,13 +632,13 @@ plt.quiver3d(xv, yv, zv, xv_vec, yv_vec, zv_vec, \
 # Next three parameters are the actual components of the vectors
 # mode: ensures that the vectors are drawn as arrow.
 # colormap: controls how the vectors are colored.
-# scale_factor: manually scale vector lengths, 
+# scale_factor: manually scale vector lengths,
 # so that vectors do not collide.
 plt.axes(xlabel='x', ylabel='y', zlabel='z', \
         nb_labels=5, color=(0., 0., 0.))
 
 !ec
-The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting three-dimensional vector fields. 
+The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting three-dimensional vector fields.
 It may be challenging to create instructive plots, since vectors are drawn over an area in 3D rather than 2D.
 
 FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] The three-dimensional vector field plotted with Mayavi. label{quivermayavi}

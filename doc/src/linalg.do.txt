@@ -11,9 +11,8 @@ functionality found in Matlab.
 
 idx{eigenvalues} idx{eigenvectors}
 
-First we exemplify how to find
-the inverse and the determinant of a matrix, and how to
-compute the eigenvalues and eigenvectors:
+First we exemplify how to find the inverse and the determinant of a
+matrix, and how to compute the eigenvalues and eigenvectors:
 
 !bc pyshell
 >>> import numpy as np
@@ -57,8 +56,14 @@ array([[ 2.,  2.],
        [ 5.,  5.]])
 !ec
 
-Other typical operations in linear algebra, like the cross product $a\times b$
-(between vectors of length 3) and finding the angle between vectors,
+The cross product $a\times b$,
+between vectors $a$ and $b$ of length 3, is computed by
+
+!bc pyshell
+>>> np.cross([1, 1, 1], [0, 0, 1])
+array([ 1, -1,  0])
+!ec
+Finding the angle between vectors,
 
 !bt
 \[ \theta = \cos^{-1}\left(\frac{a\cdot b}{||a||\,||b||}\right),\]
@@ -66,9 +71,6 @@ Other typical operations in linear algebra, like the cross product $a\times b$
 go like
 
 !bc pyshell
->>> np.cross([1, 1, 1], [0, 0, 1])
-array([ 1, -1,  0])
-
 >>> np.arccos(np.dot(a, b)/(np.linalg.norm(a)*np.linalg.norm(b)))
 1.5707963267948966
 !ec
@@ -138,6 +140,8 @@ array([[ 1.,  0.],
 >>> np.abs(np.dot(A, np.linalg.inv(A)) - I).max()
 0.0
 !ec
+
+!bwarning Never use `==` when testing real numbers!
 It could be tempting to test $AA^{-1}=I$ using the syntax
 
 !bc pyshell
@@ -172,6 +176,7 @@ otherwise it returns `False`, as in the case above:
 >>> (np.dot(A, np.linalg.inv(A)) == np.eye(2)).all()
 False
 !ec
+!ewarning
 
 NumPy can also strip down a matrix to its upper or lower triangular parts:
 
@@ -184,7 +189,7 @@ array([[ 1.,  0.],
        [ 3., -4.]])
 !ec
 
-Indexing an element is done by `B[i,j]`, and a row or column
+Indexing an element is done by `A[i,j]`, and a row or column
 is extracted as
 
 !bc pyshell
@@ -205,15 +210,21 @@ array([[2],
        [8]])
 !ec
 
-You can also use the colon-notation to pick out other parts of a matrix.
+You can also use the colon notation to pick out other parts of a matrix.
 If `C` is a $3\times 5$-matrix,
 
 !bc pycod
 C[1:3, 0:4]
 !ec
 gives a submatrix consisting of the two rows of `C` after the first, and the first four columns of `C` (recall that the upper limits, here `3` and `4`, are
-not included). If you are familiar with Matlab you should note that behaviour may be a bit unexpected when referring to parts of a matrix. Writing `C[[0, 2], [0, 2]]` one would expect entries residing in rows/columns $0$ and $2$. The following code shows that in Python a special command is required for this.
- 
+not included).
+
+If you are familiar with Matlab you should note that behavior may be a
+bit unexpected when referring to parts of a matrix. Writing `C[[0, 2],
+[0, 2]]` one would expect entries residing in rows/columns $0$ and
+$2$. The following code shows that in Python a special command with
+`np.ix_` is required for this:
+
 !bc pyshell
 >>> C = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 >>> C[[0, 2], [0, 2]]
@@ -226,6 +237,8 @@ not included). If you are familiar with Matlab you should note that behaviour ma
 
 
 ======= Row operations and Gaussian elimination =======
+
+===== Solving linear systems =====
 
 The perhaps most frequent operation in linear algebra is the solution
 of systems of linear algebraic equations: $Ax=b$, where $A$ is a coefficient
@@ -259,8 +272,8 @@ for j in range(n - 1):
     for i in range(j + 1, m):
         A[i, j:] -= (A[i,j]/A[j,j])*A[j, j:]
 !ec
-Note the special syntax `j:`, which refers to indices from j and up to the end of the array. 
-More generally, when referring to an array `a` with length `n`, the following are equivalent: 
+Note the special syntax `j:`, which refers to indices from j and up to the end of the array.
+More generally, when referring to an array `a` with length `n`, the following are equivalent:
 !bc pycod
 a[0:n]
 a[:n]
@@ -276,35 +289,38 @@ this, we can swap rows if the problem arises.  The following code
 implements the idea and will not fail, even if some of the columns are zero.
 
 !bc pycod
-def Gauss_Elimination(A):
+def Gaussian_Elimination(A):
     rank = 0
     m, n = np.shape(A)
     i = 0
     for j in range(n):
-        p = np.argmax(abs(A[i:m, j]))
+        p = np.argmax(abs(A[i:m,j]))
         if p > 0: # swap rows
-            A[[i, p + i]] = A[[p + i, i]]
-        if A[i, j] != 0:
+            A[[i,p+i]] = A[[p+i, i]]
+        if A[i,j] != 0:
             # j is a pivot column
             rank += 1
-            for r in range(i + 1, m):
-                A[r, j:] -= (A[r, j]/A[i, j])*A[i, j:]
+            for r in range(i+1, m):
+                A[r,j:] -= (A[r,j]/A[i,j])*A[i,j:]
             i += 1
-        if i>m:
+        if i > m:
             break
     return rank
 !ec
 
+===== Computing the rank of a matrix =====
+
 idx{rank of a matrix}
 
-The rank of a matrix equals the number of pivot columns after Gaussian elimination. 
+The rank of a matrix equals the number of pivot columns after Gaussian elimination.
 The variable `rank` counts these in the code above.
 
-Due to roundoff errors, the computed rank may be higher than the actual rank: 
-The roundoff errors may imply that `A[i, j] != 0` is true, even if Gaussian elimination 
-performed exactly gives exactly zero. 
-These kinds of situations can be avoided by replacing `if A[i, j] != 0:` with `if abs(A[i, j]) > tol:`, where 
-`tol` is some small tolerance.
+Due to rounding errors, the computed rank may be higher than the
+actual rank: The rounding errors may imply that `A[i,j] != 0` is true,
+even if Gaussian elimination performed exactly gives exactly zero.
+These kinds of situations can be avoided by replacing `if A[i,j] !=0:`
+with `if abs(A[i, j]) > tol:`, where `tol` is some small
+tolerance.
 
 A more reliable way to compute the rank is to compute the
 singular value decomposition of `A`, and check how many of the
@@ -317,16 +333,32 @@ singular values which are larger than a threshold `epsilon`:
 1
 # abs(s) > tol gives an array with True and False values
 # s.nonzero() lists indices k so that s[k] != 0
->>>  Gauss_Elimination(A)
+>>>  Gaussian_Elimination(A)
 2
-!ec  
-If you instead use a tolerance check on the form `if abs(A[i, j]) > 1E-10:` in `Gauss_Elimination`, 
-the code will say that the rank is 1, which is the correct value also found by using  
-the singular value decomposition. It seems that `np.linalg.svd(A)` also rounds small singular values to zero, 
-so that one can find the rank simply as `shape(s.nonzero())[1]` above.
+!ec
+If you use a tolerance check on the form `if abs(A[i,j]) >1E-10:`
+in `Gaussian_Elimination`, the code will say that the rank is 1,
+which is the correct value also found by using the singular value
+decomposition. It seems that `np.linalg.svd(A)` also rounds small
+singular values to zero, so that one can find the rank simply as
+`shape(s.nonzero())[1]` above.
 
-Using Gaussian elimination for computing the rank may not be very efficient. The following code 
-compares the computational time for a random $100\times 100$-matrix to that of using a singular value decomposition. 
+It is known that the determinant is nonzero if and only if the rank equals the number of rows/columns.
+For the matrix $A$ we used above, the determinant should thus be $0$,
+but also here roundoff errors come into play:
+
+!bc pyshell
+>>> A = np.array([[1, 2.01], [2.01, 4.0401]])
+>>> A[0, 0]*A[1, 1] - A[0, 1]*A[1, 0]
+8.881784197e-16
+>>> np.linalg.det(A)
+8.92619311799e-16
+!ec
+
+Using Gaussian elimination for computing the rank may not be very
+efficient. The following code compares the computational time for a
+random $100\times 100$-matrix to that of using a singular value
+decomposition.
 
 !bc pycod
 >>> A = np.random.rand(100, 100)
@@ -336,9 +368,7 @@ compares the computational time for a random $100\times 100$-matrix to that of u
 100 loops, best of 3: 22.3 ms per loop
 !ec
 
-
-
-
+===== Stacking arrays =====
 
 If `A` and `B` are matrices with equally many rows, the matrix where
 `A` and `B` are placed next to each other or on top of each other
@@ -370,28 +400,8 @@ array([[ 1. ,  2. ],
 array([ 4. ,  0. ,  1. ,  4.5])
 !ec
 
-The determinant of a matrix is another important concept in linear algebra with many applications. 
-The determinant of a $2\times 2$-matrix $A$ is simply
-
-!bt
-\begin{equation}
-\det(A)=\det\begin{pmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{pmatrix} = a_{11}a_{22} - a_{21}a_{12}.
-\end{equation}
-!et
-The determinant is more generally defined for any square matrix, 
-and can be computed with the method `np.linalg.det(A)`. 
-It is known that the determinant is nonzero if and only if the rank equals the number of rows/columns. 
-For the matrix $A$ we used above, the determinant should thus be $0$, 
-but also here roundoff errors come into play:
-
-!bc pyshell
->>> A = np.array([[1, 2.01], [2.01, 4.0401]])
->>> A[0, 0]*A[1, 1] - A[0, 1]*A[1, 0] 
-8.881784197e-16 
->>> np.linalg.det(A)
-8.92619311799e-16
-!ec
-
+[hpl: Most readers will ask: When do I need such operations? Should have
+a good example if it is important enough to mention these operations.]
 
 
 
