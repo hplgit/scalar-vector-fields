@@ -3,15 +3,14 @@ import numpy as np
 
 import scitools.easyviz as plt
 
-h0 = 2277.  # Hoyden av toppen av fjellet (m)
-R = 4.      # Maal for radius av fjellet (km)
+h0 = 2277.  # Height of the top of the mountain (m)
+R = 4.     # The radius of the mountain (km)
 
 x = y = np.linspace(-10., 10., 41)
 
 xv, yv = plt.ndgrid(x, y)
 hv = h0/(1+(xv**2+yv**2)/(R**2))
 
-# The following four plots must run one at a time
 plt.mesh(xv, yv, hv)
 plt.savefig('images/simple_plot_scitools.png')
 plt.savefig('images/simple_plot_scitools.pdf')

@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 
-h0 = 2277.  # Hoyden av toppen av fjellet (m)
-R = 4.      # Maal for radius av fjellet (km)
+h0 = 2277.   # Height of the top of the mountain (m)
+R = 4.      # The radius of the mountain (km)
 
 x = y = np.linspace(-5, 5, 11)
 xv, yv = np.meshgrid(x, y, sparse=False, indexing='ij')
@@ -16,33 +16,33 @@ yv_vec = -3*yv
 fig = plt.figure()
 ax = fig.gca()
 ax.quiver(xv, yv, xv_vec, yv_vec, angles='xy', color='b', scale_units='xy')
-#plt.quiver(x, y, vx, vy, units='xy', scale=20, color='b') # skalareringsfaktor 1.5, blaa farge
+#plt.quiver(x, y, vx, vy, units='xy', scale=20, color='b') # scale factor 1.5, blue color
 plt.axis('equal')
 plt.savefig('images/quiver_matplotlib_simple.pdf')
 plt.savefig('images/quiver_matplotlib_simple.png')
 
 x = y = np.linspace(-10.,10.,41)
 
-xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)           # Grid for x- og y-verdiene (km)
-hv = h0/(1 + (xv**2+yv**2)/(R**2))      # Beregn hoyden h (m)
+xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)           # Grid for x, y values (km)
+hv = h0/(1 + (xv**2+yv**2)/(R**2))      # Compute height (m)
 
 
 x2 = y2 = np.linspace(-10., 10., 11)
-x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)       # Definer et grovere grid til vektorfeltet
-h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Beregn hoyden med det nye griddet
-x2v_vec, y2v_vec = np.gradient(h2v)         # Beregn gradientvektoren (dh/dx,dh/dy)
-# Plott vektorfeltet (rod farge) og skaler vektorlengden med en faktor
-# En bedre skaleringsfaktor er .75, men fungerer kanskje ikke?
+x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)       # Define a coarser grid for the vector field
+h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Compute height for new grid
+x2v_vec, y2v_vec = np.gradient(h2v)         # Compute the gradient vector (dh/dx,dh/dy)
+# Plot the vector field (red color) and scale the lengths of the vectors with a factor
+# A better scaling factor is .75, but may not work?
 fig = plt.figure()
 ax = fig.gca()
 ax.quiver(x2v, y2v, x2v_vec, y2v_vec, color='r', angles='xy')#, scale_units = 'xy') #, )
 
-plt.hold('on')                     # Behold konturlinjene og akse-egenskapene
+plt.hold('on')
 x = y = np.linspace(-10.,10.,21)
 
-xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)           # Grid for x- og y-verdiene (km)
-hv = h0/(1+(xv**2+yv**2)/(R**2))      # Beregn hoyden h (m)
-plt.contour(xv, yv, hv)               # Kontur og sett akseenhetene like
+xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)           # Grid for x, y values (km)
+hv = h0/(1+(xv**2+yv**2)/(R**2))      # Compute height (m)
+plt.contour(xv, yv, hv)
 plt.xlabel('x')
 plt.ylabel('y')
 plt.axis('equal')
