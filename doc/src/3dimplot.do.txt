@@ -77,7 +77,7 @@ intercal $[-10,10]$ km.
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinates to have the right order in mathematics.
 In Figure ref{plotmatplotlib} we have shown two plots of the surface $h(x,y)$, created with Matplotlib. Section ref{matplotlibsurfaceplots} presents the code which generates these plots.
 
-FIGURE:[images/plotmatplotlib] Plot of a mountain: contours without colors (left) and with colors (right), shown together with a curve showing a trajectory to the top of the mountain. label{plotmatplotlib}
+FIGURE:[fig/plot_matplotlib] Plot of a mountain: contours without colors (left) and with colors (right), shown together with a curve showing a trajectory to the top of the mountain. label{plotmatplotlib}
 
 [hpl: I have removed the plot package name from the figures in this
 introduction to avoid too many details. At this stage, it is enough
@@ -93,9 +93,10 @@ of the mountain:
 
 !bt
 \begin{equation}
-\bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t),  10\left(1 - \frac{t}{2\pi}\right)\sin(t), \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \right). label{req}
+\bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t) \right) \bm{i} + \left( 10\left(1 - \frac{t}{2\pi}\right)\sin(t) \right) \bm{j} + \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \bm{k}. label{req}
 \end{equation}
 !et
+Here $\bm{i}$, $\bm{j}$, and $\bm{k}$ denote the unit vectors in the $x$-, $y$-, and $z$-directions, respectively. This is a common notation for vector fields in mathematical textbooks.
 The coordinates of this parametrized curve $\bm{r}(t)$ can be produced by
 
 !bc pycod
@@ -114,7 +115,7 @@ The gradient vector field $\nabla h$ of $h(x,y)$ is defined as
 
 !bt
 \begin{equation}
-\nabla h = (\partial h/\partial x, \partial h \partial y).
+\nabla h = \frac{\partial h}{\partial x}\bm{i} +  \frac{\partial h}{\partial y}\bm{j}.
 label{gradienteq}
 \end{equation}
 !et
@@ -146,7 +147,7 @@ The gradient field (ref{gradienteq}) appears in Figure ref{quivermatplotlib}.
 Section ref{matplotlibquiverplots} explains the code needed to make these
 plots.
 
-FIGURE:[images/quivermatplotlib, width=600 frac=0.8] 2D vector field (left), combined with contour plot (right). label{quivermatplotlib}
+FIGURE:[fig/quiver_matplotlib, width=600 frac=0.8] 2D vector field (left), combined with contour plot (right). label{quivermatplotlib}
 
 
 === A two-dimensional vector field ===
@@ -155,11 +156,10 @@ Another vector field to be used in examples is defined by
 
 !bt
 \begin{equation}
-\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy,   - 3y\right).
+\bm{v}(x,y) = \left( x^2 + 2y - \frac{1}{2} xy\right)\bm{i}   - 3y\bm{j}.
 label{2dvectorfieldeq}
 \end{equation}
 !et
-[hpl: Need to decide on the notation of vector fields.]
 We shall plot this field on a grid where the coordinates run over $[-5,5]$.
 The chosen resolution gives a distance $0.5$ between the grid points where
 the vector arrows are drawn. The grid and the evaluation of the vector field
@@ -184,7 +184,7 @@ Newtons law of gravitation says that the gravitational force is proportional to
 
 !bt
 \begin{equation}
-\bm{v}(x, y, z) = -\bm{r}/|\bm{r}|^3 = -( x,y,z)/\sqrt{x^2+y^2+z^2}^3, label{3dvectorfieldeq}
+\bm{v}(x, y, z) = -\bm{r}/|\bm{r}|^3 = -\frac{1}{\sqrt{x^2+y^2+z^2}^3}( x\bm{i} + y\bm{j} + z\bm{k}), label{3dvectorfieldeq}
 \end{equation}
 !et
 where $\bm{r}=(x,y,z)$ is the position vector. In this case, we need a
@@ -204,7 +204,7 @@ The cube of the distance (`r3`) has here been computed once, since all three com
 Figure ref{quivermatplotlibgr} displays this vector field,
 and the necessary code is explained in Section ref{matplotlibquiverplots}.
 
-FIGURE:[images/quivermatplotlibgr, height=400 width=600 frac=0.8] A three-dimensional gravitational force field. label{quivermatplotlibgr}
+FIGURE:[fig/quiver_matplotlib_gr, height=400 width=600 frac=0.8] A three-dimensional gravitational force field. label{quivermatplotlibgr}
 
 
 
@@ -317,9 +317,9 @@ The first two plots (default two-dimensional and three-dimensional contour plots
 
 [hpl: Don't we need to create new figures above to get separate plots as we refer to in the figures?]
 
-FIGURE:[images/simplecontourmatplotlib, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with Matplotlib. label{simplecontourmatplotlib}
+FIGURE:[fig/simple_contour_matplotlib, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with Matplotlib. label{simplecontourmatplotlib}
 
-FIGURE:[images/advancedcontourmatplotlib, height=400 width=600 frac=0.8] Some other contour plots with Matplotlib: 10 contour lines (upper left), 10 black contour lines (upper right), specified contour levels (lower left), and labeled levels (lower right). label{advancedcontourmatplotlib}
+FIGURE:[fig/advanced_contour_matplotlib, height=400 width=600 frac=0.8] Some other contour plots with Matplotlib: 10 contour lines (upper left), 10 black contour lines (upper right), specified contour levels (lower left), and labeled levels (lower right). label{advancedcontourmatplotlib}
 
 
 
@@ -401,7 +401,7 @@ plt.plot3(curve_x, curve_y, curve_z, 'r-') # Gnuplot backend
 !ec
 The results are shown in Figure ref{plotscitools}.
 
-FIGURE:[images/plotscitools, height=400 width=600 frac=0.8] Two SciTools surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotscitools}
+FIGURE:[fig/plot_scitools, height=400 width=600 frac=0.8] Two SciTools surface plots. Plot without colours (left), and a plot with colours (right) shown together with a parametric curve which is a trajectory to the top of the mountain. label{plotscitools}
 
 
 ===== Contour plots =====
@@ -432,9 +432,9 @@ plt.contour(xv, yv, hv, levels, clabels='on')
 !ec
 The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourscitools}. The next 4 plots are shown in Figure ref{advancedcontourscitools}.
 
-FIGURE:[images/simplecontourscitools, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with SciTools. label{simplecontourscitools}
+FIGURE:[fig/simple_contour_scitools, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with SciTools. label{simplecontourscitools}
 
-FIGURE:[images/advancedcontourscitools, height=400 width=600 frac=0.8] Some other contour plots with SciTools: With 10 contour lines (upper left), with 10 contour lines in black (upper right), with specified levels (lower left), and with labeled levels (lower right). label{advancedcontourscitools}
+FIGURE:[fig/advanced_contour_scitools, height=400 width=600 frac=0.8] Some other contour plots with SciTools: With 10 contour lines (upper left), with 10 contour lines in black (upper right), with specified levels (lower left), and with labeled levels (lower right). label{advancedcontourscitools}
 
 
 ===== Vector field plots =====
@@ -454,7 +454,7 @@ plt.contour(x, y, h, daspectmode='equal')
 !ec
 The results are shown in Figure ref{quiverscitools}.
 
-FIGURE:[images/quiverscitools, height=400 width=600 frac=0.8] Vector field plots with SciTools. The two-dimensional vector field (left), contour plot together with gradient field (right). label{quiverscitools}
+FIGURE:[fig/quiver_scitools, height=400 width=600 frac=0.8] Vector field plots with SciTools. The two-dimensional vector field (left), contour plot together with gradient field (right). label{quiverscitools}
 
 
 ======= Mayavi =======
@@ -557,7 +557,7 @@ We therefore have to be a bit cautious when applying the autoscaling in Mayavi, 
 first so that the coordinates are of comparable magnitude, so that there is no need for autoscaling in the first case.
 One can also use other properties to scale the cases. Some of the plotting commands below accept a `warp_scale` parameter, which tells us how the the vertical scaling should be performed.
 
-FIGURE:[images/plotmayavi] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right) together with a parametric curve which is a trajectory to the top of the mountain. label{plotmayavi}
+FIGURE:[fig/plot_mayavi] Two Mayavi surface plots. Using `mesh` (left), and using `surf` (right) together with a parametric curve which is a trajectory to the top of the mountain. label{plotmayavi}
 
 
 
@@ -578,7 +578,7 @@ plt.outline(plt.mesh(xv, yv, hv, extent=(0.75, 1, 0, 0.25, 0, 0.25),\
 The result is shown in the left plot in Figure ref{subplot}.
 
 
-FIGURE:[images/subplot] A plot with three subplots created with Mayavi, consisting of the same surface drawn with different color maps. label{subplot}
+FIGURE:[fig/subplot] A plot with three subplots created with Mayavi, consisting of the same surface drawn with different color maps. label{subplot}
 
 From this it should be clear that the six values listed in `extent` represent fractions of the cube `(0,1,0,1,0,1)`, where the corresponding plots are placed.
 The extents for the three plots are defined so that they do not overlap.
@@ -613,7 +613,7 @@ There seems to be no function in Mayavi which labels the contours, as we did wit
 The plots are shown in Figure ref{advancedcontourmayavi}. Contour plots in Mayavi are shown in 3D, contrary to Matplotlib and SciTools. Their visual appearance may be enhanced by also including the surface plot itself. We have here done this for two of the contour plots.
 For comparison, we have not included the surface itself for the two last contour plots. There is a clear difference in visual impression between the two, and we see that the colour of the contours can conflict with the colour of the surface.
 
-FIGURE:[images/advancedcontourmayavi, height=400 width=600 frac=0.8] Some contour plots with Mayavi: Default contour plot (upper left), with 10 contour lines (upper right), with 10 contour lines in black (lower left), and with specified levels (lower right). label{advancedcontourmayavi}
+FIGURE:[fig/advanced_contour_mayavi, height=400 width=600 frac=0.8] Some contour plots with Mayavi: Default contour plot (upper left), with 10 contour lines (upper right), with 10 contour lines in black (lower left), and with specified levels (lower right). label{advancedcontourmayavi}
 
 
 
@@ -641,7 +641,7 @@ plt.axes(xlabel='x', ylabel='y', zlabel='z', \
 The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting three-dimensional vector fields.
 It may be challenging to create instructive plots, since vectors are drawn over an area in 3D rather than 2D.
 
-FIGURE:[images/quivermayavi, height=400 width=600 frac=0.8] The three-dimensional vector field plotted with Mayavi. label{quivermayavi}
+FIGURE:[fig/quiver_mayavi, height=400 width=600 frac=0.8] The three-dimensional vector field plotted with Mayavi. label{quivermayavi}
 
 ===== Animations =====
 

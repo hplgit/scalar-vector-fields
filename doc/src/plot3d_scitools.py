@@ -16,25 +16,25 @@ xv, yv = plt.ndgrid(x, y)             # Grid for x- og y-verdiene (km)
 hv = h0/(1+(xv**2+yv**2)/(R**2)) # Beregn hoyden h (m)
 
 plt.contour(xv, yv, hv)
-plt.savefig('images/defaultcontourscitools.pdf')
-plt.savefig('images/defaultcontourscitools.png')
+plt.savefig('images/default_contour_scitools.pdf')
+plt.savefig('images/default_contour_scitools.png')
 
 plt.contour(xv, yv, hv, 10)
-plt.savefig('images/contour10levelsscitools.pdf')
-plt.savefig('images/contour10levelsscitools.png')
+plt.savefig('images/contour_10levels_scitools.pdf')
+plt.savefig('images/contour_10levels_scitools.png')
 
 plt.contour(xv, yv, hv, 10, 'k')
-plt.savefig('images/contour10levelsblackscitools.pdf')
-plt.savefig('images/contour10levelsblackscitools.png')
+plt.savefig('images/contour_10levels_black_scitools.pdf')
+plt.savefig('images/contour_10levels_black_scitools.png')
 
 levels = [500., 1000., 1500., 2000.]
 plt.contour(xv, yv, hv, levels=levels)
-plt.savefig('images/contourspeclevelsscitools.pdf')
-plt.savefig('images/contourspeclevelsscitools.png')
+plt.savefig('images/contour_speclevels_scitools.pdf')
+plt.savefig('images/contour_speclevels_scitools.png')
 
 plt.contour(xv, yv, hv, clabels='on')
-plt.savefig('images/contourclabelscitools.pdf')
-plt.savefig('images/contourclabelscitools.png')
+plt.savefig('images/contour_clabel_scitools.pdf')
+plt.savefig('images/contour_clabel_scitools.png')
 
 x = y = np.linspace(-5, 5, 11)
 xv, yv = plt.ndgrid(x, y)
@@ -43,8 +43,8 @@ yv_vec = -3*yv
 
 plt.quiver(xv, yv, xv_vec, yv_vec, 200, 'b')
 plt.axis('equal')
-plt.savefig('images/quiverscitoolssimple.pdf')
-plt.savefig('images/quiverscitoolssimple.png')
+plt.savefig('images/quiver_scitools_simple.pdf')
+plt.savefig('images/quiver_scitools_simple.png')
 
 
 x = y = np.linspace(-10.,10.,11)
@@ -67,5 +67,5 @@ plt.hold('off')
 # Sett aksenavn
 # Sett akseenhetene like
 # Trenger ikke flere plott i denne figuren
-plt.savefig('images/quiverscitoolsadvanced.pdf')
-plt.savefig('images/quiverscitoolsadvanced.png')
+plt.savefig('images/quiver_scitools_advanced.pdf')
+plt.savefig('images/quiver_scitools_advanced.png')

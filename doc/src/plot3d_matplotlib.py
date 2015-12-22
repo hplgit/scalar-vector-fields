@@ -18,8 +18,8 @@ ax = fig.gca()
 ax.quiver(xv, yv, xv_vec, yv_vec, angles='xy', color='b', scale_units='xy')
 #plt.quiver(x, y, vx, vy, units='xy', scale=20, color='b') # skalareringsfaktor 1.5, blaa farge
 plt.axis('equal')
-plt.savefig('images/quivermatplotlibsimple.pdf')
-plt.savefig('images/quivermatplotlibsimple.png')
+plt.savefig('images/quiver_matplotlib_simple.pdf')
+plt.savefig('images/quiver_matplotlib_simple.png')
 
 x = y = np.linspace(-10.,10.,41)
 
@@ -46,47 +46,47 @@ plt.contour(xv, yv, hv)               # Kontur og sett akseenhetene like
 plt.xlabel('x')
 plt.ylabel('y')
 plt.axis('equal')
-plt.savefig('images/quivermatplotlibadvanced.pdf')
-plt.savefig('images/quivermatplotlibadvanced.png')
+plt.savefig('images/quiver_matplotlib_advanced.pdf')
+plt.savefig('images/quiver_matplotlib_advanced.png')
 
 
 fig = plt.figure()
 ax = fig.gca()
 ax.contour(xv, yv, hv)
-plt.savefig('images/defaultcontourmatplotlib.pdf')
-plt.savefig('images/defaultcontourmatplotlib.png')
+plt.savefig('images/default_contour_matplotlib.pdf')
+plt.savefig('images/default_contour_matplotlib.png')
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 ax.contour(xv, yv, hv)
-plt.savefig('images/defaultcontour3matplotlib.pdf')
-plt.savefig('images/defaultcontour3matplotlib.png')
+plt.savefig('images/default_contour3_matplotlib.pdf')
+plt.savefig('images/default_contour3_matplotlib.png')
 
 fig = plt.figure()
 ax = fig.gca()
 ax.contour(xv, yv, hv, 10)
-plt.savefig('images/contour10levelsmatplotlib.pdf')
-plt.savefig('images/contour10levelsmatplotlib.png')
+plt.savefig('images/contour_10levels_matplotlib.pdf')
+plt.savefig('images/contour_10levels_matplotlib.png')
 
 fig = plt.figure()
 ax = fig.gca()
 ax.contour(xv, yv, hv, 10, colors='k')
-plt.savefig('images/contour10levelsblackmatplotlib.pdf')
-plt.savefig('images/contour10levelsblackmatplotlib.png')
+plt.savefig('images/contour_10levels_black_matplotlib.pdf')
+plt.savefig('images/contour_10levels_black_matplotlib.png')
 
 fig = plt.figure()
 ax = fig.gca()
 levels = [500., 1000., 1500., 2000.]
 ax.contour(xv, yv, hv, levels=levels)
-plt.savefig('images/contourspeclevelsmatplotlib.pdf')
-plt.savefig('images/contourspeclevelsmatplotlib.png')
+plt.savefig('images/contour_speclevels_matplotlib.pdf')
+plt.savefig('images/contour_speclevels_matplotlib.png')
 
 fig = plt.figure()
 ax = fig.gca()
 cs = ax.contour(xv, yv, hv)
 plt.clabel(cs)
-plt.savefig('images/contourclabelmatplotlib.pdf')
-plt.savefig('images/contourclabelmatplotlib.png')
+plt.savefig('images/contour_clabel_matplotlib.pdf')
+plt.savefig('images/contour_clabel_matplotlib.png')
 
 
 
@@ -95,8 +95,8 @@ plt.savefig('images/contourclabelmatplotlib.png')
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 ax.plot_surface(xv, yv, hv)
-plt.savefig('images/simpleplotmatplotlib.pdf')
-plt.savefig('images/simpleplotmatplotlib.png')
+plt.savefig('images/simple_plot_matplotlib.pdf')
+plt.savefig('images/simple_plot_matplotlib.png')
 
 
 
@@ -112,8 +112,8 @@ curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
 ax.plot(curve_x, curve_y, curve_z)
 
 
-plt.savefig('images/simpleplotcoloursmatplotlib.pdf')
-plt.savefig('images/simpleplotcoloursmatplotlib.png')
+plt.savefig('images/simple_plot_colours_matplotlib.pdf')
+plt.savefig('images/simple_plot_colours_matplotlib.png')
 
 
 
@@ -126,7 +126,7 @@ zv_vec = -zv/r3v
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 ax.quiver(xv, yv, zv, xv_vec, yv_vec, zv_vec, color='r', length=0.2)
-plt.savefig('images/quivermatplotlibgr.png')
-plt.savefig('images/quivermatplotlibgr.pdf')
+plt.savefig('images/quiver_matplotlib_gr.png')
+plt.savefig('images/quiver_matplotlib_gr.pdf')
 
 plt.show()
