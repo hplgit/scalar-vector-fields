@@ -11,6 +11,10 @@ Matplotlib, SciTools, and Mayavi) one can rotate a figure by holding the
 mouse cursor down. This functionality is often useful in order to get
 a better view of a three-dimensional plot.
 
+For Ubuntu the file `install_minimal_plotting.sh`, on the book’s webpage, contains all packages you will need for plotting. All you have to do is run this file in a shell. 
+
+[or: place `install_minimal_plotting.sh` and  `inf11003dplot.txt` in a logical place. Same place as `install_minimal.sh`, `install_rich.sh`?]
+
 For Mac OSX and Windows we recommend using Anaconda when testing the plotting packages we describe here. To obtain an environment for this, download the file `inf11003dplot.txt` from the book’s webpage,
 and then create a conda environment named `inf11003dplot` with contents described in this file. This can be done by writing
 
@@ -24,8 +28,6 @@ source activate inf11003dplot # Mac OSX platforms
 activate inf11003dplot        # Windows platforms
 !ec
 
-[hpl: What about Ubuntu? Our primary recommendation is virtual Ubuntu...]
-
 Our pedagogical example consists of plotting a scalar function in different ways.
 we will flat create contour plots as well as an elevated three-dimensional
 surface, and also plot the latter together with a parametrized curve lying
@@ -37,7 +39,7 @@ Before we start, let us be clear on how variable names have bene chosen.
 
 * We have used names such as `x`, `y`, `z` for one-dimensional coordinates.
 * We have used names such as `xv`, `yv`, `zv` for vectorized coordinates in a higher dimensional grid.
-* For vector fields, we use names such as `xv_vec`, `yv_vec`, `zv_vec` for vectors at points corresponding to `xv`, `yv`, `zv`. [hpl: Sounds fine, but it is more natural in applications to name the components of the field, like `dhdx`, `ux`, or `u`, depending on the context, see also comment below.]
+* For vector fields, we use names such as `u`, `v`, `w` for vectors at points corresponding to `xv`, `yv`, `zv`.
 
 Below are more mathematical details on the various scalar and vector fields
 we aim to plot.
@@ -52,7 +54,7 @@ h(x,y) = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}},
 label{heq}
 \end{equation}
 !et
-where $h(x,y)$ may model the height of an isolated mountain, $h$ being the height above sea level, while $x$ and $y$ are Cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is the radius of the mountain.
+$h(x,y)$ may model the height of an isolated mountain, $h$ being the height above sea level, while $x$ and $y$ are Cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is the radius of the mountain.
 Since mountains are quite low compared to the horizontal extent, we use
 meter as length unit for vertical distances ($z$ direction) and km as length
 unit for horizontal distances ($x$ and $y$ coordinates).
@@ -140,9 +142,8 @@ h2v = h0/(1+(x2v**2+y2v**2)/(R**2))
 The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
 
 !bc pycod
-x2v_vec, y2v_vec = np.gradient(h2v)   # dh/dx, dh/dy
+dhdx, dhdy = np.gradient(h2v)   # dh/dx, dh/dy
 !ec
-[hpl: `dhdx` and `dhdy` are much more natural variable names here.]
 The gradient field (ref{gradienteq}) appears in Figure ref{quivermatplotlib}.
 Section ref{matplotlibquiverplots} explains the code needed to make these
 plots.
@@ -168,10 +169,9 @@ on the grid are computed by
 !bc pycod
 x = y = np.linspace(-5, 5, 11)
 xv, yv = np.meshgrid(x, y, sparse=False, indexing='ij')
-xv_vec = xv**2 + 2*yv - .5*xv*yv
-yv_vec = -3*yv
+u = xv**2 + 2*yv - .5*xv*yv
+v = -3*yv
 !ec
-[hpl: Again, I would say `u` and `v` are better names for the components of this field. The name in math and code should correspond...]
 The two-dimensional vector field (ref{2dvectorfieldeq}) is illustrated
 in the left part of Figure ref{quivermatplotlib}.
 
@@ -195,9 +195,9 @@ $[0.5, 2]$ along each axis with only 7 intervals to avoid too dense arrows:
 x = y = z = np.linspace(.5, 2., 8)
 xv, yv, zv = np.meshgrid(x, y, z)
 r3 = np.sqrt(xv**2 + yv**2 + zv**2)**3
-xv_vec = -x/r3
-yv_vec = -y/r3
-zv_vec = -z/r3
+u = -x/r3
+v = -y/r3
+w = -z/r3
 !ec
 [hpl: `meshgrid` has no special parameters, why?]
 The cube of the distance (`r3`) has here been computed once, since all three components are divided by this quantity.
@@ -337,17 +337,17 @@ ax = fig.gca()
 # angles and scale_units express that the vector field should
 # have arrow lengths equal to the real vector lengths.
 # color indicates the color to be used for the vectors (here blue).
-ax.quiver(xv, yv, xv_vec, yv_vec, angles='xy', scale_units='xy',
+ax.quiver(xv, yv, u, v, angles='xy', scale_units='xy',
           color='b')
 
 fig = plt.figure()
 ax = fig.gca()
-ax.quiver(x2v, y2v, x2v_vec, y2v_vec, color='r', angles='xy')
+ax.quiver(x2v, y2v, dhdx, dhdy, color='r', angles='xy')
 ax.contour(xv, yv, hv)
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-ax.quiver(xv, yv, zv, xv_vec, yv_vec, zv_vec, color='r', length=0.2)
+ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)
 !ec
 [hpl: What does it mean when `angles` is present but `scale_units` is left out?]
 The first two plots are shown in Figure ref{quivermatplotlib}, and the third in Figure ref{quivermatplotlibgr}.
@@ -445,10 +445,10 @@ There seems to be limited support for plotting three-dimensional vector fields i
 !bc pycod
 # The two last parameters represent scaling (0 means no scaling)
 # and color (‘b’ means blue).
-plt.quiver(xv, yv, xv_vec, yv_vec, 200, 'b')
+plt.quiver(xv, yv, u, v, 200, 'b')
 
 plot.figure()
-plt.quiver(x2v, y2v, x2v_vec, y2v_vec, 0, 'r')
+plt.quiver(x2v, y2v, dhdx, dhdy, 0, 'r')
 plt.hold('on')
 plt.contour(x, y, h, daspectmode='equal')
 !ec
@@ -462,7 +462,6 @@ FIGURE:[fig/quiver_scitools, height=400 width=600 frac=0.8] Vector field plots w
 Mayavi[^mayaviurl] is an advanced, free, easy to use, scientific data visualizer, with an emphasis on 3D visualization.
 It is written in Python, and uses the Visualization Toolkit (VTK) for rendering graphics. Since VTK can be configured with different backends, so can Mayavi.
 Mayavi is cross platform and runs on most platforms, including Mac OSX, Windows, Linux.
-On Ubuntu you can install Mayavi by writing or `sudo apt-get install mayavi2`, or  `sudo pip install mayavi —upgrade` (which will obtain the most recent version of it).
 
 [^mayaviurl]: The page URL: "http://docs.enthought.com/mayavi/mayavi/" collects pointers to all relevant documentation of Mayavi.
 
@@ -626,7 +625,7 @@ This can be vizualized as follows.
 !bc pycod
 # Set foreground/background colour
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-plt.quiver3d(xv, yv, zv, xv_vec, yv_vec, zv_vec, \
+plt.quiver3d(xv, yv, zv, u, v, w, \
             mode='arrow', colormap='jet', scale_factor=.5)
 # First three parameters are the points where vectors are drawn
 # Next three parameters are the actual components of the vectors
