@@ -36,10 +36,10 @@ plt.savefig('images/contour_clabel_scitools.png')
 
 x = y = np.linspace(-5, 5, 11)
 xv, yv = plt.ndgrid(x, y)
-xv_vec = xv**2 + 2*yv - .5*xv*yv
-yv_vec = -3*yv
+u = xv**2 + 2*yv - .5*xv*yv
+v = -3*yv
 
-plt.quiver(xv, yv, xv_vec, yv_vec, 200, 'b')
+plt.quiver(xv, yv, u, v, 200, 'b')
 plt.axis('equal')
 plt.savefig('images/quiver_scitools_simple.pdf')
 plt.savefig('images/quiver_scitools_simple.png')
@@ -48,10 +48,10 @@ plt.savefig('images/quiver_scitools_simple.png')
 x = y = np.linspace(-10.,10.,11)
 x2v, y2v = plt.ndgrid(x, y)      # Define a coarser grid for the vector field
 h2v = h0/(1+(x2v**2+y2v**2)/(R**2)) # Compute height for new grid
-x2v_vec, y2v_vec = np.gradient(h2v)         # Compute the gradient vector (dh/dx,dh/dy)
+dhdx, dhdy = np.gradient(h2v)         # Compute the gradient vector (dh/dx,dh/dy)
 # Plot the vector field (red color) and scale the lengths of the vectors with a factor
 # A better scaling factor is .75, but may not work?
-plt.quiver(x2v, y2v, x2v_vec, y2v_vec, 0, 'r')
+plt.quiver(x2v, y2v, dhdx, dhdy, 0, 'r')
 plt.hold('on')
 x = y = np.linspace(-10., 10., 21)
 

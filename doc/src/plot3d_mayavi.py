@@ -65,10 +65,10 @@ plt.savefig('images/contour_speclevels_mayavi.png')
 x = y = z = np.linspace(.5, 2., 8)
 xv, yv, zv = np.meshgrid(x, y, z)
 r3v = np.sqrt(xv**2 + yv**2 + zv**2)**3
-xv_vec = -x/r3v
-yv_vec = -y/r3v
-zv_vec = -z/r3v
+u = -x/r3v
+v = -y/r3v
+w = -z/r3v
 plt.figure(fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0)) 
-plt.quiver3d(xv, yv, zv, xv_vec, yv_vec, zv_vec, mode='arrow', colormap='jet', scale_factor=.5)
+plt.quiver3d(xv, yv, zv, u, v, w, mode='arrow', colormap='jet', scale_factor=.5)
 plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5, color=(0., 0., 0.))
 plt.savefig('images/quiver_mayavi.png')

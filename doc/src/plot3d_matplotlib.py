@@ -11,11 +11,11 @@ R = 4.      # The radius of the mountain (km)
 
 x = y = np.linspace(-5, 5, 11)
 xv, yv = np.meshgrid(x, y, sparse=False, indexing='ij')
-xv_vec = xv**2 + 2*yv - .5*xv*yv
-yv_vec = -3*yv
+u = xv**2 + 2*yv - .5*xv*yv
+v = -3*yv
 fig = plt.figure()
 ax = fig.gca()
-ax.quiver(xv, yv, xv_vec, yv_vec, angles='xy', color='b', scale_units='xy')
+ax.quiver(xv, yv, u, v, angles='xy', color='b', scale_units='xy')
 #plt.quiver(x, y, vx, vy, units='xy', scale=20, color='b') # scale factor 1.5, blue color
 plt.axis('equal')
 plt.savefig('images/quiver_matplotlib_simple.pdf')
@@ -30,12 +30,12 @@ hv = h0/(1 + (xv**2+yv**2)/(R**2))      # Compute height (m)
 x2 = y2 = np.linspace(-10., 10., 11)
 x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)       # Define a coarser grid for the vector field
 h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Compute height for new grid
-x2v_vec, y2v_vec = np.gradient(h2v)         # Compute the gradient vector (dh/dx,dh/dy)
+dhdx, dhdy = np.gradient(h2v)         # Compute the gradient vector (dh/dx,dh/dy)
 # Plot the vector field (red color) and scale the lengths of the vectors with a factor
 # A better scaling factor is .75, but may not work?
 fig = plt.figure()
 ax = fig.gca()
-ax.quiver(x2v, y2v, x2v_vec, y2v_vec, color='r', angles='xy')#, scale_units = 'xy') #, )
+ax.quiver(x2v, y2v, dhdx, dhdy, color='r', angles='xy')#, scale_units = 'xy') #, )
 
 plt.hold('on')
 x = y = np.linspace(-10.,10.,21)
@@ -120,12 +120,12 @@ plt.savefig('images/simple_plot_colours_matplotlib.png')
 x = y = z = np.linspace(.5, 2., 8)
 xv, yv, zv = np.meshgrid(x, y, z)
 r3v = np.sqrt(xv**2 + yv**2 + zv**2)**3
-xv_vec = -xv/r3v
-yv_vec = -yv/r3v
-zv_vec = -zv/r3v
+u = -xv/r3v
+v = -yv/r3v
+w = -zv/r3v
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-ax.quiver(xv, yv, zv, xv_vec, yv_vec, zv_vec, color='r', length=0.2)
+ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)
 plt.savefig('images/quiver_matplotlib_gr.png')
 plt.savefig('images/quiver_matplotlib_gr.pdf')
 
