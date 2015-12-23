@@ -60,31 +60,16 @@ meter as length unit for vertical distances ($z$ direction) and km as length
 unit for horizontal distances ($x$ and $y$ coordinates).
 Prior to all code below we have initialised $h_0$ and $R$ the following values:
 
-!bc pycod
-h0 = 2277.  # m
-R = 4.      # km
-!ec
+@@@CODE plot3d_matplotlib.py fromto: h0 =@#endinitvalues
 Before we can plot $h(x,y)$, we need to create a rectangular grid in the $xy$ plane with all the points used for plotting. Regardless of which plotting package we will use later on, the grid can be created as follows:
 
-!bc pycod
-x = y = np.linspace(-10., 10., 41)
-# Grid for contour plot
-xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)
-# indexing='ij' means an $xy$-coordinate system.
-# indexing='xy' means coordinates as row/column indices in a matrix.
-hv = h0/(1 + (xv**2 + yv**2)/(R**2)) # Elevation coordinates
-!ec
+@@@CODE plot3d_matplotlib.py fromto: # Grid for x, y@# endinitgrid
 The grid is based on equally spaced coordinates `x` and `y` in the
 intercal $[-10,10]$ km.
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinates to have the right order in mathematics.
 In Figure ref{plotmatplotlib} we have shown two plots of the surface $h(x,y)$, created with Matplotlib. Section ref{matplotlibsurfaceplots} presents the code which generates these plots.
 
 FIGURE:[fig/plot_matplotlib] Plot of a mountain: contours without colors (left) and with colors (right), shown together with a curve showing a trajectory to the top of the mountain. label{plotmatplotlib}
-
-[hpl: I have removed the plot package name from the figures in this
-introduction to avoid too many details. At this stage, it is enough
-information to see the mathematics and get a visualization. Later,
-we speak about different packages and different looks of the plots.]
 
 
 ===== Parametrized curve =====
@@ -101,12 +86,7 @@ of the mountain:
 Here $\bm{i}$, $\bm{j}$, and $\bm{k}$ denote the unit vectors in the $x$-, $y$-, and $z$-directions, respectively. This is a common notation for vector fields in mathematical textbooks.
 The coordinates of this parametrized curve $\bm{r}(t)$ can be produced by
 
-!bc pycod
-s = np.linspace(0, 2*np.pi, 100)
-curve_x = 10*(1 - s/(2*np.pi))*np.cos(s)
-curve_y = 10*(1 - s/(2*np.pi))*np.sin(s)
-curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
-!ec
+@@@CODE plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
 The parametric curve is shown together with the surface $h(x,y)$ in the right plot in Figure ref{plotmatplotlib}.
 
 
@@ -133,17 +113,10 @@ a plot that is difficult to interpret.
 So, let us use a grid with 20 instead of 40 intervals in the horizontal
 directions:
 
-!bc pycod
-x2 = y2 = np.linspace(-10.,10.,21)
-# Grid for vector field
-x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
-h2v = h0/(1+(x2v**2+y2v**2)/(R**2))
-!ec
+@@@CODE plot3d_matplotlib.py fromto: # Define a coarser grid for the vector field@# endcoarsergrid
 The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
 
-!bc pycod
-dhdx, dhdy = np.gradient(h2v)   # dh/dx, dh/dy
-!ec
+@@@CODE plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
 The gradient field (ref{gradienteq}) appears in Figure ref{quivermatplotlib}.
 Section ref{matplotlibquiverplots} explains the code needed to make these
 plots.
@@ -166,12 +139,7 @@ The chosen resolution gives a distance $0.5$ between the grid points where
 the vector arrows are drawn. The grid and the evaluation of the vector field
 on the grid are computed by
 
-!bc pycod
-x = y = np.linspace(-5, 5, 11)
-xv, yv = np.meshgrid(x, y, sparse=False, indexing='ij')
-u = xv**2 + 2*yv - .5*xv*yv
-v = -3*yv
-!ec
+@@@CODE plot3d_matplotlib.py fromto: # Grid two-dimensional vector field@# endtwodimfield
 The two-dimensional vector field (ref{2dvectorfieldeq}) is illustrated
 in the left part of Figure ref{quivermatplotlib}.
 
@@ -191,15 +159,7 @@ where $\bm{r}=(x,y,z)$ is the position vector. In this case, we need a
 three-dimensional grid for plotting, here defined by coordinates
 $[0.5, 2]$ along each axis with only 7 intervals to avoid too dense arrows:
 
-!bc pycod
-x = y = z = np.linspace(.5, 2., 8)
-xv, yv, zv = np.meshgrid(x, y, z)
-r3 = np.sqrt(xv**2 + yv**2 + zv**2)**3
-u = -x/r3
-v = -y/r3
-w = -z/r3
-!ec
-[hpl: `meshgrid` has no special parameters, why?]
+@@@CODE plot3d_matplotlib.py fromto: # Grid three-dimensional vector field@# endthreedimfield
 The cube of the distance (`r3`) has here been computed once, since all three components are divided by this quantity.
 Figure ref{quivermatplotlibgr} displays this vector field,
 and the necessary code is explained in Section ref{matplotlibquiverplots}.
@@ -288,31 +248,8 @@ Very often, we let $C$ run over some equally spaced values, and the
 plotting program computes relevant $C$ values.
 The following code exemplifies how one can create different types of contour plots.
 
-!bc pycod
-# Default two-dimensional contour plot with 7 colored lines
-ax.contour(xv, yv, hv)
+@@@CODE plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
 
-# Default three-dimensional contour plot
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-ax.contour(xv, yv, hv)
-
-# 10 contour lines (equally spaced contour levels)
-fig = plt.figure()
-ax = fig.gca()
-ax.contour(xv, yv, hv, 10)
-
-# 10 black ('k') contour lines
-ax.contour(xv, yv, hv, 10, colors='k')
-
-# Specify the contour levels explicitly as a list
-levels = [500., 1000., 1500., 2000.]
-ax.contour(xv, yv, hv, levels=levels)
-
-# Add labels with the contour level for each contour line
-c = ax.contour(xv, yv, hv, levels=levels)
-plt.clabel(c)
-!ec
 The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourmatplotlib}. The next 4 plots are shown in Figure ref{advancedcontourmatplotlib}.
 
 [hpl: Don't we need to create new figures above to get separate plots as we refer to in the figures?]
@@ -439,8 +376,7 @@ FIGURE:[fig/advanced_contour_scitools, height=400 width=600 frac=0.8] Some other
 
 ===== Vector field plots =====
 
-[hpl: Cannot use ``seems to be''.]
-There seems to be limited support for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field (ref{gradienteq}) and the two-dimensional vector field (ref{2dvectorfieldeq}).
+There is limited support for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field (ref{gradienteq}) and the two-dimensional vector field (ref{2dvectorfieldeq}).
 
 !bc pycod
 # The two last parameters represent scaling (0 means no scaling)
