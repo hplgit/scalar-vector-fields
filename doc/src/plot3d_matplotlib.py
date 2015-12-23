@@ -7,7 +7,7 @@ from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 
 h0 = 2277.   # Height of the top of the mountain (m)
-R = 4.       # The radius of the mountain (km)
+R = 4.       # Radius of the mountain (km)
 #endinitvalues
 
 # Grid two-dimensional vector field
@@ -34,7 +34,7 @@ hv = h0/(1 + (xv**2+yv**2)/(R**2))      # Elevation coordinates (m)
 # Define a coarser grid for the vector field
 x2 = y2 = np.linspace(-10.,10.,21)
 x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
-h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Compute height for new grid
+h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
 # endcoarsergrid
 
 dhdx, dhdy = np.gradient(h2v) # dh/dx, dh/dy
