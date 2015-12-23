@@ -63,7 +63,7 @@ plt.contour_surf(xv, yv, hv, contours=levels)
 plt.savefig('images/contour_speclevels_mayavi.png')
 
 x = y = z = np.linspace(.5, 2., 8)
-xv, yv, zv = np.meshgrid(x, y, z)
+xv, yv, zv = np.meshgrid(x, y, z, sparse=False, indexing='ij')
 r3v = np.sqrt(xv**2 + yv**2 + zv**2)**3
 u = -x/r3v
 v = -y/r3v
