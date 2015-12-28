@@ -3,7 +3,6 @@ from math import *
 import numpy as np
 
 import matplotlib.pyplot as plt
-from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 
 h0 = 2277.   # Height of the top of the mountain (m)
@@ -17,11 +16,14 @@ u = xv**2 + 2*yv - .5*xv*yv
 v = -3*yv
 # endtwodimfield
 
+# Draw 2D-field
 fig = plt.figure(1)
 ax = fig.gca()
+# The parameters angles and scale_units ensure here that the vectors
+# are drawn with the same units as the x,y-coordinates
 ax.quiver(xv, yv, u, v, angles='xy', color='b', scale_units='xy')
-#plt.quiver(x, y, vx, vy, units='xy', scale=20, color='b') # scale factor 1.5, blue color
 plt.axis('equal')
+# end draw 2D-field
 
 # Grid for x, y values (km)
 x = y = np.linspace(-10.,10.,41)
@@ -42,19 +44,18 @@ dhdx, dhdy = np.gradient(h2v) # dh/dx, dh/dy
 
 # Plot the vector field (red color) and scale the lengths of the vectors with a factor
 # A better scaling factor is .75, but may not work?
-fig = plt.figure(2)
-ax = fig.gca()
-ax.quiver(x2v, y2v, dhdx, dhdy, color='r', angles='xy')#, scale_units = 'xy') #, )
 
-plt.hold('on')
 x = y = np.linspace(-10.,10.,21)
-
 xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)           # Grid for x, y values (km)
 hv = h0/(1+(xv**2+yv**2)/(R**2))      # Compute height (m)
+
+# Draw contours and gradient field of h
+fig = plt.figure(2)
+ax = fig.gca()
+ax.quiver(x2v, y2v, dhdx, dhdy, color='r', angles='xy', scale_units='xy')
 plt.contour(xv, yv, hv)
-plt.xlabel('x')
-plt.ylabel('y')
 plt.axis('equal')
+# end draw contours and gradient field of h
 
 
 # Default two-dimensional contour plot with 7 colored lines
@@ -94,26 +95,26 @@ plt.clabel(cs)
 
 
 
-
-
-fig = plt.figure(9)
-ax = fig.gca(projection='3d')
-ax.plot_surface(xv, yv, hv)
-
-
-
-
-fig = plt.figure(10)
-ax = fig.gca(projection='3d')
-ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm)
-
 s = np.linspace(0, 2*np.pi, 100)
 curve_x = 10*(1 - s/(2*np.pi))*np.cos(s)
 curve_y = 10*(1 - s/(2*np.pi))*np.sin(s)
 curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
 # endparamcurve
-ax.plot(curve_x, curve_y, curve_z)
 
+# Simple plot of mountain
+from matplotlib import cm
+
+fig = plt.figure(9)
+ax = fig.gca(projection='3d')
+ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=2, cstride=2)
+
+# Simple plot of mountain and parametric curve
+fig = plt.figure(10)
+ax = fig.gca(projection='3d')
+ax.plot_surface(xv, yv, hv, cmap=cm.Spectral, rstride=1, cstride=1)
+# add the parametric curve. linewidth controls the width of the curve
+ax.plot(curve_x, curve_y, curve_z, linewidth=5)
+# endsimpleplots
 
 
 # Grid three-dimensional vector field
@@ -125,9 +126,11 @@ v = -yv/r3v
 w = -zv/r3v
 # endthreedimfield
 
+# Draw 3D-field
 fig = plt.figure(11)
 ax = fig.gca(projection='3d')
 ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)
+# end draw 3D-field
 
 plt.figure(1)
 plt.savefig('images/quiver_matplotlib_simple.pdf')
