@@ -28,7 +28,7 @@ activate inf11003dplot        # Windows platforms
 !ec
 
 Our pedagogical example consists of plotting a scalar function in different ways.
-we will flat create contour plots as well as an elevated three-dimensional
+We will flat create contour plots as well as an elevated three-dimensional
 surface, and also plot the latter together with a parametrized curve lying
 on the surface. To illustrate plotting of
 vector fields, we simply plot the gradient of the scalar field, but will
@@ -73,9 +73,7 @@ intercal $[-10,10]$ km.
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinates to have the right order in mathematics.
 In Figure ref{plotmatplotlib} we have shown two plots of the surface $h(x,y)$, created with Matplotlib. Section ref{matplotlibsurfaceplots} presents the code which generates these plots.
 
-FIGURE:[fig/plot_matplotlib] Plot of a mountain: contours without colors (left) and with colors (right), shown together with a curve showing a trajectory to the top of the mountain. label{plotmatplotlib}
-
-[hpl: Figure ref{plotmatplotlib} looks strange: with and without colors does not make sense... It is just a bit more red in the right figure. The trajectory is very difficult to see. It is just not a good illustration...]
+FIGURE:[fig/plot_matplotlib] Two different plots of a mountain. The right plot also shows a trajectory to the top of the mountain. label{plotmatplotlib}
 
 ===== Parametrized curve =====
 
@@ -95,8 +93,18 @@ The coordinates of this parametrized curve $\bm{r}(t)$ can be produced by
 The parametric curve is shown together with the surface $h(x,y)$ in the right plot in Figure ref{plotmatplotlib}.
 
 
+===== Contour lines =====
+
+Given a real number $c$, the set of points $(x,y)$ so that $h(x,y)=c$ is called a contour line (or simply contour) of $h$. 
+The number $c$ is also called the level. 
+If we choose the right levels $c$ (and enough of them), contour lines can give instructive information about a surface. 
+Contour lines can be instructive both in 2D and 3D. Figure ref{simplecontourmatplotlib} shows contour lines in 2D and 3D for 
+our surface $h(x,y)$. The code used to generate these plots will be gone through in Section ref{matplotlibcontourplots}.
+
+FIGURE:[fig/simple_contour_matplotlib, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with Matplotlib. label{simplecontourmatplotlib}
 
 ===== The gradient vector field =====
+label{sec:gradientvectorfield}
 
 The gradient vector field $\nabla h$ of $h(x,y)$ is defined as
 
@@ -110,8 +118,6 @@ One learns in vector calculus
 that the gradients are orthogonal to the contour lines.
 This is something we can easily illustrate in our plots when when we combine the
 contour plot with a plot of the gradient vector field.
-[hpl: This does not make sense since we have not talked about contour lines
-yet. They are defined later.]
 
 When we plot the gradient vector field, it is useful to make a grid of coordinates with a smaller resolution that what we use for the surface coordinates.
 The reason is that an arrow is drawn at each point in the grid, and
@@ -132,6 +138,7 @@ FIGURE:[fig/quiver_matplotlib, width=600 frac=0.8] 2D vector field (left), combi
 
 
 === A two-dimensional vector field ===
+label{sec:twodimvectorfield}
 
 Another vector field to be used in examples is defined by
 
@@ -153,6 +160,7 @@ in the left part of Figure ref{quivermatplotlib}.
 
 
 === A three-dimensional vector field ===
+label{sec:threedimvectorfield}
 
 As an example of a three-dimensional vector field we consider a gravitational field.
 Newtons law of gravitation says that the gravitational force is proportional to
@@ -218,44 +226,28 @@ label{matplotlibsurfaceplots}
 
 A surface plot of a two-dimensional scalar field $h(x,y)$ is a visualization
 of the surface $z=h(x,y)$ in three-dimensional space.
-The Matplotlib command to produce such a surface is `ax.plot_surface`:
+The Matplotlib command to produce such a surface is `ax.plot_surface`. 
+The following code uses this command to produce the plots shown in Figure ref{plotmatplotlib}.
 
-!bc pycod
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-ax.plot_surface(xv, yv, hv)
-!ec
-The result appears in the left part of
-Figure ref{plotmatplotlib}.
+@@@CODE plot3d_matplotlib.py fromto:# Simple plot of mountain@# endsimpleplots
+Note that the second plot in this figure was drawn using a finer grid of colors. This was controlled 
+using the `rstride` and  `cstride`parameters. The two plots illustrate the effect of giving these smaller values. 
 
 A surface with colors reflecting the height of the surface (i.e., the value
 of the scalar field) needs specification of a *color map*, i.e.,
-what type of colors to be used. Below we apply the common `coolwarm`
+what type of colors to be used. Above we applied the common `coolwarm`
 scheme which goes from blue (``cool'' color for minimum values) to
-red (``varm'' color for maximum values):
-
-!bc pycod
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-from matplotlib import cm
-ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm)
-!ec
+red (``warm'' color for maximum values), as well as another scheme called `Spectral`.
 There are lots of colormaps to choose from.
 
-We can add the parameterized curve $\bm{r}(t)$, defined by (ref{req}),
-to the latter plot:
-
-!bc pycod
-ax.plot(curve_x, curve_y, curve_z) # Plot of parametrised curve
-!ec
+To the latter plot we also added the parameterized curve $\bm{r}(t)$, defined by (ref{req}), using the command `plot`.
 By default, Matplotlib adds plots to each other without any need
-for `plt.hold('on')`.
-The resulting color plot with the curve appears in the right part
-of Figure ref{plotmatplotlib}.
+for `plt.hold('on')`.  
 
 
 
 ===== Contour plots =====
+label{matplotlibcontourplots}
 
 Contour lines are lines defined by the implicit equation $h(x,y)=C$, where
 $C$ is some constant representing the contour level.
@@ -266,11 +258,7 @@ The following code exemplifies how one can create different types of contour plo
 
 @@@CODE plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
 
-The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourmatplotlib}. The next 4 plots are shown in Figure ref{advancedcontourmatplotlib}.
-
-[hpl: Don't we need to create new figures above to get separate plots as we refer to in the figures?]
-
-FIGURE:[fig/simple_contour_matplotlib, height=400 width=600 frac=0.8]  Default two-dimensional (left) and three-dimensional (right) contour plots with Matplotlib. label{simplecontourmatplotlib}
+The first two plots (default two-dimensional and three-dimensional contour plots) were shown in Figure ref{simplecontourmatplotlib}. The next 4 plots are shown in Figure ref{advancedcontourmatplotlib}.
 
 FIGURE:[fig/advanced_contour_matplotlib, height=400 width=600 frac=0.8] Some other contour plots with Matplotlib: 10 contour lines (upper left), 10 black contour lines (upper right), specified contour levels (lower left), and labeled levels (lower right). label{advancedcontourmatplotlib}
 
@@ -281,28 +269,18 @@ FIGURE:[fig/advanced_contour_matplotlib, height=400 width=600 frac=0.8] Some oth
 ===== Vector field plots =====
 label{matplotlibquiverplots}
 
-The following code plots the two-dimensional vector field (ref{2dvectorfieldeq}), the gradient field (ref{gradienteq}) together with contours, and finally the three-dimensional vector field (ref{3dvectorfieldeq}).
+With grid coordinates defined as in Section ref{sec:twodimvectorfield},
+the two-dimensional vector field (ref{2dvectorfieldeq}) can be plotted as follows.
 
-!bc pycod
-fig = plt.figure()
-ax = fig.gca()
+@@@CODE plot3d_matplotlib.py fromto:# Draw 2D-field@# end draw 2D-field
+The code for plotting the gradient field (ref{gradienteq}) together with contours is as follows, 
+once the grid has been defined as in Section ref{sec:gradientvectorfield}.
 
-# angles and scale_units express that the vector field should
-# have arrow lengths equal to the real vector lengths.
-# color indicates the color to be used for the vectors (here blue).
-ax.quiver(xv, yv, u, v, angles='xy', scale_units='xy',
-          color='b')
+@@@CODE plot3d_matplotlib.py fromto:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+Finally the three-dimensional vector field (ref{3dvectorfieldeq}) can be plotted as follows, 
+witht he grid defined as in Section ref{sec:threedimvectorfield}.
 
-fig = plt.figure()
-ax = fig.gca()
-ax.quiver(x2v, y2v, dhdx, dhdy, color='r', angles='xy')
-ax.contour(xv, yv, hv)
-
-fig = plt.figure()
-ax = fig.gca(projection='3d')
-ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)
-!ec
-[hpl: What does it mean when `angles` is present but `scale_units` is left out?]
+@@@CODE plot3d_matplotlib.py fromto:# Draw 3D-field@# end draw 3D-field
 The first two plots are shown in Figure ref{quivermatplotlib}, and the third in Figure ref{quivermatplotlibgr}.
 
 A challenge in plots of vector fields is to get the right arrow lengths such
@@ -310,10 +288,7 @@ that the arrows are well visible, but they do not collide and make a
 cluttered visual impression. Since the arrows are drawn at each point in
 the 2D grid, one way of controlling the number of arrows is to control
 the resolution of the grid.
-The `ax.quiver` function also features a `scale` parameter, and
-increasing this parameter results in shorter vectors.
-[hpl: `scale` is not used in the examples!]
-Matplotlib will attempt to scale arrows automatically if the `scale` parameter is not set.
+
 
 
 
@@ -366,7 +341,7 @@ FIGURE:[fig/plot_scitools, height=400 width=600 frac=0.8] Two SciTools surface p
 
 [hpl: Try to avoid referring to the Matplotlib examples if possible. Just say what you want to plot and show code. Update comments in the code so that they are the same (if possible) for all plotting tools.]
 
-The following code examplifies how one can create the same types of contour plots as above with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set.
+The following code exemplifies how one can create the same types of contour plots as above with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set.
 
 !bc pycod
 # Default two-dimensional contour plot: with X contour lines
@@ -434,94 +409,25 @@ import mayavi.mlab as plt
 The official documentation of the `mlab` module is provided in two places, one for
 the "basic functionality": "http://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html" and one for "further functionality":
 "http://docs.enthought.com/mayavi/mayavi/auto/mlab_other_functions.html".
-
-
-===== The basics =====
-
-[hpl: ``The basics'' of what?]
-
-[hpl: After some thinking, I suggest taking this section out unless we
-have some good example on plotting in at least two figures simultaneously so
-you need to switch between them. Otherwise the figure handling does not
-make much sense to a reader.]
-
-We first need to cover some of the basic "figure handling":
-"http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html"
-functions in the `mayavi.mlab` module.
-The plotting commands you do in `mlab` will go into the same figure, until you change to a new figure.
-The following code explains the use of some of the basic figure handling functions together with a simple surface plot.
-
-[hpl: What is the figure handling? You just create one figure...]
-
-[hpl: We have not used `clf` previously with Matplotlib. Is it really necessary? Can't we just create a new figure?]
-
-[hpl: Be careful with comments in cod: Don't comment obvious things and emphasize commenting on ideas.]
-
-!bc pycod
-plt.clf() # Clear current figure, and return a handle to it.
-
-# Create a figure with white background and black foreground.
-# Specify colors with RGB values: (0,0,0) for black,
-# (1,1,1) for white.
-plt.figure(fgcolor=(.0,.0,.0), bgcolor=(1.0,1.0,1.0))
-
-plt.mesh(xv, yv, hv, extent=(0, 1, 0, 1, 0, 1))
-plt.title('My first plot')
-
-# Set axes with given labels, 5 ticks on each axis, and black color
-plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5,
-         color=(0.,0.,0.))
-
-plt.savefig('plot.png')
-plt.close()
-!ec
-
-[hpl: Explain the `extent` parameter. Ah, it comes later, I see. But it is confusing above.]
-
+Basic "figure handling":"http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html" is very similar as the one we know from Matplotlib and SciTools.
+Just as for Matplotlib, plotting commands you do in `mlab` will go into the same figure, until you manually change to a new figure.
 There is no function `plt.show()` in Mayavi. Instead the current figure is made visible by default.
-The functions `clf()`, `close()`, `figure()`, `savefig()` all can take an optional parameter which identifies the figure in question (this parameter was not used above).
-[hpl: Isn't this confusing information? We have used `figure(2)` before, but never `clf` and `close`. Do we really need them? They are typical Matlab functions, but not used regularly in Matplotlib earlier. Also, `savefig` already takes a parameter, and I don't think it is very useful to save a previous figure with its number; better to switch to a given figure and then do things with that figure. Below, `plt.gcf` and the other commands are confusing when there is just one figure. You need two at least to defend these commands, but that is a good idea - one often switches between plotting in two figures in real cases.]
-Also, a figure can be identified or created in terms of a name, an index, or the figure object itself. [hpl: Isn't it easier to adopt just one rule, the one from Matlab with a figure number?]
-The following code shows how one can jump between figures, to create different plots.
+The functions `plt.figure()`, `plt.savefig()` work as we are use to, and can take an optional parameter which identifies the number of the figure in question.
 
-!bc pycod
-fig = plt.gcf()        # Return the current figure object
-
-# Set figure with index 1 to be the current one.
-# It is created if it does not exist.
-plt.figure(1)
-
-# Set figure with name 'New plot' to be the current one.
-plt.figure('New plot')
-
-# Set the previously retrieved figure again to be the current one,
-# and set the foreground and background colour.
-plt.figure(fig, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-!ec
-If there exists no figure with the given name or index, `plt.figure()` will create a new one.
-The function `plt.gcf()` returns the current figure object. You will need to call this in order to change the properties of the current figure,
-such as the foreground or background colour above. Note that the foreground colour is used for text and labels included in the plot.
 
 ===== Simple surface plots =====
 
-Above we called the function `mesh` to make a simple surface plot of the $h(x,y)$ in (ref{heq}). This works similarly to Matplotlib and SciTools, but note the extra parameter `extent=(0, 1, 0, 1, 0, 1)`.
+Mayavi has the functions `mesh` and `surf` for making simple surface plots. 
+The following code uses these to plot the surface $h(x,y)$ in (ref{heq}), as well as the parametric curve $\bm{r}(t)$ in (ref{req}). 
+
+@@@CODE plot3d_mayavi.py fromto:# Simple plot of mountain@# endsimpleplots
+Note the extra parameter `extent=(0, 1, 0, 1, 0, 1)`.
 Mayavi does no auto-scaling of the axes per default (contrary to SciTools and Matplotlib),
 so if the magnitudes in the vertical and horizontal directions are very different (as they are for $h(x,y)$), the plots may be very concentrated in one direction.
 `extent` ensures that the axes are auto-scaled to fit the contents of the surface.
 We will return to what the six values listed in `extent` mean when we have
 a more illustrating example.
 
-
-To reproduce [hpl: Reproduce from what?] the coloured surface plot together with the parametric curve $\bm{r}(t)$ in (ref{req}), we can write
-
-!bc pycod
-plt.surf(xv, yv, hv, extent=(0, 1, 0, 1, 0, 1))
-plt.plot3d(curve_x, curve_y, curve_z, tube_radius=0.2, \
-           extent=(0, 1, 0, 1, 0, 1))
-# tube_radius controls the width of the parametrized curve.
-# Increased here in order to make the curve more visible
-# when shown together with `surf`.
-!ec
 `surf` is more general than `mesh` according to the documentation, but for this plot we really see no differences. [hpl: This sentence sounds like the authors don't understand what they are trying to explain...]
 Figure ref{plotmayavi} shows the resulting plots.
 Rather unexpectedly we see that $\bm{r}(t)$ does not lie on the surface anymore.
@@ -567,21 +473,10 @@ One can choose from a wide range of different color maps.
 
 ===== Contour plots =====
 
-The following code examplifies how one can create the same types of contour plots as above with Matplotlob. We see again some minor differences [hpl: in what? Results? Commands?], such as how colors here are specified by value. [hpl: You mean RGB tuple, not color string.]
+The following code exemplifies how one can create the same types of contour plots as above with Matplotlib. We see again some minor differences [hpl: in what? Results? Commands?], such as how colors here are specified by value. [hpl: You mean RGB tuple, not color string.]
 
-!bc pycod
-plt.contour_surf(xv, yv, hv)        # default: with X contour lines.
+@@@CODE plot3d_mayavi.py fromto:# Default contour plot plotted together with surface@#end contourplots
 
-# 10 contour lines. The contour levels will be automatically chosen.
-plt.contour_surf(xv, yv, hv, contours=10)
-
-# 10 contour lines. Black color (i.e. (0., 0., 0.)) for contour lines.
-plt.contour_surf(xv, yv, hv, contours=10, color=(0., 0., 0.))
-
-# Specify the contour levels
-levels = [500., 1000., 1500., 2000.]
-plt.contour_surf(xv, yv, hv, contours=levels)
-!ec
 There seems to be no function in Mayavi which labels the contours, as we did with Matplotlib and ScitTools.
 The plots are shown in Figure ref{advancedcontourmayavi}. Contour plots in Mayavi are shown in 3D, contrary to Matplotlib and SciTools [hpl: But you can rotate and look at them from above?]. Their visual appearance may be enhanced by also including the surface plot itself. We have here done this for two of the contour plots.
 For comparison, we have not included the surface itself for the two last contour plots. There is a clear difference in visual impression between the two, and we see that the colour of the contours can conflict with the colour of the surface. [hpl: What do you mean by conflict? Seems to be the same colors, but plotting default contour colors on top of a surface will make the contours lines invisible?]
