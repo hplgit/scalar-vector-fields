@@ -13,27 +13,6 @@ x = y = np.linspace(-10., 10., 41)
 xv, yv = plt.ndgrid(x, y)             # Grid for x, y values (km)
 hv = h0/(1+(xv**2+yv**2)/(R**2)) # Compute height (m)
 
-plt.contour(xv, yv, hv)
-plt.savefig('images/default_contour_scitools.pdf')
-plt.savefig('images/default_contour_scitools.png')
-
-plt.contour(xv, yv, hv, 10)
-plt.savefig('images/contour_10levels_scitools.pdf')
-plt.savefig('images/contour_10levels_scitools.png')
-
-plt.contour(xv, yv, hv, 10, 'k')
-plt.savefig('images/contour_10levels_black_scitools.pdf')
-plt.savefig('images/contour_10levels_black_scitools.png')
-
-levels = [500., 1000., 1500., 2000.]
-plt.contour(xv, yv, hv, levels=levels)
-plt.savefig('images/contour_speclevels_scitools.pdf')
-plt.savefig('images/contour_speclevels_scitools.png')
-
-plt.contour(xv, yv, hv, clabels='on')
-plt.savefig('images/contour_clabel_scitools.pdf')
-plt.savefig('images/contour_clabel_scitools.png')
-
 x = y = np.linspace(-5, 5, 11)
 xv, yv = plt.ndgrid(x, y)
 u = xv**2 + 2*yv - .5*xv*yv

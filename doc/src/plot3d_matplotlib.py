@@ -19,9 +19,10 @@ v = -3*yv
 # Draw 2D-field
 fig = plt.figure(1)
 ax = fig.gca()
-# The parameters angles and scale_units ensure here that the vectors
-# are drawn with the same units as the x,y-coordinates
-ax.quiver(xv, yv, u, v, angles='xy', color='b', scale_units='xy')
+# color controls the color of the arrows
+# angles and scale_units ensure here that the vectors are drawn
+# with the same units as the x,y-coordinates
+ax.quiver(xv, yv, u, v, color='b', angles='xy', scale_units='xy')
 plt.axis('equal')
 # end draw 2D-field
 
@@ -52,7 +53,8 @@ hv = h0/(1+(xv**2+yv**2)/(R**2))      # Compute height (m)
 # Draw contours and gradient field of h
 fig = plt.figure(2)
 ax = fig.gca()
-ax.quiver(x2v, y2v, dhdx, dhdy, color='r', angles='xy', scale_units='xy')
+ax.quiver(x2v, y2v, dhdx, dhdy, color='r',\
+          angles='xy', scale_units='xy')
 plt.contour(xv, yv, hv)
 plt.axis('equal')
 # end draw contours and gradient field of h
@@ -106,12 +108,12 @@ from matplotlib import cm
 
 fig = plt.figure(9)
 ax = fig.gca(projection='3d')
-ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=2, cstride=2)
+ax.plot_wireframe(xv, yv, hv, rstride=2, cstride=2)
 
 # Simple plot of mountain and parametric curve
 fig = plt.figure(10)
 ax = fig.gca(projection='3d')
-ax.plot_surface(xv, yv, hv, cmap=cm.Spectral, rstride=1, cstride=1)
+ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
 # add the parametric curve. linewidth controls the width of the curve
 ax.plot(curve_x, curve_y, curve_z, linewidth=5)
 # endsimpleplots
@@ -129,6 +131,7 @@ w = -zv/r3v
 # Draw 3D-field
 fig = plt.figure(11)
 ax = fig.gca(projection='3d')
+# length controls the length of the vectors
 ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)
 # end draw 3D-field
 
