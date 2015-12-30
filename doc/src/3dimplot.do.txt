@@ -44,7 +44,9 @@ Before we start, let us be clear on how variable names have bene chosen.
 * For vector fields, we use names such as `u`, `v`, `w` for vectors at points corresponding to `xv`, `yv`, `zv`.
 
 Below are more mathematical details on the various scalar and vector fields
-we aim to plot.
+we aim to plot. The figures we show first are generated with Matplotlib. 
+The succeeding sections explain the corresponding code, 
+and how the same plots can be made with the other plotting packages. 
 
 ===== Surface plots =====
 
@@ -79,7 +81,7 @@ A surface plot of a two-dimensional scalar field $h(x,y)$ is a visualization of 
 Most plotting packages have functions called `mesh` and `surf`, which both can be used to create surface plots. 
 `mesh` only colors the lines connecting the grid points, producing what is also called a *wireframe plot*.
 `surf` on the other hand also colors the faces of the surface.
-In Figure ref{plotmatplotlib} we have shown two plots of the surface $h(x,y)$, created with Matplotlib. Section ref{matplotlibsurfaceplots} presents the code which generates these plots.
+In Figure ref{plotmatplotlib} we have shown two plots of the surface $h(x,y)$. Section ref{matplotlibsurfaceplots} presents the code which generates these plots.
 
 FIGURE:[fig/plot_matplotlib] Two different plots of a mountain. The right plot also shows a trajectory to the top of the mountain. label{plotmatplotlib}
 
@@ -103,13 +105,15 @@ The parametric curve is shown together with the surface $h(x,y)$ in the right pl
 
 ===== Contour lines =====
 
-Given a real number $c$, the set of points $(x,y)$ so that $h(x,y)=c$ is called a *contour line* (or simply contour) of $h$. 
-The number $c$ is also called the *level*. 
-If we choose the right levels $c$ (and enough of them), contour lines can give instructive information about a surface. 
+Contour lines are lines defined by the implicit equation $h(x,y)=C$, where
+$C$ is some constant representing the contour level.
+Different contour lines arise by the contour level.
+Very often, we let $C$ run over some equally spaced values, and the
+plotting program computes relevant $C$ values. 
 Contour lines can be instructive both in 2D and 3D. Figure ref{simplecontourmatplotlib} shows contour lines in 2D and 3D for 
 our surface $h(x,y)$. The code used to generate these plots will be gone through in Section ref{matplotlibcontourplots}.
 
-FIGURE:[fig/simple_contour_matplotlib, height=400 width=600 frac=0.8]  Default two- and three-dimensional contour plots with Matplotlib. label{simplecontourmatplotlib}
+FIGURE:[fig/simple_contour_matplotlib, height=400 width=600 frac=0.8]  Default two- and three-dimensional contour plots. label{simplecontourmatplotlib}
 
 ===== The gradient vector field =====
 label{sec:gradientvectorfield}
@@ -122,7 +126,7 @@ The *gradient vector field* $\nabla h$ of $h(x,y)$ is defined as
 label{gradienteq}
 \end{equation}
 !et
-One learns in vector calculus
+One learns in vector calculus that the gradient points in the direction where $h$ increases most, and 
 that the gradients are orthogonal to the contour lines.
 This is something we can easily illustrate in our plots when when we combine the
 contour plot with a plot of the gradient vector field.
@@ -143,6 +147,19 @@ Section ref{matplotlibquiverplots} explains the code needed to make these
 plots.
 
 FIGURE:[fig/quiver_matplotlib, width=600 frac=0.8] Gradient field with contour plot (left). 2D vector field (right). label{quivermatplotlib}
+
+By setting the third component to zero, and place the vectors at the surface, we can also plot the gradient field in three dimensions. 
+In figure ref{quivercontoursurfmatplotlib} we have done this, and added contours and the surface itself to the plot. 
+We reversed the gradient when plotting together with the surface, so that the surface does not hide the gradients.
+Again the code can be found in Section ref{matplotlibquiverplots}. 
+
+FIGURE:[fig/quiver_contour_surf_matplotlib, height=400 width=600 frac=0.8] The gradient field plotted in three dimensions in different ways. With the contours (left) and with the surface (right). label{quivercontoursurfmatplotlib}
+
+
+
+
+
+
 
 
 === A two-dimensional vector field ===
@@ -256,11 +273,6 @@ for `plt.hold('on')`.
 ===== Contour plots =====
 label{matplotlibcontourplots}
 
-Contour lines are lines defined by the implicit equation $h(x,y)=C$, where
-$C$ is some constant representing the contour level.
-Different contour lines arise by the contour level.
-Very often, we let $C$ run over some equally spaced values, and the
-plotting program computes relevant $C$ values.
 The following code exemplifies how one can create different types of contour plots.
 
 @@@CODE plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
@@ -279,11 +291,27 @@ label{matplotlibquiverplots}
 The code for plotting the gradient field (ref{gradienteq}) together with contours is as follows, 
 once the grid has been defined as in Section ref{sec:gradientvectorfield}.
 
-@@@CODE plot3d_matplotlib.py fromto:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+@@@CODE plot3d_matplotlib.py fromto:# Draw contours and gradient field of h in 2D@# end draw contours and gradient field of h in 2D
 With grid coordinates defined as in Section ref{sec:twodimvectorfield},
 the two-dimensional vector field (ref{2dvectorfieldeq}) can be plotted as follows.
 
 @@@CODE plot3d_matplotlib.py fromto:# Draw 2D-field@# end draw 2D-field
+The following code plots the gradient field together with the contours of $h$ in 3D. 
+
+@@@CODE plot3d_matplotlib.py fromto:# Draw contours and gradient field of h in 3D@# end draw contours and gradient field of h in 3D
+If we replace contours with the surface itself, and reverse the gradient vectors, we can use the following code. 
+
+@@@CODE plot3d_matplotlib.py fromto:# Draw surface and negative gradient field of h@# end draw surface and negative gradient field of h
+The corresponding plots were shown in Figure ref{quivercontoursurfmatplotlib}.
+
+
+
+
+
+
+
+
+
 Finally the three-dimensional vector field (ref{3dvectorfieldeq}) can be plotted as follows, 
 with the grid defined as in Section ref{sec:threedimvectorfield}.
 
@@ -459,15 +487,23 @@ As we see, the contours are more visible when a black color is used.
 FIGURE:[fig/advanced_contour_mayavi, height=400 width=600 frac=0.8] Some contour plots with Mayavi: Default contour plot (upper left), with 10 contour lines (upper right), with 10 contour lines in black (lower left), and with specified levels (lower right). label{advancedcontourmayavi}
 
 
-[hpl: MEK1100 emphasizes the need for showing contours and gradient arrows
-in the same plot. Can we do that with Mayavi? Karsten will claim it is
-fundamental...]
 
+===== Vector field plots =====
 
-===== Plotting vector fields in 3D =====
+Mayavis functionality for plotting vector fields is primarily intended for 3D also, so we will not plot the two-dimensional field (ref{2dvectorfieldeq}).
+The following code plots the gradient field together with the contours of $h$ in 3D. 
 
-Mayavis functionality for plotting vector fields is primarily intended for 3D also, so we will only plot the three dimensional field (ref{3dvectorfieldeq}).
-This can be vizualized as follows.
+@@@CODE plot3d_mayavi.py fromto:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+The color of the vectors were here set to red, and the attribute `scale_factor` adjusted so that vectors do not collide. 
+Still the plot look a bit cluttered. If we replace contours with the surface itself, 
+and reverse the gradient vectors, we can use the following code. 
+
+@@@CODE plot3d_mayavi.py fromto:# Draw surface and negative gradient field of h@# end draw surface and negative gradient field of h
+The corresponding plots are shown in Figure ref{quivercontoursurfmayavi}.
+
+FIGURE:[fig/quiver_contour_surf_mayavi, height=400 width=600 frac=0.8] The gradient field plotted in three dimensions in different ways. With the contours (left) and with the surface (right). label{quivercontoursurfmayavi}
+
+The three-dimensional vector field (ref{3dvectorfieldeq}) can be plotted as follows.
 
 @@@CODE plot3d_mayavi.py fromto:# Draw 3D-field@# end draw 3D-field
 The resulting plot is shown in Figure ref{quivermayavi}. This shows some of the challenges in plotting three-dimensional vector fields.
