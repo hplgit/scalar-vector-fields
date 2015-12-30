@@ -27,6 +27,7 @@ plt.title('h(x,y)', size=0.4)
 # Simple plot of mountain and parametric curve
 plt.figure(2, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.surf(xv, yv, hv, extent=(0,1,0,1,0,1), color=(.5, .5, .5))
+
 # add the parametric curve. tube_radius controls the width of the curve
 plt.plot3d(curve_x, curve_y, curve_z, tube_radius=0.2,\
            extent=(0,1,0,1,0,1))
@@ -62,7 +63,7 @@ plt.figure(5, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.contour_surf(xv, yv, hv, contours=10)
 
 # 10 contour lines (equally spaced contour levels) together with surf.
-# Black color (i.e. (0., 0., 0.)) for contour lines.
+# Black color for contour lines.
 plt.figure(6, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 s2 = plt.surf(xv, yv, hv)
 plt.contour_surf(xv, yv, hv, contours=10, color=(0., 0., 0.))
