@@ -27,6 +27,9 @@ system doconce combine_images png -2 images/contour_10levels_matplotlib images/c
 system doconce combine_images pdf -2 images/quiver_matplotlib_advanced images/quiver_matplotlib_simple images/quiver_matplotlib
 system doconce combine_images png -2 images/quiver_matplotlib_advanced images/quiver_matplotlib_simple images/quiver_matplotlib
 
+system doconce combine_images pdf -2 images/quiver_contour_matplotlib images/quiver_surf_matplotlib images/quiver_contour_surf_matplotlib
+system doconce combine_images png -2 images/quiver_contour_matplotlib images/quiver_surf_matplotlib images/quiver_contour_surf_matplotlib
+
 
 
 
@@ -47,4 +50,5 @@ system doconce combine_images png -2 images/quiver_scitools_advanced images/quiv
 
 system doconce combine_images png -2 images/simple_plot_mayavi images/simple_plot_colours_mayavi images/plot_mayavi
 system doconce combine_images png -2 images/simple_contour_mayavi images/contour_10levels_mayavi images/contour_10levels_black_mayavi images/contour_speclevels_mayavi images/advanced_contour_mayavi
+system doconce combine_images png -2 images/quiver_contour_mayavi images/quiver_surf_mayavi images/quiver_contour_surf_mayavi
 
