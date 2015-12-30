@@ -19,7 +19,7 @@ hv = h0/(1 + (xv**2+yv**2)/(R**2))      # Elevation coordinates (m)
 # endinitgrid
 
 # Define a coarser grid for the vector field
-x2 = y2 = np.linspace(-10.,10.,11)
+x2 = y2 = np.linspace(-10.,10.,21)
 x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
 h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
 # endcoarsergrid
@@ -89,19 +89,30 @@ plt.clabel(cs)
 #end contourplots
 
 
-# Draw contours and gradient field of h
+# Draw contours and gradient field of h in 2D
 fig = plt.figure(9)
 ax = fig.gca()
 ax.quiver(x2v, y2v, dhdx, dhdy, color='r',\
           angles='xy', scale_units='xy')
-plt.contour(xv, yv, hv)
+ax.contour(xv, yv, hv)
 plt.axis('equal')
-# end draw contours and gradient field of h
+# end draw contours and gradient field of h in 2D
 
+# Draw contours and gradient field of h in 3D
+fig = plt.figure(12)
+ax = fig.gca(projection='3d')
 
+w = np.zeros_like(dhdx)
+ax.quiver(x2v, y2v, h2v, dhdx, dhdy, w, color='r')
+ax.contour(xv, yv, hv, 20)
+# end draw contours and gradient field of h in 3D
 
-
-
+# Draw surface and negative gradient field of h
+fig = plt.figure(13)
+ax = fig.gca(projection='3d')
+ax.quiver(x2v, y2v, h2v, dhdx, dhdy, w, color='r')
+ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
+# end draw surface and negative gradient field of h
 
 
 # Grid two-dimensional vector field
@@ -183,3 +194,11 @@ plt.savefig('images/quiver_matplotlib_simple.png')
 plt.figure(11)
 plt.savefig('images/quiver_matplotlib_gr.png')
 plt.savefig('images/quiver_matplotlib_gr.pdf')
+
+plt.figure(12)
+plt.savefig('images/quiver_contour_matplotlib.png')
+plt.savefig('images/quiver_contour_matplotlib.pdf')
+
+plt.figure(13)
+plt.savefig('images/quiver_surf_matplotlib.png')
+plt.savefig('images/quiver_surf_matplotlib.pdf')
