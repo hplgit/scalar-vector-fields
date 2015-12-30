@@ -9,7 +9,10 @@ they also have much in common, as code below shows.  Note that (for
 most backends one can plug into Matplotlib, SciTools, and Mayavi) one
 can rotate a figure by holding the mouse cursor down. This
 functionality is often useful in order to get a better view of a
-three-dimensional plot.
+three-dimensional plot. 
+The commands `figure()` and `savefig()` are common for the plotting packages we consider. 
+In calls on the form `figure(num)` the parameter identifies the plot we work with, 
+and in calls on the form `savefig(filename)` the parameter identifies a file.
 
 For Ubuntu,
 Section ref{sec:accesspy:vmware} describes installation of all the software
@@ -139,7 +142,7 @@ The gradient field (ref{gradienteq}) appears in Figure ref{quivermatplotlib}.
 Section ref{matplotlibquiverplots} explains the code needed to make these
 plots.
 
-FIGURE:[fig/quiver_matplotlib, width=600 frac=0.8] 2D vector field (left), combined with contour plot (right). label{quivermatplotlib}
+FIGURE:[fig/quiver_matplotlib, width=600 frac=0.8] Gradient field with contour plot (left). 2D vector field (right). label{quivermatplotlib}
 
 
 === A two-dimensional vector field ===
@@ -160,7 +163,7 @@ on the grid are computed by
 
 @@@CODE plot3d_matplotlib.py fromto: # Grid two-dimensional vector field@# endtwodimfield
 The two-dimensional vector field (ref{2dvectorfieldeq}) is illustrated
-in the left part of Figure ref{quivermatplotlib}.
+in the right part of Figure ref{quivermatplotlib}.
 
 
 
@@ -210,7 +213,7 @@ scalar and vector fields, we shall make use
 of a Matplotlib ``axes'' object, called `ax` and made by
 
 !bc pycod
-fig = plt.figure()
+fig = plt.figure(1)
 ax = fig.gca()
 !ec
 For three-dimensional visualization, we need the following alternative
@@ -219,7 +222,7 @@ lines:
 !bc pycod
 from mpl_toolkits.mplot3d import Axes3D
 
-fig = plt.figure()
+fig = plt.figure(1)
 ax = fig.gca(projection='3d')
 !ec
 
@@ -273,16 +276,16 @@ FIGURE:[fig/advanced_contour_matplotlib, height=400 width=600 frac=0.8] Some oth
 ===== Vector field plots =====
 label{matplotlibquiverplots}
 
-With grid coordinates defined as in Section ref{sec:twodimvectorfield},
-the two-dimensional vector field (ref{2dvectorfieldeq}) can be plotted as follows.
-
-@@@CODE plot3d_matplotlib.py fromto:# Draw 2D-field@# end draw 2D-field
 The code for plotting the gradient field (ref{gradienteq}) together with contours is as follows, 
 once the grid has been defined as in Section ref{sec:gradientvectorfield}.
 
 @@@CODE plot3d_matplotlib.py fromto:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+With grid coordinates defined as in Section ref{sec:twodimvectorfield},
+the two-dimensional vector field (ref{2dvectorfieldeq}) can be plotted as follows.
+
+@@@CODE plot3d_matplotlib.py fromto:# Draw 2D-field@# end draw 2D-field
 Finally the three-dimensional vector field (ref{3dvectorfieldeq}) can be plotted as follows, 
-witht he grid defined as in Section ref{sec:threedimvectorfield}.
+with the grid defined as in Section ref{sec:threedimvectorfield}.
 
 @@@CODE plot3d_matplotlib.py fromto:# Draw 3D-field@# end draw 3D-field
 The first two plots are shown in Figure ref{quivermatplotlib}, and the third in Figure ref{quivermatplotlibgr}.
@@ -328,16 +331,8 @@ Also, I have not had much luck with the VTK backend]
 
 [or: I changed backend to gnuplot for contour plots, but it seems then that I cannot set the colour of the labels anymore, see the plot. I think Scitools is simply not tested enough for 3D here]
 
-!bc pycod
-plt.figure(1)
-plt.mesh(xv, yv, hv)
+@@@CODE plot3d_scitools_gnuplot.py fromto:# Simple plot of mountain@# endsimpleplots
 
-plt.figure(2)
-plt.surf(xv, yv, hv)
-plt.hold('on')
-# The last parameter controls the color of the curve
-plt.plot3(curve_x, curve_y, curve_z, 'b-')
-!ec
 The results are shown in Figure ref{plotscitools}. A Gnuplot backend was used here.
 
 FIGURE:[fig/plot_scitools, height=400 width=600 frac=0.8] Two SciTools surface plots: `mesh` (left) and `surf` (right). The curve $\bm{r}(t)$ is also shown in the right plot. label{plotscitools}
@@ -350,26 +345,8 @@ FIGURE:[fig/plot_scitools, height=400 width=600 frac=0.8] Two SciTools surface p
 
 The following code exemplifies how one can create different contour plots with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set.
 
-!bc pycod
-# Default two-dimensional contour plot: with X contour lines
-plt.contour(xv, yv, hv)
+@@@CODE plot3d_scitools_gnuplot.py fromto: # Default two-dimensional contour plot@#end contourplots
 
-# Default three-dimensional contour plot (Gnuplot backend)
-plt.contour3(xv, yv, hv)
-
-# 10 contour lines. The contour levels will be automatically chosen.
-plt.contour(xv, yv, hv, 10)
-
-# 10 contour lines. Black color for contour lines
-plt.contour(xv, yv, hv, 10, 'k')
-
-# Specify the contour levels
-levels = [500., 1000., 1500., 2000.]
-plt.contour(xv, yv, hv, levels)
-
-# Add labels with the contour line values to the lines
-plt.contour(xv, yv, hv, levels, clabels='on')
-!ec
 The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourscitools}. The next 4 plots are shown in Figure ref{advancedcontourscitools}.
 
 FIGURE:[fig/simple_contour_scitools, height=400 width=600 frac=0.8]  Default two- and three-dimensional contour plots with SciTools. label{simplecontourscitools}
@@ -381,20 +358,15 @@ FIGURE:[fig/advanced_contour_scitools, height=400 width=600 frac=0.8] Some other
 ===== Vector field plots =====
 
 There is limited support for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), so the following code only concerns the gradient field (ref{gradienteq}) and the two-dimensional vector field (ref{2dvectorfieldeq}).
+The code for plotting the gradient field together with contours is as follows.
 
-!bc pycod
-# The two last parameters represent scaling (0 means no scaling)
-# and color (‘b’ means blue).
-plt.quiver(xv, yv, u, v, 200, 'b')
+@@@CODE plot3d_scitools.py fromto:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+The two-dimensional vector field (ref{2dvectorfieldeq}) can be plotted as follows.
 
-plot.figure()
-plt.quiver(x2v, y2v, dhdx, dhdy, 0, 'r')
-plt.hold('on')
-plt.contour(x, y, h, daspectmode='equal')
-!ec
+@@@CODE plot3d_scitools.py fromto:# Draw 2D-field@# end draw 2D-field.
 The results are shown in Figure ref{quiverscitools}.
 
-FIGURE:[fig/quiver_scitools, height=400 width=600 frac=0.8] Vector field plots with SciTools. The two-dimensional vector field (left), contour plot together with gradient field (right). label{quiverscitools}
+FIGURE:[fig/quiver_scitools, height=400 width=600 frac=0.8] Vector field plots with SciTools. Gradient field with contour plot (left). 2D vector field (right). label{quiverscitools}
 
 
 ======= Mayavi =======
@@ -418,8 +390,6 @@ the "basic functionality": "http://docs.enthought.com/mayavi/mayavi/auto/mlab_he
 "http://docs.enthought.com/mayavi/mayavi/auto/mlab_other_functions.html".
 Basic "figure handling":"http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html" is very similar as the one we know from Matplotlib and SciTools.
 Just as for Matplotlib, plotting commands you do in `mlab` will go into the same figure, until you manually change to a new figure.
-There is no function `plt.show()` in Mayavi. Instead the current figure is made visible by default.
-The functions `plt.figure()`, `plt.savefig()` work as we are use to, and can take an optional parameter which identifies the number of the figure in question.
 
 
 ===== Simple surface plots =====
@@ -430,7 +400,7 @@ The following code uses these to plot the surface $h(x,y)$ in Equation (ref{heq}
 
 @@@CODE plot3d_mayavi.py fromto:# Simple plot of mountain@# endsimpleplots
 
-The calls to `plt.figure()` took three parameters: First an index for the plot, then two tuples of numbers , representing the RGB-values to be used for the foreground (`fgcolor`) and the background (`bgcolor`). 
+The calls to `plt.figure()` took three parameters: First the usual index for the plot, then two tuples of numbers , representing the RGB-values to be used for the foreground (`fgcolor`) and the background (`bgcolor`). 
 White and black are  (1,1,1) and (0,0,0), respectively. The foreground color is used for text and labels included in the plot. 
 
 The `color` attribute adjusts the surface so that it is coloured with small variations from the provided base-color. 
