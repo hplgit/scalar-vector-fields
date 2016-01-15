@@ -55,6 +55,7 @@ ax.plot(curve_x, curve_y, curve_z, linewidth=5)
 
 
 
+
 # Default two-dimensional contour plot with 7 colored lines
 fig = plt.figure(3)
 ax = fig.gca()
@@ -65,24 +66,34 @@ fig = plt.figure(4)
 ax = fig.gca(projection='3d')
 ax.contour(xv, yv, hv)
 
-# 10 contour lines (equally spaced contour levels)
+# Plot of mountain and contour lines projected on the coordinate planes
 fig = plt.figure(5)
+ax = fig.gca(projection='3d')
+ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
+# zdir is the projection axis
+# offset is the offset of the projection plane
+ax.contour(xv, yv, hv, zdir='z', offset=-1000, cmap=cm.coolwarm)
+ax.contour(xv, yv, hv, zdir='x', offset=-10, cmap=cm.coolwarm)
+ax.contour(xv, yv, hv, zdir='y', offset=10, cmap=cm.coolwarm)
+
+# 10 contour lines (equally spaced contour levels)
+fig = plt.figure(6)
 ax = fig.gca()
 ax.contour(xv, yv, hv, 10)
 
 # 10 black ('k') contour lines
-fig = plt.figure(6)
+fig = plt.figure(7)
 ax = fig.gca()
 ax.contour(xv, yv, hv, 10, colors='k')
 
 # Specify the contour levels explicitly as a list
-fig = plt.figure(7)
+fig = plt.figure(8)
 ax = fig.gca()
 levels = [500., 1000., 1500., 2000.]
 ax.contour(xv, yv, hv, levels=levels)
 
 # Add labels with the contour level for each contour line
-fig = plt.figure(8)
+fig = plt.figure(9)
 ax = fig.gca()
 cs = ax.contour(xv, yv, hv)
 plt.clabel(cs)
@@ -90,7 +101,7 @@ plt.clabel(cs)
 
 
 # Draw contours and gradient field of h in 2D
-fig = plt.figure(9)
+fig = plt.figure(10)
 ax = fig.gca()
 ax.quiver(x2v, y2v, dhdx, dhdy, color='r',\
           angles='xy', scale_units='xy')
@@ -99,7 +110,7 @@ plt.axis('equal')
 # end draw contours and gradient field of h in 2D
 
 # Draw contours and gradient field of h in 3D
-fig = plt.figure(12)
+fig = plt.figure(13)
 ax = fig.gca(projection='3d')
 
 w = np.zeros_like(dhdx)
@@ -108,7 +119,7 @@ ax.contour(xv, yv, hv, 20)
 # end draw contours and gradient field of h in 3D
 
 # Draw surface and negative gradient field of h
-fig = plt.figure(13)
+fig = plt.figure(14)
 ax = fig.gca(projection='3d')
 ax.quiver(x2v, y2v, h2v, dhdx, dhdy, w, color='r')
 ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
@@ -123,7 +134,7 @@ v = -3*yv
 # endtwodimfield
 
 # Draw 2D-field
-fig = plt.figure(10)
+fig = plt.figure(11)
 ax = fig.gca()
 
 # color controls the color of the arrows
@@ -134,16 +145,16 @@ plt.axis('equal')
 # end draw 2D-field
 
 # Grid three-dimensional vector field
-x = y = z = np.linspace(.5, 2., 8)
+x = y = z = np.linspace(.5, 2., 6)
 xv, yv, zv = np.meshgrid(x, y, z, sparse=False, indexing='ij')
-r3v = np.sqrt(xv**2 + yv**2 + zv**2)**3
-u = -xv/r3v
-v = -yv/r3v
-w = -zv/r3v
+rv = np.sqrt(xv**2 + yv**2 + zv**2)
+u = -xv/rv**3
+v = -yv/rv**3
+w = -zv/rv**3
 # endthreedimfield
 
 # Draw 3D-field
-fig = plt.figure(11)
+fig = plt.figure(12)
 ax = fig.gca(projection='3d')
 # length controls the length of the vectors
 ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)
@@ -168,37 +179,41 @@ plt.savefig('images/default_contour3_matplotlib.pdf')
 plt.savefig('images/default_contour3_matplotlib.png')
 
 plt.figure(5)
+plt.savefig('images/contour3_dims_matplotlib.png')
+plt.savefig('images/contour3_dims_matplotlib.pdf')
+
+plt.figure(6)
 plt.savefig('images/contour_10levels_matplotlib.pdf')
 plt.savefig('images/contour_10levels_matplotlib.png')
 
-plt.figure(6)
+plt.figure(7)
 plt.savefig('images/contour_10levels_black_matplotlib.pdf')
 plt.savefig('images/contour_10levels_black_matplotlib.png')
 
-plt.figure(7)
+plt.figure(8)
 plt.savefig('images/contour_speclevels_matplotlib.pdf')
 plt.savefig('images/contour_speclevels_matplotlib.png')
 
-plt.figure(8)
+plt.figure(9)
 plt.savefig('images/contour_clabel_matplotlib.pdf')
 plt.savefig('images/contour_clabel_matplotlib.png')
 
-plt.figure(9)
+plt.figure(10)
 plt.savefig('images/quiver_matplotlib_advanced.pdf')
 plt.savefig('images/quiver_matplotlib_advanced.png')
 
-plt.figure(10)
+plt.figure(11)
 plt.savefig('images/quiver_matplotlib_simple.pdf')
 plt.savefig('images/quiver_matplotlib_simple.png')
 
-plt.figure(11)
+plt.figure(12)
 plt.savefig('images/quiver_matplotlib_gr.png')
 plt.savefig('images/quiver_matplotlib_gr.pdf')
 
-plt.figure(12)
+plt.figure(13)
 plt.savefig('images/quiver_contour_matplotlib.png')
 plt.savefig('images/quiver_contour_matplotlib.pdf')
 
-plt.figure(13)
+plt.figure(14)
 plt.savefig('images/quiver_surf_matplotlib.png')
 plt.savefig('images/quiver_surf_matplotlib.pdf')

@@ -106,21 +106,6 @@ plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,\
 
 
 
-x = y = z = np.linspace(.5, 2., 8)
-xv, yv, zv = np.meshgrid(x, y, z, sparse=False, indexing='ij')
-r3v = np.sqrt(xv**2 + yv**2 + zv**2)**3
-u = -x/r3v
-v = -y/r3v
-w = -z/r3v
-
-# Draw 3D-field
-plt.figure(11, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-# colormap: controls how the vectors are colored.
-plt.quiver3d(xv, yv, zv, u, v, w,\
-             mode='arrow', colormap='jet', scale_factor=.5)
-plt.axes(xlabel='x', ylabel='y', zlabel='z',\
-         nb_labels=5, color=(0., 0., 0.))
-# end draw 3D-field
 
 # Save figures to files
 plt.figure(1)
@@ -149,6 +134,3 @@ plt.savefig('images/quiver_contour_mayavi.png')
 
 plt.figure(10)
 plt.savefig('images/quiver_surf_mayavi.png')
-
-plt.figure(11)
-plt.savefig('images/quiver_mayavi.png')
