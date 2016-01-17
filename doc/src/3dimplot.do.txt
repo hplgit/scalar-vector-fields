@@ -111,8 +111,10 @@ Very often, we let $C$ run over some equally spaced values, and the
 plotting program computes relevant $C$ values. 
 Contour lines can be instructive both in 2D and 3D. 
 Figure ref{simplecontourmatplotlib} shows different ways contour lines 
-can improve the visualisation in 2D and 3D for the surface $h(x,y)$. 
-The last plot actually shows three different types of contours at the same time, 
+can improve the visualisation for the surface $h(x,y)$. 
+The first and last plot are 2D visualisations. The first draws a small set of contour lines only, 
+while the last one displays the surface as an image, so that the last height component is displayed by means of intensity. 
+The third plot actually shows three different types of contours at the same time, 
 each type corresponding to keeping one coordinate constant.
 The code used to generate these plots will be gone through in Section ref{matplotlibcontourplots}.
 
@@ -197,7 +199,7 @@ The 2D vector field (ref{2dvectorfieldeq}) is illustrated in the right part of F
 
 
 
-=== A 3D scalar field and a 3D vector field ===
+=== A 3D scalar - and vector field ===
 label{sec:threedimvectorfield}
 
 As an example of a 3D field we consider a gravitational field.
@@ -214,17 +216,31 @@ For 2D scalar fields we defined contour lines as lines defined by the implicit e
 For 3D scalar fields the implicit equation $F(x,y,x)=C$ instead gives rise to a surface (for the field (ref{3dscalarfieldeq}) actually the surface of a sphere), 
 so it is more appropriate to call them contour surfaces. To visualise the field (ref{3dscalarfieldeq}) we will simply draw enough of these contours.
 
+The gradient field for this 3D scalar field is defined by
+
+!bt
+\begin{equation}
+\nabla F = \frac{\partial F}{\partial x}\bm{i} +  \frac{\partial F}{\partial y}\bm{j} + \frac{\partial F}{\partial z}\bm{k}.
+label{gradient3eq}
+\end{equation}
+!et
+This is a 3D vector field, similar to how he defined the 2D gradient vector field. 
+Also in 3D the gradient field points in the direction where the function increases most, 
+and the contours are orthogonal to the gradient field. 
+One easily here computes the gradient field as $-2\bm{r}/|\bm{r}|^4$, where 
+$\bm{r} = x\bm{i} + y\bm{j} + z\bm{k})$ is the position vector. The gradient field thus points towards the origin, 
+so that it is orthogonal to the contours, which where surfaces of spheres centered at the origin.
+
 The gravitational force is also directed towards the center of mass, 
-so that we can view it as the following 3D vector field.
+so that it also can be viewed as 3d vector field, with the same direction as the gradient field.
 
 !bt
 \begin{equation}
 \bm{v}(x, y, z) = -\bm{r}/|\bm{r}|^3 = -\frac{1}{\sqrt{x^2+y^2+z^2}^3}( x\bm{i} + y\bm{j} + z\bm{k}), label{3dvectorfieldeq}
 \end{equation}
 !et
-where $\bm{r} = x\bm{i} + y\bm{j} + z\bm{k})$ is the position vector. We need a
-three-dimensional grid for plotting in this case, here defined by coordinates
-$[0.5, 2]$ along each axis with only 6 intervals to avoid too dense arrows:
+We need a three-dimensional grid for plotting 3D scalar- and vector fields. 
+Below we have chosen $[0.5, 2]$ along each axis with only 6 intervals to avoid too dense arrows:
 
 @@@CODE plot3d_matplotlib.py fromto: # Grid three-dimensional vector field@# endthreedimfield
 The distance (`rv`) is here computed, and all components divided by this.
@@ -495,12 +511,15 @@ as well as the levels themselves:
 
 @@@CODE plot3d_mayavi.py fromto:# Default contour plot plotted together with surf@#end contourplots
 There seems to be no function in Mayavi which labels the contours, as we did with Matplotlib and ScitTools.
-The plots are shown in Figure ref{advancedcontourmayavi}. Contour plots in Mayavi are shown in 3D, contrary to Matplotlib and SciTools, but you can rotate and look at them from above. 
+The plots are shown in Figure ref{advancedcontourmayavi}. 
+
+Contour plots in Mayavi are shown in 3D, but you can rotate and look at them from above. 
+When we display as an image, however, a 2D object is rendered. 
 Their visual appearance may be enhanced by also including the surface plot itself. We have here done this for two of the contour plots.
 There is a clear difference in visual impression between the two. In the first one default surface- and contour coloring was used, resulting in less visible contours. 
 As we see, the contours are more visible when a black color is used.
 
-FIGURE:[fig/advanced_contour_mayavi, height=400 width=600 frac=0.8] Some contour plots with Mayavi: Default contour plot (upper left), with 10 contour lines (upper right), with 10 contour lines in black (lower left), and with specified levels (lower right). label{advancedcontourmayavi}
+FIGURE:[fig/advanced_contour_mayavi, height=400 width=600 frac=0.8] Some contour plots with Mayavi.. label{advancedcontourmayavi}
 
 
 

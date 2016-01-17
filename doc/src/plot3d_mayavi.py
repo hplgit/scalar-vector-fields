@@ -72,6 +72,10 @@ plt.contour_surf(xv, yv, hv, contours=10, color=(0., 0., 0.))
 plt.figure(7, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 levels = [5., 10., 15., 20.]
 plt.contour_surf(xv, yv, hv, contours=levels)
+
+# View the contours by displaying as an image
+plt.figure(8, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
+plt.imshow(hv)
 #end contourplots
 
 
@@ -128,6 +132,9 @@ plt.savefig('images/contour_10levels_black_mayavi.png')
 
 plt.figure(7)
 plt.savefig('images/contour_speclevels_mayavi.png')
+
+plt.figure(8)
+plt.savefig('images/contour_imshow_mayavi.png')
 
 plt.figure(9)
 plt.savefig('images/quiver_contour_mayavi.png')
