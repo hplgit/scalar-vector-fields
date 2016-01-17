@@ -18,8 +18,8 @@ system python plot3d_matplotlib.py
 system doconce combine_images pdf -2 images/simple_plot_matplotlib images/simple_plot_colours_matplotlib images/plot_matplotlib
 system doconce combine_images png -2 images/simple_plot_matplotlib images/simple_plot_colours_matplotlib images/plot_matplotlib
 
-system doconce combine_images pdf -2 images/default_contour_matplotlib images/default_contour3_matplotlib images/contour3_dims_matplotlib images/simple_contour_matplotlib
-system doconce combine_images png -2 images/default_contour_matplotlib images/default_contour3_matplotlib images/contour3_dims_matplotlib images/simple_contour_matplotlib
+system doconce combine_images pdf -2 images/default_contour_matplotlib images/default_contour3_matplotlib images/contour3_dims_matplotlib images/contour_imshow_matplotlib images/simple_contour_matplotlib
+system doconce combine_images png -2 images/default_contour_matplotlib images/default_contour3_matplotlib images/contour3_dims_matplotlib images/contour_imshow_matplotlib images/simple_contour_matplotlib
 
 system doconce combine_images pdf -2 images/contour_10levels_matplotlib images/contour_10levels_black_matplotlib images/contour_speclevels_matplotlib images/contour_clabel_matplotlib images/advanced_contour_matplotlib
 system doconce combine_images png -2 images/contour_10levels_matplotlib images/contour_10levels_black_matplotlib images/contour_speclevels_matplotlib images/contour_clabel_matplotlib images/advanced_contour_matplotlib
@@ -49,6 +49,6 @@ system doconce combine_images png -2 images/quiver_scitools_advanced images/quiv
 
 
 system doconce combine_images png -2 images/simple_plot_mayavi images/simple_plot_colours_mayavi images/plot_mayavi
-system doconce combine_images png -2 images/simple_contour_mayavi images/contour_10levels_mayavi images/contour_10levels_black_mayavi images/contour_speclevels_mayavi images/advanced_contour_mayavi
+system doconce combine_images png -2 images/simple_contour_mayavi images/contour_10levels_mayavi images/contour_10levels_black_mayavi images/contour_speclevels_mayavi images/contour_imshow_mayavi images/advanced_contour_mayavi
 system doconce combine_images png -2 images/quiver_contour_mayavi images/quiver_surf_mayavi images/quiver_contour_surf_mayavi
 
