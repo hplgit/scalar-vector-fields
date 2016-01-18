@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+font = {'size'   : 24}
+
 h0 = 2277.   # Height of the top of the mountain (m)
 R = 4.       # Radius of the mountain (km)
 #endinitvalues
@@ -114,21 +116,22 @@ ax.contour(xv, yv, hv)
 plt.axis('equal')
 # end draw contours and gradient field of h in 2D
 
-# Draw contours and gradient field of h in 3D
+# Draw contours and normal vector field of h in 3D
 fig = plt.figure(14)
 ax = fig.gca(projection='3d')
 
-w = np.zeros_like(dhdx)
-ax.quiver(x2v, y2v, h2v, dhdx, dhdy, w, color='r')
+w = np.zeros_like(dhdx) + 1
+ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, w, color='r', length=2)
 ax.contour(xv, yv, hv, 20)
-# end draw contours and gradient field of h in 3D
+# end draw contours and normal vector field of h in 3D
 
-# Draw surface and negative gradient field of h
+# Draw surface and normal vector field of h
 fig = plt.figure(15)
 ax = fig.gca(projection='3d')
-ax.quiver(x2v, y2v, h2v, dhdx, dhdy, w, color='r')
 ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
-# end draw surface and negative gradient field of h
+# length controls the length of the vectors
+ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, w, color='r', length=2)
+# end draw surface and normal vector gradient field of h
 
 
 # Grid two-dimensional vector field
@@ -161,11 +164,11 @@ w = -zv/rv**3
 # Draw 3D-field
 fig = plt.figure(13)
 ax = fig.gca(projection='3d')
-# length controls the length of the vectors
 ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)
 # end draw 3D-field
 
 
+plt.rc('font', **font)
 
 plt.figure(1)
 plt.savefig('images/simple_plot_matplotlib.pdf')

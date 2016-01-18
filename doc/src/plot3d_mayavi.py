@@ -87,24 +87,24 @@ h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
 
 dhdx, dhdy = np.gradient(h2v)
 
-# Draw contours and gradient field of h
+# Draw contours and normal vector field of h
 plt.figure(9, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.contour_surf(xv, yv, hv, contours=20)
 
-w = np.zeros_like(dhdx)
+w = np.zeros_like(dhdx) + 1
 # mode controls the style how vectors are drawn
 # color controls the colors of the vectors
 # scale_factor controls thelength of the vectors
-plt.quiver3d(x2v, y2v, h2v, dhdx, dhdy, w,\
+plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,\
              mode='arrow', color=(1,0,0), scale_factor=.75)
-# end draw contours and gradient field of h
+# end draw contours and normal vector field of h
 
-# Draw surface and negative gradient field of h
+# Draw surface and normal vector field of h
 plt.figure(10, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.surf(xv, yv, hv)
 plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,\
              mode='arrow', color=(1,0,0), scale_factor=.75)
-# end draw surface and negative gradient field of h
+# end draw surface and normal vector field of h
 
 
 
