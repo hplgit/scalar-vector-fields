@@ -3,7 +3,7 @@ conda update conda
 
 # Build and activate environment
 conda create --name inf11003dplot python
-conda install --name inf11003dplot matplotlib
+source 
 conda install --name inf11003dplot mayavi
 conda install --name inf11003dplot --channel johannr scitools
 source activate inf11003dplot
