@@ -10,9 +10,9 @@ exit 1
 fi
 }
 
-system python plot3d_scitools.py
+# system python plot3d_scitools.py
 system python plot3d_mayavi.py
-system python plot3d_scitools_gnuplot.py --SCITOOLS_easyviz_backend gnuplot
+# system python plot3d_scitools_gnuplot.py --SCITOOLS_easyviz_backend gnuplot
 system python plot3d_matplotlib.py
 
 system doconce combine_images pdf -2 images/simple_plot_matplotlib images/simple_plot_colours_matplotlib images/plot_matplotlib
