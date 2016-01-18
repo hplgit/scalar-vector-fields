@@ -43,8 +43,8 @@ Before we start, let us be clear on how variable names have bene chosen.
 * For vector fields, we use names such as `u`, `v`, `w` for vectors at points corresponding to `xv`, `yv`, `zv`.
 
 Below are more mathematical details on the various scalar and vector fields
-we aim to plot. The figures we show first are generated with Matplotlib. 
-The succeeding sections explain the corresponding code, 
+we aim to plot. Most figures we show first are generated with Matplotlib. 
+Succeeding sections explain the corresponding code, 
 and how the same plots can be made with the other plotting packages. 
 
 ===== Surface plots =====
@@ -57,7 +57,10 @@ h(x,y) = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}},
 label{heq}
 \end{equation}
 !et
-$h(x,y)$ may model the height of an isolated circular mountain, $h$ being the height above sea level, while $x$ and $y$ are Cartesian coordinates, $h_0$ is the height at the top of the mountain, and $R$ what is the radius of the mountain.
+$h(x,y)$ may model the height of an isolated circular mountain, 
+$h$ being the height above sea level, 
+while $x$ and $y$ are Cartesian coordinates, 
+$h_0$ the height of the mountain, and $R$ the radius of the mountain.
 Since mountains are actually quite flat (or more precisely,
 their heights are small compared to the horizontal extent), we use
 meter as length unit for vertical distances ($z$ direction) and km as length
@@ -96,7 +99,7 @@ of the mountain:
 \end{equation}
 !et
 Here $\bm{i}$, $\bm{j}$, and $\bm{k}$ denote the unit vectors in the $x$-, $y$-, and $z$-directions, respectively.
-The coordinates of this parametrized curve $\bm{r}(t)$ can be produced by
+The coordinates of $\bm{r}(t)$ can be produced by
 
 @@@CODE plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
 The parametric curve is shown together with the surface $h(x,y)$ in the right plot in Figure ref{plotmatplotlib}.
@@ -106,19 +109,21 @@ The parametric curve is shown together with the surface $h(x,y)$ in the right pl
 
 Contour lines are lines defined by the implicit equation $h(x,y)=C$, where
 $C$ is some constant representing the contour level.
-Different contour lines arise by the contour level.
 Very often, we let $C$ run over some equally spaced values, and the
 plotting program computes relevant $C$ values. 
+To distinguish contours, one often associates each contour level $C$ with its own color.
+
 Contour lines can be instructive both in 2D and 3D. 
 Figure ref{simplecontourmatplotlib} shows different ways contour lines 
 can improve the visualisation for the surface $h(x,y)$. 
-The first and last plot are 2D visualisations. The first draws a small set of contour lines only, 
-while the last one displays the surface as an image, so that the last height component is displayed by means of intensity. 
-The third plot actually shows three different types of contours at the same time, 
-each type corresponding to keeping one coordinate constant.
+The first and last plot are 2D visualisations. 
+The first draws a small set of contour lines only, 
+while the last one displays the surface as an image, so that the height component is displayed by means of intensity. 
+The third plot actually combines three different types of contours, 
+each type corresponding to keeping a coordinate constant.
 The code used to generate these plots will be gone through in Section ref{matplotlibcontourplots}.
 
-FIGURE:[fig/simple_contour_matplotlib, height=400 width=600 frac=0.8]  Different types of contour plots in 2D and 3D. label{simplecontourmatplotlib}
+FIGURE:[fig/simple_contour_matplotlib, frac=1]  Different types of contour plots in 2D and 3D. label{simplecontourmatplotlib}
 
 ===== The gradient vector field and the normal vector field =====
 label{sec:gradientvectorfield}
@@ -133,15 +138,13 @@ label{gradienteq}
 !et
 One learns in vector calculus that the gradient points in the direction where $h$ increases most, and 
 that the gradients are orthogonal to the contour lines.
-This is something we can easily illustrate in our plots when when we combine the
-contour plot with a plot of the gradient vector field.
+This is something we can easily illustrate by combining plots of the contours and the gradient vector field.
 
 
-
-A challenge in plots of vector fields is to get the right arrow lengths such
+A challenge in plots of vector fields is to get the right arrow lengths so
 that the arrows are well visible, but they do not collide and make a
 cluttered visual impression. Since the arrows are drawn at each point in
-the 2D grid, one way of controlling the number of arrows is to control
+a 2D grid, one way of controlling the number of arrows is to control
 the resolution of the grid. So, let us use a grid with 20 instead of 40 intervals in the horizontal
 directions:
 
@@ -153,23 +156,22 @@ The gradient field (ref{gradienteq}) appears in Figure ref{quivermatplotlib}.
 Section ref{matplotlibquiverplots} explains the code needed to make these
 plots.
 
-FIGURE:[fig/quiver_matplotlib, width=600 frac=0.8] Gradient field with contour plot (left). 2D vector field (right). label{quivermatplotlib}
+FIGURE:[fig/quiver_matplotlib, frac=1] Gradient field with contour plot (left). 2D vector field (right). label{quivermatplotlib}
 
 The *normal vector field* of $h(x,y)$ is defined by 
 
 !bt
 \begin{equation}
 \bm{n}(x, y) = -\frac{\partial h}{\partial x}\bm{i}  -\frac{\partial h}{\partial y}\bm{j} + \bm{k}.
-label{gradienteq}
+label{noemalvectoreq}
 \end{equation}
 !et
 We see that, up to a sign a change, the normal vector field is simply an embedding of the gradient vector field in 3D, 
 obtained by adding a constant third component. One learns in calculus that the normal vector field is perpendicular to the surface. 
 In Figure ref{quivercontoursurfmatplotlib} we have plotted the normal vector field, together with the contours and the surface. 
-We reversed the normal vector when plotting together with the contours.
 Again the code can be found in Section ref{matplotlibquiverplots}. 
 
-FIGURE:[fig/quiver_contour_surf_matplotlib, height=400 width=600 frac=0.8] Normal vector field with contours (left), with surface (right). label{quivercontoursurfmatplotlib}
+FIGURE:[fig/quiver_contour_surf_matplotlib, height=400 width=600 frac=1] Normal vector field with contours (left), with surface (right). label{quivercontoursurfmatplotlib}
 
 
 
@@ -211,11 +213,6 @@ the square of the distance to the center of mass. Let us therefore consider the 
 F(x, y, z) = \frac{1}{x^2 + y^2 + z^2}
 \end{equation}
 !et
-Visualizing a 3D scalar field is challenging. We will use contours as an aid here. 
-For 2D scalar fields we defined contour lines as lines defined by the implicit equation $h(x,y)=C$.
-For 3D scalar fields the implicit equation $F(x,y,x)=C$ instead gives rise to a surface (for the field (ref{3dscalarfieldeq}) actually the surface of a sphere), 
-so it is more appropriate to call them contour surfaces. To visualise the field (ref{3dscalarfieldeq}) we will simply draw enough of these contours.
-
 The gradient field for this 3D scalar field is defined by
 
 !bt
@@ -224,32 +221,40 @@ The gradient field for this 3D scalar field is defined by
 label{gradient3eq}
 \end{equation}
 !et
-This is a 3D vector field, similar to how he defined the 2D gradient vector field. 
-Also in 3D the gradient field points in the direction where the function increases most, 
+This is a 3D vector field. 
+Also in 3D the gradient field points in the direction of maximum increase, 
 and the contours are orthogonal to the gradient field. 
+For 2D scalar fields contour lines were defined by the implicit equation $h(x,y)=C$.
+For 3D scalar fields the implicit equation $F(x,y,z)=C$ instead gives rise to a surface, 
+so it is more appropriate to talk about contour surfaces. 
+For the field (ref{3dscalarfieldeq}) the contours are clearly spheres.
 One easily here computes the gradient field as $-2\bm{r}/|\bm{r}|^4$, where 
-$\bm{r} = x\bm{i} + y\bm{j} + z\bm{k})$ is the position vector. The gradient field thus points towards the origin, 
-so that it is orthogonal to the contours, which where surfaces of spheres centered at the origin.
+$\bm{r} = x\bm{i} + y\bm{j} + z\bm{k})$ is the position vector. 
+The gradient field thus points towards the origin, 
+and the contours are clearly spheres centered at the origin. 
+This immediately verifiies the orthogoality between the contours and the gradient field in this case.
 
 The gravitational force is also directed towards the center of mass, 
-so that it also can be viewed as 3d vector field, with the same direction as the gradient field.
+so that it also can be viewed as 3D vector field, with the same direction as the gradient field.
 
 !bt
 \begin{equation}
 \bm{v}(x, y, z) = -\bm{r}/|\bm{r}|^3 = -\frac{1}{\sqrt{x^2+y^2+z^2}^3}( x\bm{i} + y\bm{j} + z\bm{k}), label{3dvectorfieldeq}
 \end{equation}
 !et
-We need a three-dimensional grid for plotting 3D scalar- and vector fields. 
+To visualise the fields (ref{3dscalarfieldeq}) and (ref{3dvectorfieldeq}) together, 
+we draw enough contours, as we did in the 2D case in the left part of Figure ref{quivermatplotlib}.
+We first need a three-dimensional grid. 
 Below we have chosen $[0.5, 2]$ along each axis with only 6 intervals to avoid too dense arrows:
 
 @@@CODE plot3d_matplotlib.py fromto: # Grid three-dimensional vector field@# endthreedimfield
 The distance (`rv`) is here computed, and all components divided by this.
-In Figure ref{quivermayavi} we have shown the 3D scalar field (ref{3dscalarfieldeq}) 
-together with the 3D vector field (ref{3dvectorfieldeq}). This figure was produced with Mayavi, 
+In Figure ref{quivermayavi} we have shown the two fields. This figure was produced with Mayavi, 
 since Matplotlib lacks functionaility for drawing contours in 3D.  
 In section ref{sec:mayavaiquiverplots} we will go through the code which produced this plot.
+Visualizing a 3D scalar field is clearly challenging.
 
-FIGURE:[fig/quiver_mayavi, height=400 width=600 frac=0.8] The 3D scalar field (ref{3dscalarfieldeq}) and the 3D vector field (ref{3dvectorfieldeq}). label{quivermayavi}
+FIGURE:[fig/quiver_mayavi, frac=1] The 3D scalar field (ref{3dscalarfieldeq}) and the 3D vector field (ref{3dvectorfieldeq}). label{quivermayavi}
 
 
 ======= Matplotlib =======
@@ -328,15 +333,15 @@ once the grid has been defined as in Section ref{sec:gradientvectorfield}.
 
 @@@CODE plot3d_matplotlib.py fromto:# Draw contours and gradient field of h in 2D@# end draw contours and gradient field of h in 2D
 With grid coordinates defined as in Section ref{sec:twodimvectorfield},
-the two-dimensional vector field (ref{2dvectorfieldeq}) can be plotted as follows.
+the 2D vector field (ref{2dvectorfieldeq}) can be plotted as follows.
 
 @@@CODE plot3d_matplotlib.py fromto:# Draw 2D-field@# end draw 2D-field
-The following code plots the gradient field together with the contours of $h$ in 3D. 
+The following code plots the normal vector field together with the contours of $h$ in 3D. 
 
-@@@CODE plot3d_matplotlib.py fromto:# Draw contours and gradient field of h in 3D@# end draw contours and gradient field of h in 3D
-If we replace contours with the surface itself, and reverse the gradient vectors, we can use the following code. 
+@@@CODE plot3d_matplotlib.py fromto:# Draw contours and normal vector field of h in 3D@# end draw contours and normal vector field of h in 3D
+If we replace contours with the surface itself, we can use the following code. 
 
-@@@CODE plot3d_matplotlib.py fromto:# Draw surface and negative gradient field of h@# end draw surface and negative gradient field of h
+@@@CODE plot3d_matplotlib.py fromto:# Draw surface and gradient field of h@# end draw surface and gradient field of h
 The corresponding plots were shown in Figure ref{quivercontoursurfmatplotlib}.
 
 
@@ -499,7 +504,7 @@ The commands use different values for the `colormap` attribute to color the surf
 The two latter plot handles are sent as input to the `plt.outline` command, which produces the frames we see in the figure. 
 We see that the last plot has a frame with a different color. This is due to the `color`-attribute, which was added in the last call to `plt.outline`. 
 
-FIGURE:[fig/subplot] A plot with three subplots created with Mayavi. label{subplot}
+FIGURE:[fig/subplot, frac=1] A plot with three subplots created with Mayavi. label{subplot}
 
 
 
@@ -527,21 +532,20 @@ FIGURE:[fig/advanced_contour_mayavi, height=400 width=600 frac=0.8] Some contour
 label{sec:mayavaiquiverplots}
 
 Mayavis functionality for plotting vector fields is primarily intended for viewing in 3D, so we will not plot the two-dimensional field (ref{2dvectorfieldeq}).
-The following code plots the gradient field together with the contours of $h$ in 3D. 
+The following code plots the normal vector field together with the contours of $h$ in 3D. 
 
-@@@CODE plot3d_mayavi.py fromto:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+@@@CODE plot3d_mayavi.py fromto:# Draw contours and normal vector field of h@# end draw contours and normal vector field of h
 The color of the vectors were here set to red, and the attribute `scale_factor` adjusted so that vectors do not collide. 
-Still the plot look a bit cluttered. If we replace contours with the surface itself, 
-and reverse the gradient vectors, we can use the following code. 
+Still the plot look a bit cluttered. If we replace contours with the surface itself, we can use the following code. 
 
-@@@CODE plot3d_mayavi.py fromto:# Draw surface and negative gradient field of h@# end draw surface and negative gradient field of h
+@@@CODE plot3d_mayavi.py fromto:# Draw surface and normal vector field of h@# end draw surface and normal vector field of h
 The corresponding plots are shown in Figure ref{quivercontoursurfmayavi}.
 
-FIGURE:[fig/quiver_contour_surf_mayavi, height=400 width=600 frac=0.8] Normal vector field with contours (left), with surface (right). label{quivercontoursurfmayavi}
+FIGURE:[fig/quiver_contour_surf_mayavi, height=400 width=600 frac=1] Normal vector field with contours (left), with surface (right). label{quivercontoursurfmayavi}
 
 The contours of the 3D scalar field (ref{3dscalarfieldeq}) and the 3D vector field (ref{3dvectorfieldeq}), as shown in Figure ref{quivermayavi}, were produced as follows.
 
-@@@CODE plot3d_mayavi_manual.py fromto:# Draw countours of 3D scalar field togeth with 3D vector field@# end draw countours of 3D scalar field togeth with 3D vector field
+@@@CODE plot3d_mayavi_manual.py fromto:# Draw countours of 3D scalar field together with 3D vector field@# end draw countours of 3D scalar field together with 3D vector field
 This shows some of the challenges in plotting three-dimensional vector fields. 
 The vectors must not be too dense, and not too long. 
 It is inevitable that contours shadow for oneanother, so that we must use some degree of opacity.
