@@ -15,8 +15,8 @@ R = 4.       # Radius of the mountain (km)
 x = y = np.linspace(-10.,10.,41)
 xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)
 
-# indexing='ij' means an $xy$-coordinate system.
-# indexing='xy' means coordinates as row/column indices in a matrix.
+# indexing='ij' means an xy-coordinate system
+# indexing='xy' means coordinates as row/column indices in a matrix
 hv = h0/(1 + (xv**2+yv**2)/(R**2))      # Elevation coordinates (m)
 # endinitgrid
 
@@ -75,8 +75,8 @@ ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
 # zdir is the projection axis
 # offset is the offset of the projection plane
 ax.contour(xv, yv, hv, zdir='z', offset=-1000, cmap=cm.coolwarm)
-ax.contour(xv, yv, hv, zdir='x', offset=-10, cmap=cm.coolwarm)
-ax.contour(xv, yv, hv, zdir='y', offset=10, cmap=cm.coolwarm)
+ax.contour(xv, yv, hv, zdir='x', offset=-10,   cmap=cm.coolwarm)
+ax.contour(xv, yv, hv, zdir='y', offset=10,    cmap=cm.coolwarm)
 
 # View the contours by displaying as an image
 fig = plt.figure(6)
@@ -107,23 +107,23 @@ plt.clabel(cs)
 #end contourplots
 
 
-# Draw contours and gradient field of h in 2D
+# Draw contours and gradient field of h in two dimensions
 fig = plt.figure(11)
 ax = fig.gca()
-ax.quiver(x2v, y2v, dhdx, dhdy, color='r',\
+ax.quiver(x2v, y2v, dhdx, dhdy, color='r',
           angles='xy', scale_units='xy')
 ax.contour(xv, yv, hv)
 plt.axis('equal')
-# end draw contours and gradient field of h in 2D
+# end draw contours and gradient field of h in two dimensions
 
-# Draw contours and normal vector field of h in 3D
+# Draw contours and normal vector field of h in three dimensions
 fig = plt.figure(14)
 ax = fig.gca(projection='3d')
 
 w = np.zeros_like(dhdx) + 1
 ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, w, color='r', length=2)
 ax.contour(xv, yv, hv, 20)
-# end draw contours and normal vector field of h in 3D
+# end draw contours and normal vector field of h in three dimensions
 
 # Draw surface and normal vector field of h
 fig = plt.figure(15)
@@ -141,7 +141,7 @@ u = xv**2 + 2*yv - .5*xv*yv
 v = -3*yv
 # endtwodimfield
 
-# Draw 2D-field
+# Draw 2D vector field
 fig = plt.figure(12)
 ax = fig.gca()
 
@@ -161,7 +161,7 @@ v = -yv/rv**3
 w = -zv/rv**3
 # endthreedimfield
 
-# Draw 3D-field
+# Draw 3D vector field
 fig = plt.figure(13)
 ax = fig.gca(projection='3d')
 ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)

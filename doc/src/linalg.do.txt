@@ -7,11 +7,13 @@ functionality found in Matlab.
 
 
 
-======= Basic operations =======
+======= Some common linear algebra operations =======
 
+===== Inverse, determinant, and eigenvalues =====
 idx{eigenvalues} idx{eigenvectors}
+idx{inverse} idx{determinant}
 
-First we exemplify how to find the inverse and the determinant of a
+We start with exemplifing how to find the inverse and the determinant of a
 matrix, and how to compute the eigenvalues and eigenvectors:
 
 !bc pyshell
@@ -32,9 +34,10 @@ array([ 2.,  5.])
 array([[ 1.,  0.],
        [ 0.,  1.]])
 !ec
-The eigenvectors are normalized
-so that they have length 1, which can make them seem more complicated
-than necessary in some cases.
+The eigenvectors are normalized to have unit lengths.
+
+
+===== Products =====
 
 idx{`dot` (from `numpy`)}
 idx{`cross` (from `numpy`)}
@@ -75,6 +78,7 @@ go like
 1.5707963267948966
 !ec
 
+===== Norms =====
 idx{norms in `numpy`}
 
 Various norms of matrices and vectors are well supported by NumPy.
@@ -90,15 +94,8 @@ Some common examples are
 !ec
 See `pydoc numpy.linalg.norm` for information on other norms.
 
-idx{transpose (in `numpy`)}
-The transpose of a matrix `B` is obtained by `B.T`:
 
-!bc pyshell
->>> B = np.array([[1, 2], [3, -4]], dtype=float)
->>> B.T                # the transpose
-array([[ 1.,  3.],
-       [ 2., -4.]])
-!ec
+===== Sum and extreme values =====
 
 idx{`sum` (from `numpy`)}
 idx{`max` (from `numpy`)}
@@ -178,16 +175,7 @@ False
 !ec
 !ewarning
 
-NumPy can also strip down a matrix to its upper or lower triangular parts:
-
-!bc pyshell
->>> np.triu(B)  # upper triangular part of B
-array([[ 1.,  2.],
-       [ 0., -4.]])
->>> np.tril(B)  # lower triangular part of B
-array([[ 1.,  0.],
-       [ 3., -4.]])
-!ec
+===== Indexing =====
 
 Indexing an element is done by `A[i,j]`, and a row or column
 is extracted as
@@ -234,9 +222,28 @@ $2$. The following code shows that in Python a special command with
  [7 9]]
 !ec
 
+===== Other frequent operations =====
 
+idx{transpose (in `numpy`)}
+The transpose of a matrix `B` is obtained by `B.T`:
 
-======= Row operations and Gaussian elimination =======
+!bc pyshell
+>>> B = np.array([[1, 2], [3, -4]], dtype=float)
+>>> B.T                # the transpose
+array([[ 1.,  3.],
+       [ 2., -4.]])
+!ec
+
+NumPy can also strip down a matrix to its upper or lower triangular parts:
+
+!bc pyshell
+>>> np.triu(B)  # upper triangular part of B
+array([[ 1.,  2.],
+       [ 0., -4.]])
+>>> np.tril(B)  # lower triangular part of B
+array([[ 1.,  0.],
+       [ 3., -4.]])
+!ec
 
 ===== Solving linear systems =====
 
@@ -254,7 +261,9 @@ The function `np.linalg.solve(A, b)` does the job:
 array([-1.,  1.])
 !ec
 
-Implementing Gaussian elimination constitutes a good example on
+===== Matrix row and column operations =====
+
+Implementing Gaussian elimination constitutes a good pedagogical example on
 various row and column operations on a matrix. Some
 needed functionality is
 
@@ -289,7 +298,7 @@ this, we can swap rows if the problem arises.  The following code
 implements the idea and will not fail, even if some of the columns are zero.
 
 !bc pycod
-def Gaussian_Elimination(A):
+def Gaussian_elimination(A):
     rank = 0
     m, n = np.shape(A)
     i = 0
@@ -333,11 +342,11 @@ singular values which are larger than a threshold `epsilon`:
 1
 # abs(s) > tol gives an array with True and False values
 # s.nonzero() lists indices k so that s[k] != 0
->>>  Gaussian_Elimination(A)
+>>>  Gaussian_elimination(A)
 2
 !ec
-If you use a tolerance check on the form `if abs(A[i,j]) >1E-10:`
-in `Gaussian_Elimination`, the code will say that the rank is 1,
+If you use a tolerance check on the form `if abs(A[i,j]) > 1E-10:`
+in the function `Gaussian_elimination`, the code will say that the rank is 1,
 which is the correct value also found by using the singular value
 decomposition. It seems that `np.linalg.svd(A)` also rounds small
 singular values to zero, so that one can find the rank simply as
@@ -364,7 +373,7 @@ decomposition.
 >>> A = np.random.rand(100, 100)
 >>> %timeit U, s, V = np.linalg.svd(A)
 100 loops, best of 3: 3.7 ms per loop
->>> %timeit Gauss_Elimination(A)
+>>> %timeit Gauss_elimination(A)
 100 loops, best of 3: 22.3 ms per loop
 !ec
 
@@ -372,26 +381,44 @@ decomposition.
 
 The two equations
 
-!bt 
+!bt
 \begin{align*}
 2x_1 + 0x_2 + 0x_3 + 6x_4 &= 4 \\
-0x_1 + 1x_2 + 0x_3 + 1x_4 &= 2 
+0x_1 + 1x_2 + 0x_3 + 1x_4 &= 2
 \end{align*}
-!et 
-can be represented as a system $A_1\bm{x}=\bm{b}_1$, where $A_1$ is a $2\times 4$-matrix and $\bm{b}_1$ is a vector of length 2. 
-It is straightforward to verify that these equations have infinitely many solutions, as often is the case when there are more unknowns than equations. 
+!et
+can be represented as a system $A_1\bm{x}=\bm{b}_1$, where $A_1$ is a $2\times 4$-matrix and $\bm{b}_1$ is a vector of length 2.
+It is straightforward to verify that these equations have infinitely many solutions, as often is the case when there are more unknowns than equations.
 In the same way, the two equations
 
-!bt 
+!bt
 \begin{align*}
 1x_1 + 2x_2 + 3x_3 - 4x_4 &= 6 \\
-0x_1 + 0x_2 + 0x_3 + 1x_4 &= 3 
+0x_1 + 0x_2 + 0x_3 + 1x_4 &= 3
 \end{align*}
-!et 
-can be represented as a system $A_2\bm{x}=\bm{b}_2$, which also has infinitely many solutions. 
-If we combine these two systems together, we get a system on the form $A\bm{x}=\bm{b}$, where there are 4 equations with 4 unknowns. 
-Since there are equally many equations and unknowns we are lead to believe that there may be a unique solution.
-The following code verifies this. We use the function `vstack` to compute $A$ and $\bm{b}$.
+!et
+can be represented as a system $A_2\bm{x}=\bm{b}_2$, which also has infinitely many solutions.
+If we combine these two systems together, we get a system on the form $A\bm{x}=\bm{b}$, where there are 4 equations with 4 unknowns.
+We shall show how to two systems can be combined into one.
+
+[hpl: I find the example below quite strange. You do a tailored
+Gaussian elimination on the augmented matrix. When do you actually do
+such a thing? To check for a unique solution here, the only natural
+action is to call `solve` and see if it returns a solution...
+I realize that the example shows stacking functionality, but is not that
+also a specialized functionality needed in advanced applications when
+(e.g.) different pieces of a matrix have been computed by different
+computed units? I think we should only show functionality that
+occurs frequently in widely used operations. Row and column manipulation
+can be defended since Gaussian elimination is fundamental in itself,
+and implementations of other algorithms need such operations.
+My suggestion is to leave out stacking and the augmented matrix unless
+you can point to real applications, met by students, where this is useful.]
+
+As example,
+let us verify that the $4\times 4$ system has a unique solution.
+We use the function `vstack` to compute $A$ and $\bm{b}$, i.e.,
+to stack the matrices $A_1$ and $A_2$ and right-hand sides vertically:
 
 !bc pyshell
 >>> A1 = np.array([[2, 0, 0, 6], [0, 1, 0, 1]], dtype=float)
@@ -415,10 +442,10 @@ array([[-7.],
        [-1.],
        [ 9.],
        [ 3.]])
-!ec 
-Let us also verify that there is a unique solution using Gaussian elimination. 
-In linear algebra $A$ and $\bm{b}$ are first combined into a larger matrix by adding $\bm{b}$ as a last column. 
-The resulting matrix is called the augmented matrix, and can be produced with the function `hstack`.
+!ec
+The next step is to compute the augmented matrix, where
+$A$ and $\bm{b}$ are combined into a larger matrix by adding $\bm{b}$ as a last column. This is a horizontal stacking, which can be performed by the
+function `hstack`:
 
 !bc pyshell
 >>> A_aug = np.hstack([A, b]) # stack matrix and vector horizontally
@@ -428,7 +455,8 @@ array([[ 2.,  0.,  0.,  6.,  4.],
        [ 1.,  2.,  3., -4.,  6.],
        [ 0.,  0.,  0.,  1.,  3.]])
 !ec
-Gaussian elimination can be carried out on the augmented matrix as follows. 
+
+Gaussian elimination can be carried out on the augmented matrix as follows.
 We have only included operations which affect row 2, since the other rows contain zeros.
 
 !bc pyshell
@@ -440,7 +468,7 @@ array([[ 2.,  0.,  0.,  6.,  4.],
        [ 0.,  0.,  3., -9.,  0.],
        [ 0.,  0.,  0.,  1.,  3.]])
 !ec
-To solve the system we also need to eliminate the entries above the diagonal entries, and scale entries so that we have ones on the diagonal. 
+To solve the system, we also need to eliminate the entries above the diagonal entries, and scale entries so that we have ones on the diagonal.
 
 !bc pyshell
 >>> A_aug[1, 3:] -= (A_aug[1,3]/A_aug[3,3])*A_aug[3, 3:] # Zero (1,3)

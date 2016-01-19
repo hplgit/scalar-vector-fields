@@ -16,36 +16,41 @@ curve_y = 10*(1 - s/(2*np.pi))*np.sin(s)
 curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
 
 # Simple plot of mountain
-# Create a figure with white background and black foreground.
+
+# Create a figure with white background and black foreground
 plt.figure(1, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.mesh(xv, yv, hv, extent=(0,1,0,1,0,1))
-# Decorate axes. nb_labels is the number of labels in each direction.
-plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5,\
-        color=(0., 0., 0.))
-# Decorate the plot with a title. size controls the size of the title.
+
+# Decorate axes (nb_labels is the number of labels in each direction)
+plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5,
+         color=(0., 0., 0.))
+
+# Decorate the plot with a title (size is the size of the title)
 plt.title('h(x,y)', size=0.4)
 
 # Simple plot of mountain and parametric curve
 plt.figure(2, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.surf(xv, yv, hv, extent=(0,1,0,1,0,1), color=(.5, .5, .5))
 
-# add the parametric curve. tube_radius controls the width of the curve
-plt.plot3d(curve_x, curve_y, curve_z, tube_radius=0.2,\
+# Add the parametric curve (tube_radius is the width of the curve)
+plt.plot3d(curve_x, curve_y, curve_z, tube_radius=0.2,
            extent=(0,1,0,1,0,1))
-plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5,\
+plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5,
          color=(0., 0., 0.))
 # endsimpleplots
 
 R2 = 10.
 # Create one figure with three subplots
 plt.figure(3, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-plt.mesh(xv, yv, hv, extent=(0, 0.25, 0, 0.25, 0, 0.25),\
+plt.mesh(xv, yv, hv, extent=(0, 0.25, 0, 0.25, 0, 0.25),
          colormap='cool')
-plt.outline(plt.mesh(xv, yv, hv,\
-                     extent=(0.375, 0.625, 0, 0.25, 0, 0.25),\
-                     colormap='Accent'))
-plt.outline(plt.mesh(xv, yv, hv, extent=(0.75, 1, 0, 0.25, 0, 0.25),\
-                     colormap='prism'), color=(.5, .5, .5))
+plt.outline(plt.mesh(
+    xv, yv, hv,
+    extent=(0.375, 0.625, 0, 0.25, 0, 0.25),
+    colormap='Accent'))
+plt.outline(plt.mesh(
+    xv, yv, hv, extent=(0.75, 1, 0, 0.25, 0, 0.25),
+    colormap='prism'), color=(.5, .5, .5))
 # endsubplot
 
 h0 = 22.77
@@ -95,14 +100,14 @@ w = np.zeros_like(dhdx) + 1
 # mode controls the style how vectors are drawn
 # color controls the colors of the vectors
 # scale_factor controls thelength of the vectors
-plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,\
+plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,
              mode='arrow', color=(1,0,0), scale_factor=.75)
 # end draw contours and normal vector field of h
 
 # Draw surface and normal vector field of h
 plt.figure(10, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.surf(xv, yv, hv)
-plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,\
+plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,
              mode='arrow', color=(1,0,0), scale_factor=.75)
 # end draw surface and normal vector field of h
 
