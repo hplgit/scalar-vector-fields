@@ -85,7 +85,7 @@ plt.imshow(hv)
 
 
 # Define a coarser grid for the vector field
-x2 = y2 = np.linspace(-10.,10.,21)
+x2 = y2 = np.linspace(-10.,10.,11)
 x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
 h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
 # endcoarsergrid
@@ -93,26 +93,50 @@ h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
 dhdx, dhdy = np.gradient(h2v)
 
 # Draw contours and normal vector field of h
-plt.figure(9, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
+plt.figure(12, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.contour_surf(xv, yv, hv, contours=20)
 
-w = np.zeros_like(dhdx) + 1
 # mode controls the style how vectors are drawn
 # color controls the colors of the vectors
 # scale_factor controls thelength of the vectors
-plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,
+plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),
              mode='arrow', color=(1,0,0), scale_factor=.75)
 # end draw contours and normal vector field of h
 
 # Draw surface and normal vector field of h
-plt.figure(10, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
+plt.figure(13, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.surf(xv, yv, hv)
-plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, w,
+plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),
              mode='arrow', color=(1,0,0), scale_factor=.75)
 # end draw surface and normal vector field of h
 
 
 
+# Define grid for 3D scalar field
+x = y = np.linspace(-10.,10.,41)
+z = np.linspace(0,50, 41)
+xv, yv, zv = np.meshgrid(x, y, z, sparse=False, indexing='ij')
+hv = h0/(1 + (xv**2+yv**2)/(R**2))
+gv = zv - hv
+# end define grid for 3D scalar field
+
+# Define grid for 3D gradient field
+x2 = y2 = np.linspace(-10.,10.,5)
+z2 = np.linspace(0, 50, 5)
+x2v, y2v, z2v = np.meshgrid(x2, y2, z2, indexing='ij', sparse=False)
+h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2))
+g2v = z2v - h2v
+dhdx, dhdy, dhdz = np.gradient(g2v)
+# end define grid for 3D gradient field
+
+# Draw 3D vector field with countours of 3D scalar field
+plt.figure(14, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
+# opacity controls how contours are visible through each other
+plt.contour3d(xv, yv, zv, gv, contours=7, opacity=0.5)
+# scale_mode='none' says that the vectors should not be scaled
+plt.quiver3d(x2v, y2v, z2v, dhdx, dhdy, dhdz, mode='arrow',\
+             scale_mode='none', opacity=0.5)
+# end draw 3D vector field with countours of 3D scalar field
 
 
 
@@ -125,6 +149,8 @@ plt.savefig('images/simple_plot_colours_mayavi.png')
 
 plt.figure(3)
 plt.savefig('images/subplot.png')
+
+# Save contours plots
 
 plt.figure(4)
 plt.savefig('images/simple_contour_mayavi.png')
@@ -141,8 +167,13 @@ plt.savefig('images/contour_speclevels_mayavi.png')
 plt.figure(8)
 plt.savefig('images/contour_imshow_mayavi.png')
 
-plt.figure(9)
+# Save vector field plots
+
+plt.figure(12)
 plt.savefig('images/quiver_contour_mayavi.png')
 
-plt.figure(10)
+plt.figure(13)
 plt.savefig('images/quiver_surf_mayavi.png')
+
+plt.figure(14)
+plt.savefig('images/quiver_mayavi.png')

@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 font = {'size'   : 24}
+font2 = {'size'   : 12}
 
 h0 = 2277.   # Height of the top of the mountain (m)
 R = 4.       # Radius of the mountain (km)
@@ -19,15 +20,6 @@ xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)
 # indexing='xy' means coordinates as row/column indices in a matrix
 hv = h0/(1 + (xv**2+yv**2)/(R**2))      # Elevation coordinates (m)
 # endinitgrid
-
-# Define a coarser grid for the vector field
-x2 = y2 = np.linspace(-10.,10.,21)
-x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
-h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
-# endcoarsergrid
-
-dhdx, dhdy = np.gradient(h2v) # dh/dx, dh/dy
-# endgradient
 
 s = np.linspace(0, 2*np.pi, 100)
 curve_x = 10*(1 - s/(2*np.pi))*np.cos(s)
@@ -56,6 +48,19 @@ ax.plot(curve_x, curve_y, curve_z, linewidth=5)
 
 
 
+h0 = 22.77
+R = 4.
+
+hv = h0/(1 + (xv**2+yv**2)/(R**2))
+
+# Define a coarser grid for the vector field
+x2 = y2 = np.linspace(-10.,10.,11)
+x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
+h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
+# endcoarsergrid
+
+dhdx, dhdy = np.gradient(h2v) # dh/dx, dh/dy
+# endgradient
 
 
 # Default two-dimensional contour plot with 7 colored lines
@@ -107,65 +112,64 @@ plt.clabel(cs)
 #end contourplots
 
 
-# Draw contours and gradient field of h in two dimensions
+
+
+
+
+# Draw contours and gradient field of h
 fig = plt.figure(11)
 ax = fig.gca()
 ax.quiver(x2v, y2v, dhdx, dhdy, color='r',
           angles='xy', scale_units='xy')
 ax.contour(xv, yv, hv)
 plt.axis('equal')
-# end draw contours and gradient field of h in two dimensions
+# end draw contours and gradient field of h
 
-# Draw contours and normal vector field of h in three dimensions
-fig = plt.figure(14)
+# Draw contours and normal vector field of h
+fig = plt.figure(12)
 ax = fig.gca(projection='3d')
 
-w = np.zeros_like(dhdx) + 1
-ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, w, color='r', length=2)
+ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),\
+          color='r', length=2)
 ax.contour(xv, yv, hv, 20)
-# end draw contours and normal vector field of h in three dimensions
+# end draw contours and normal vector field of h
 
 # Draw surface and normal vector field of h
-fig = plt.figure(15)
+fig = plt.figure(13)
 ax = fig.gca(projection='3d')
 ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
 # length controls the length of the vectors
-ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, w, color='r', length=2)
-# end draw surface and normal vector gradient field of h
+ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),\
+          color='r', length=2)
+# end draw surface and normal vector field of h
 
+h0 = 22.77   # Height of the top of the mountain (m)
+R = 4.
 
-# Grid two-dimensional vector field
-x = y = np.linspace(-5, 5, 11)
+x = y = np.linspace(-10.,10.,41)
 xv, yv = np.meshgrid(x, y, sparse=False, indexing='ij')
-u = xv**2 + 2*yv - .5*xv*yv
-v = -3*yv
-# endtwodimfield
+hv = h0/(1 + (xv**2+yv**2)/(R**2))
 
-# Draw 2D vector field
-fig = plt.figure(12)
-ax = fig.gca()
+# Define grid for 3D gradient field
+x2 = y2 = np.linspace(-10.,10.,5)
+z2 = np.linspace(0, 50, 5)
+x2v, y2v, z2v = np.meshgrid(x2, y2, z2, indexing='ij', sparse=False)
+h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2))
+g2v = z2v - h2v
+dhdx, dhdy, dhdz = np.gradient(g2v)
+# end define grid for 3D gradient field
 
-# color controls the color of the arrows
-# angles and scale_units ensure here that the vectors are drawn
-# with the same units as the x,y-coordinates
-ax.quiver(xv, yv, u, v, color='b', angles='xy', scale_units='xy')
-plt.axis('equal')
-# end draw 2D-field
-
-# Grid three-dimensional vector field
-x = y = z = np.linspace(.5, 2., 6)
-xv, yv, zv = np.meshgrid(x, y, z, sparse=False, indexing='ij')
-rv = np.sqrt(xv**2 + yv**2 + zv**2)
-u = -xv/rv**3
-v = -yv/rv**3
-w = -zv/rv**3
-# endthreedimfield
-
-# Draw 3D vector field
-fig = plt.figure(13)
+# Draw 3D vector field with countours of 3D scalar field
+fig = plt.figure(14)
 ax = fig.gca(projection='3d')
-ax.quiver(xv, yv, zv, u, v, w, color='r', length=0.2)
-# end draw 3D-field
+# opacity controls how contours are visible through each other
+for lev in [5, 15, 25, 35, 45]:
+    ax.plot_surface(xv, yv, hv + lev, cmap=cm.coolwarm,\
+                    rstride=1, cstride=1)
+
+# scale_mode='none' says that the vectors should not be scaled
+ax.quiver(x2v, y2v, z2v, dhdx, dhdy, dhdz, color='r', length=4)
+# end draw 3D vector field with countours of 3D scalar field
 
 
 plt.rc('font', **font)
@@ -177,6 +181,8 @@ plt.savefig('images/simple_plot_matplotlib.png')
 plt.figure(2)
 plt.savefig('images/simple_plot_colours_matplotlib.pdf')
 plt.savefig('images/simple_plot_colours_matplotlib.png')
+
+# Save contour plots
 
 plt.figure(3)
 plt.savefig('images/default_contour_matplotlib.pdf')
@@ -210,22 +216,27 @@ plt.figure(10)
 plt.savefig('images/contour_clabel_matplotlib.pdf')
 plt.savefig('images/contour_clabel_matplotlib.png')
 
+
+# Save vector field plots
+
+plt.rc('font', **font2)
+
 plt.figure(11)
 plt.savefig('images/quiver_matplotlib_advanced.pdf')
 plt.savefig('images/quiver_matplotlib_advanced.png')
 
+plt.rc('font', **font)
+
 plt.figure(12)
-plt.savefig('images/quiver_matplotlib_simple.pdf')
-plt.savefig('images/quiver_matplotlib_simple.png')
-
-plt.figure(13)
-plt.savefig('images/quiver_matplotlib_gr.png')
-plt.savefig('images/quiver_matplotlib_gr.pdf')
-
-plt.figure(14)
 plt.savefig('images/quiver_contour_matplotlib.png')
 plt.savefig('images/quiver_contour_matplotlib.pdf')
 
-plt.figure(15)
+plt.figure(13)
 plt.savefig('images/quiver_surf_matplotlib.png')
 plt.savefig('images/quiver_surf_matplotlib.pdf')
+
+plt.rc('font', **font2)
+
+plt.figure(14)
+plt.savefig('images/quiver_matplotlib.png')
+plt.savefig('images/quiver_matplotlib.pdf')
