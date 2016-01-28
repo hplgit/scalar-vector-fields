@@ -24,9 +24,6 @@ system doconce combine_images png -2 images/default_contour_matplotlib images/de
 system doconce combine_images pdf -2 images/contour_10levels_matplotlib images/contour_10levels_black_matplotlib images/contour_speclevels_matplotlib images/contour_clabel_matplotlib images/advanced_contour_matplotlib
 system doconce combine_images png -2 images/contour_10levels_matplotlib images/contour_10levels_black_matplotlib images/contour_speclevels_matplotlib images/contour_clabel_matplotlib images/advanced_contour_matplotlib
 
-system doconce combine_images pdf -2 images/quiver_matplotlib_advanced images/quiver_matplotlib_simple images/quiver_matplotlib
-system doconce combine_images png -2 images/quiver_matplotlib_advanced images/quiver_matplotlib_simple images/quiver_matplotlib
-
 system doconce combine_images pdf -2 images/quiver_contour_matplotlib images/quiver_surf_matplotlib images/quiver_contour_surf_matplotlib
 system doconce combine_images png -2 images/quiver_contour_matplotlib images/quiver_surf_matplotlib images/quiver_contour_surf_matplotlib
 
