@@ -27,7 +27,7 @@ Our convention for variable names goes as follows:
 
 * `x`, `y`, `z` for one-dimensional coordinates along each axis direction.
 * `xv`, `yv`, `zv` are corresponding
-  vectorized coordinates in a 2D or 3D grid.
+  vectorised coordinates in a 2D or 3D grid.
 * `u`, `v`, `w` are the components of a vector field
   at points corresponding to `xv`, `yv`, `zv`.
 
@@ -233,16 +233,8 @@ Clearly we have that
 !et
 and the contour defined by $g(x,y,z)=0$ corresponds to points on the form $(x,y,h(x,y))$, i.e. points on the surface $h$ 
 (the other contours are simply vertical shifts of $h$). 
-The stated result from calculus thus says that  $\nabla g(x,y,z)$ is orthogonal to the surface, so that 
-
-!bt
-\begin{equation}
-\bm{n}(x, y) = -\frac{\partial h}{\partial x}\bm{i}  -\frac{\partial h}{\partial y}\bm{j} + \bm{k}.
-label{noemalvectoreq}
-\end{equation}
-!et
-is a vector field which is orthogonal to the surface. This 
-is often called the *normal vector field* of $h$ in the literature.
+The stated result from calculus thus says that, for points on the surface, $\nabla g(x,y,z)$ is orthogonal to the surface. 
+The restriction of $\nabla g$ to the surface is therefore also called  the *normal vector field* of $h$.
 In Figure ref{quivercontoursurfmatplotlib} we have plotted the normal vector field, together with the contours and the surface.
 Again the code can be found in Section ref{plot:surf:mpl:quiver}.
 
@@ -365,6 +357,9 @@ Here a contour can be plotted as a surface $z=h(x,y)+C$,
 but for other 3D scalar fields we do not get so simple expressions for the contours. 
 Note that we manually set the lengths of the vectors here.
 
+We see that the different surface plots shadow for one-another. 
+Unfortunately there is no way to make contours visible through each other in Matplotlib.
+
 
 
 # #ifdef SCITOOLS_2D3D
@@ -372,7 +367,7 @@ Note that we manually set the lengths of the vectors here.
 
 SciTools can work with different plotting engines (backends).
 Usually, we employ Matplotlib
-in the forthcoming figures, but sometimes Gunplot is required to realize
+in the forthcoming figures, but sometimes Gnuplot is required to realize
 a certain feature. Below we will use the prefix `plt` for the package `scitools.easyviz`:
 
 !bc pycod
@@ -390,14 +385,14 @@ xv, yv = plt.ndgrid(x, y)       # Grid for contour plot
 x2v, y2v = plt.ndgrid(x2, y2)   # Coarser grid for quiver plot
 !ec
 
-Surface plots of $h(x,y)$ in (ref{plot:surf:heq}) (coloured together with the parameterized curve $\bm{r}(t)$ in (ref{plot:surf:req})) can be produced with `mesh` and `surf` as follows.
+Surface plots of $h(x,y)$ in (ref{plot:surf:heq}) (colored together with the parameterized curve $\bm{r}(t)$ in (ref{plot:surf:req})) can be produced with `mesh` and `surf` as follows.
 
 [hpl: This is confusing: What does Gnuplot backend as comment mean? The thing is that `mesh` and `surf` are not supported by the Matplotlib interface. Must explain what `mesh` and `surf` etc.]
 
 [or: The matplotlib equivalents of mesh and surf are plotwireframe and plotsurface. Scitools should translate calls to mesh and surf to these for the matplotlib backend. Still this does not seem to work well with, so I use Gnuplot. Should fix with Johannes.
 Also, I have not had much luck with the VTK backend]
 
-[or: I changed backend to gnuplot for contour plots, but it seems then that I cannot set the colour of the labels anymore, see the plot. I think Scitools is simply not tested enough for 3D here]
+[or: I changed backend to gnuplot for contour plots, but it seems then that I cannot set the color of the labels anymore, see the plot. I think Scitools is simply not tested enough for 3D here]
 
 @@@CODE plot3d_scitools_gnuplot.py fromto:# Simple plot of mountain@# endsimpleplots
 
@@ -411,7 +406,7 @@ FIGURE:[fig/plot_scitools, height=400 width=600 frac=0.8] Two SciTools surface p
 
 [hpl: Try to avoid referring to the Matplotlib examples if possible. Just say what you want to plot and show code. Update comments in the code so that they are the same (if possible) for all plotting tools.]
 
-The following code exemplifies how one can create different contour plots with SciTools. As is seen, there are only minor differences in how the parameters (colour, levels, labeling) to the plot are set.
+The following code exemplifies how one can create different contour plots with SciTools. As is seen, there are only minor differences in how the parameters (color, levels, labeling) to the plot are set.
 
 @@@CODE plot3d_scitools_gnuplot.py fromto: # Default two-dimensional contour plot@#end contourplots
 
@@ -474,7 +469,6 @@ to plot the surface $h(x,y)$ in (ref{plot:surf:heq}),
 as well as the parameterized curve $\bm{r}(t)$ in (ref{plot:surf:req}).
 
 @@@CODE plot3d_mayavi.py fromto:# Simple plot of mountain@# endsimpleplots
-
 The calls to `plt.figure()` take three parameters: First the usual index for the plot, then two tuples of numbers , representing the RGB-values to be used for the foreground (`fgcolor`) and the background (`bgcolor`).
 White and black are  (1,1,1) and (0,0,0), respectively. The foreground color is used for text and labels included in the plot.
 
@@ -491,11 +485,11 @@ attribute `tube_radius` is explicitly set in order to make the curve thicker and
 more visible.
 
 Figure ref{plotmayavi} shows the resulting plots.
-Rather unexpectedly we see that $\bm{r}(t)$ does not lie on the surface anymore.
+Rather unexpectedly we see that $\bm{r}(t)$ does not lie on the surface.
 The reason is that the ranges of the $x$-, $y$-, and $z$-values differ for the curve and the surface,
-so that autoscaling will use different scales when placing them on the scene.
-We therefore have to be a bit cautious when applying the autoscaling in Mayavi,
-and in the following contour plots we will avoid this autoscaling problem by scaling everything
+so that auto-scaling will use different scales when placing them on the scene.
+We therefore have to be a bit cautious when applying the auto-scaling in Mayavi,
+and in the following contour plots we will avoid this auto-scaling problem by scaling everything
 first so that the coordinates already are of the same order of magnitude.
 
 FIGURE:[fig/plot_mayavi] Two Mayavi surface plots: `mesh` (left) and `surf` (right). The curve $\bm{r}(t)$ is also shown in the right plot. label{plotmayavi}
@@ -534,7 +528,7 @@ number of levels, as well as the levels themselves:
 There is no function in Mayavi which labels the contours.
 The plots are shown in Figure ref{advancedcontourmayavi}.
 
-Contour plots in Mayavi are shown in 3D, but you can rotate and look at them from above if you want a two-dimensional contour plot.
+Contour plots in Mayavi are shown in three-dimensional space, but you can rotate and look at them from above if you want a two-dimensional plot.
 Their visual appearance may be enhanced by also including the surface plot itself. We have here done this for two of the contour plots.
 There is a clear difference in visual impression between the two. In the first one default surface- and contour coloring was used, resulting in less visible contours.
 As we see, the contours are more visible when a black color is used.
@@ -547,20 +541,19 @@ FIGURE:[fig/advanced_contour_mayavi, height=400 width=600 frac=0.8] Some contour
 label{plot:surf:mayavi:quiver}
 
 Mayavi supports only vector fields in three-dimensional space. 
-We will therefore visualise the two-dimensional gradient field (ref{plot:surf:gradient:eq}) by adding a third component of zero.
+We will therefore visualize the two-dimensional gradient field (ref{plot:surf:gradient:eq}) by adding a third component of zero.
 The following code plots this gradient field  together with the contours of $h$. 
 
 @@@CODE plot3d_mayavi_manual.py fromto:# Draw contours and gradient field of h@# end draw contours and gradient field of h
-This will produce a 3D view, but we can obtain a 2D view similar to that in Figure ref{plot:surf:mpl:quiver:fig} 
-by rotating the figure and viewing it from above. 
-Figure ref{plot:surf:may:quiver:fig} has been produced in this way.
+This will produce a 3D view, which we again can rotate to obtain a 2D view.
+The result is shown in Figure ref{plot:surf:may:quiver:fig}, which is similar to Figure ref{plot:surf:mpl:quiver:fig}.
 
 FIGURE:[fig/quiver_mayavi_advanced, frac=0.8] Gradient field with contour plot. label{plot:surf:may:quiver:fig}
 
 
 
 
-The following code plots the normal vector field together with the contours of $h$ in 3D.
+The following code plots the normal vector field together with the contours of $h$.
 
 @@@CODE plot3d_mayavi.py fromto:# Draw contours and normal vector field of h@# end draw contours and normal vector field of h
 The color of the vectors were here set to red, and the attribute `scale_factor` adjusted so that vectors do not collide.
@@ -583,7 +576,7 @@ can be plotted together as follows.
 The result is shown in Figure ref{fig:quiver:mayavi}. This example
 demonstrates some of the challenges in plotting three-dimensional vector fields.
 The vectors must not be too dense, and not too long.
-It is inevitable that contours shadow for one another, so that we must use some degree of opacity.
+It is inevitable that contours shadow for one another. Fortunately Mayavi supports an opacity setting, which controls how contours are visible through each other.
 
 FIGURE:[fig/quiver_mayavi, frac=1] The 3D scalar field (ref{plot:surf:3D:surfeq}) and its gradient field. label{fig:quiver:mayavi}
 
@@ -606,23 +599,3 @@ FIGURE:[fig/quiver_mayavi, frac=1] The 3D scalar field (ref{plot:surf:3D:surfeq}
 ===== Animations =====
 
 [hpl: Emphasize saving figures to file for making videos.]
-
-We have previously seen how to produce animations with Matplotlib and SciTools.
-With the function `animate` in `mlab` we can also create animations.
-
-
-
-This code will rotate the camera continuously. f is the current graphics.
-
-!bc pycod
-import mayavi as plt
-@mlab.animate
-def anim():
-    f = plt.gcf()
-    while 1:
-        f.scene.camera.azimuth(10)
-        f.scene.render()
-        plt.yield
-
-a = anim()
-!ec
