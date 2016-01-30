@@ -48,10 +48,10 @@ ax.plot(curve_x, curve_y, curve_z, linewidth=5)
 
 
 
-h0 = 22.77
-R = 4.
+#h0 = 22.77
+#R = 4.
 
-hv = h0/(1 + (xv**2+yv**2)/(R**2))
+#hv = h0/(1 + (xv**2+yv**2)/(R**2))
 
 # Define a coarser grid for the vector field
 x2 = y2 = np.linspace(-10.,10.,11)
@@ -67,6 +67,7 @@ dhdx, dhdy = np.gradient(h2v) # dh/dx, dh/dy
 fig = plt.figure(3)
 ax = fig.gca()
 ax.contour(xv, yv, hv)
+plt.axis('equal')
 
 # Default three-dimensional contour plot
 fig = plt.figure(4)
@@ -92,23 +93,27 @@ ax.imshow(hv)
 fig = plt.figure(7)
 ax = fig.gca()
 ax.contour(xv, yv, hv, 10)
+plt.axis('equal')
 
 # 10 black ('k') contour lines
 fig = plt.figure(8)
 ax = fig.gca()
 ax.contour(xv, yv, hv, 10, colors='k')
+plt.axis('equal')
 
 # Specify the contour levels explicitly as a list
 fig = plt.figure(9)
 ax = fig.gca()
 levels = [500., 1000., 1500., 2000.]
 ax.contour(xv, yv, hv, levels=levels)
+plt.axis('equal')
 
 # Add labels with the contour level for each contour line
 fig = plt.figure(10)
 ax = fig.gca()
 cs = ax.contour(xv, yv, hv)
 plt.clabel(cs)
+plt.axis('equal')
 #end contourplots
 
 
@@ -125,51 +130,8 @@ ax.contour(xv, yv, hv)
 plt.axis('equal')
 # end draw contours and gradient field of h
 
-# Draw contours and normal vector field of h
-fig = plt.figure(12)
-ax = fig.gca(projection='3d')
 
-ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),
-          color='r', length=2)
-ax.contour(xv, yv, hv, 20)
-# end draw contours and normal vector field of h
 
-# Draw surface and normal vector field of h
-fig = plt.figure(13)
-ax = fig.gca(projection='3d')
-ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
-# length controls the length of the vectors
-ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),
-          color='r', length=2)
-# end draw surface and normal vector field of h
-
-h0 = 22.77   # Height of the top of the mountain (m)
-R = 4.
-
-x = y = np.linspace(-10.,10.,41)
-xv, yv = np.meshgrid(x, y, sparse=False, indexing='ij')
-hv = h0/(1 + (xv**2+yv**2)/(R**2))
-
-# Define grid for 3D gradient field
-x2 = y2 = np.linspace(-10.,10.,5)
-z2 = np.linspace(0, 50, 5)
-x2v, y2v, z2v = np.meshgrid(x2, y2, z2, indexing='ij', sparse=False)
-h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2))
-g2v = z2v - h2v
-dhdx, dhdy, dhdz = np.gradient(g2v)
-# end define grid for 3D gradient field
-
-# Draw 3D vector field with countours of 3D scalar field
-fig = plt.figure(14)
-ax = fig.gca(projection='3d')
-# opacity controls how contours are visible through each other
-for lev in [5, 15, 25, 35, 45]:
-    ax.plot_surface(xv, yv, hv + lev, cmap=cm.coolwarm,
-                    rstride=1, cstride=1)
-
-# scale_mode='none' says that the vectors should not be scaled
-ax.quiver(x2v, y2v, z2v, dhdx, dhdy, dhdz, color='r', length=4)
-# end draw 3D vector field with countours of 3D scalar field
 
 
 plt.rc('font', **font)
@@ -224,19 +186,3 @@ plt.rc('font', **font2)
 plt.figure(11)
 plt.savefig('images/quiver_matplotlib_advanced.pdf')
 plt.savefig('images/quiver_matplotlib_advanced.png')
-
-plt.rc('font', **font)
-
-plt.figure(12)
-plt.savefig('images/quiver_contour_matplotlib.png')
-plt.savefig('images/quiver_contour_matplotlib.pdf')
-
-plt.figure(13)
-plt.savefig('images/quiver_surf_matplotlib.png')
-plt.savefig('images/quiver_surf_matplotlib.pdf')
-
-plt.rc('font', **font2)
-
-plt.figure(14)
-plt.savefig('images/quiver_matplotlib.png')
-plt.savefig('images/quiver_matplotlib.pdf')

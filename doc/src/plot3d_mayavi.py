@@ -92,25 +92,19 @@ h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
 
 dhdx, dhdy = np.gradient(h2v)
 
-# Draw contours and normal vector field of h
-plt.figure(12, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-plt.contour_surf(xv, yv, hv, contours=20)
 
-# mode controls the style how vectors are drawn
-# color controls the colors of the vectors
-# scale_factor controls thelength of the vectors
-plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),
-             mode='arrow', color=(1,0,0), scale_factor=.75)
-# end draw contours and normal vector field of h
 
-# Draw surface and normal vector field of h
+
+# Create animation
 plt.figure(13, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-plt.surf(xv, yv, hv)
-plt.quiver3d(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),
-             mode='arrow', color=(1,0,0), scale_factor=.75)
-# end draw surface and normal vector field of h
+s = plt.surf(xv, yv, hv)
 
-
+for i in range(10):
+    # s.mlab_source.scalars is a handle for the values of the surface,
+    # and is updated here
+    s.mlab_source.scalars = hv*0.1*(i+1)
+    plt.savefig('anim%04d.png' % i)
+# end create animation
 
 # Define grid for 3D scalar field
 x = y = np.linspace(-10.,10.,41)
@@ -130,15 +124,13 @@ dhdx, dhdy, dhdz = np.gradient(g2v)
 # end define grid for 3D gradient field
 
 # Draw 3D vector field with countours of 3D scalar field
-plt.figure(14, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
+plt.figure(12, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 # opacity controls how contours are visible through each other
 plt.contour3d(xv, yv, zv, gv, contours=7, opacity=0.5)
 # scale_mode='none' says that the vectors should not be scaled
 plt.quiver3d(x2v, y2v, z2v, dhdx, dhdy, dhdz, mode='arrow',\
              scale_mode='none', opacity=0.5)
 # end draw 3D vector field with countours of 3D scalar field
-
-
 
 # Save figures to files
 plt.figure(1)
@@ -170,10 +162,4 @@ plt.savefig('images/contour_imshow_mayavi.png')
 # Save vector field plots
 
 plt.figure(12)
-plt.savefig('images/quiver_contour_mayavi.png')
-
-plt.figure(13)
-plt.savefig('images/quiver_surf_mayavi.png')
-
-plt.figure(14)
 plt.savefig('images/quiver_mayavi.png')
