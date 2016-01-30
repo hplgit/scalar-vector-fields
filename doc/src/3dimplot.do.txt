@@ -27,7 +27,7 @@ Our convention for variable names goes as follows:
 
 * `x`, `y`, `z` for one-dimensional coordinates along each axis direction.
 * `xv`, `yv`, `zv` are corresponding
-  vectorised coordinates in a 2D or 3D grid.
+  vectorized coordinates in a 2D or 3D grid.
 * `u`, `v`, `w` are the components of a vector field
   at points corresponding to `xv`, `yv`, `zv`.
 

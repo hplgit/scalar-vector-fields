@@ -11,6 +11,9 @@ function system {
 }
 
 name=programming
+
+system doconce spellcheck -d .dict4spell.txt 3dimplot.do.txt linalg.do.txt
+
 system doconce format pdflatex $name --latex_code_style=vrb-blue1
 system pdflatex $name
 pdflatex $name
