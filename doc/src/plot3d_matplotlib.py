@@ -129,7 +129,7 @@ plt.axis('equal')
 fig = plt.figure(12)
 ax = fig.gca(projection='3d')
 
-ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),\
+ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),
           color='r', length=2)
 ax.contour(xv, yv, hv, 20)
 # end draw contours and normal vector field of h
@@ -139,7 +139,7 @@ fig = plt.figure(13)
 ax = fig.gca(projection='3d')
 ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
 # length controls the length of the vectors
-ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),\
+ax.quiver(x2v, y2v, h2v, -dhdx, -dhdy, np.ones_like(dhdx),
           color='r', length=2)
 # end draw surface and normal vector field of h
 
@@ -164,7 +164,7 @@ fig = plt.figure(14)
 ax = fig.gca(projection='3d')
 # opacity controls how contours are visible through each other
 for lev in [5, 15, 25, 35, 45]:
-    ax.plot_surface(xv, yv, hv + lev, cmap=cm.coolwarm,\
+    ax.plot_surface(xv, yv, hv + lev, cmap=cm.coolwarm,
                     rstride=1, cstride=1)
 
 # scale_mode='none' says that the vectors should not be scaled

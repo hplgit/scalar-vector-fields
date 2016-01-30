@@ -3,9 +3,9 @@ label{plot:surf}
 
 Visualization of scalar and vector fields in Python is commonly done
 using Matplotlib or Mayavi. Both packages support basic visualization of
-2D scalar and vector fields, but Mayavi offers more advanced techniques
-for three-dimensional visualization, especially of 3D scalar and vector
-fields.
+2D scalar and vector fields, but Mayavi offers more advanced
+three-dimensional visualization techniques,
+especially for 3D scalar and vector fields.
 
 One can also use SciTools for visualizing 2D scalar and vector
 fields, using either Matplotlib, Gnuplot, or VTK as plotting engines, but
@@ -15,14 +15,14 @@ scalar fields, Gnuplot is a viable tool, and the SciTools interface
 offers a Matlab-style set of commands to operate Gnuplot.
 
 To exemplify visualization of scalar and vector fields with Matplotlib
-and Mayavi, we use a common set of examples. A scalar function
-of $x$ and $y$ is visualized in different ways, either as a flat
-plot containing contour lines of the field, or as a three-dimensional
-plot where the scalar field is lifted as a surface (according to the
-function values). In the latter case we also add a three-dimensional
+and Mayavi, we use a common set of examples. A scalar function of $x$
+and $y$ is visualized either as a flat two-dimensional plot with
+contour lines of the field, or as a three-dimensional surface where
+the height of the surface corresponds to the function value of the
+field. In the latter case we also add a three-dimensional
 parameterized curve to the plot.
 
-To illustrate plotting of vector fields, we simply plot the gradient of the scalar field. 
+To illustrate plotting of vector fields, we simply plot the gradient of the scalar field (often together with the scalar field).
 Our convention for variable names goes as follows:
 
 * `x`, `y`, `z` for one-dimensional coordinates along each axis direction.
@@ -41,13 +41,13 @@ scalar and vector fields we aim to plot.
 ===== Installation =====
 label{plot:surf:install}
 
-Previously in the book we have explained how to obtain Matplotlib for various platforms. 
+Previously in the book we have explained how to obtain Matplotlib for various platforms.
 To obtain Mayavi on Ubuntu platforms you can write
 
 !bc sys
 pip install mayavi --upgrade
 !ec
-For Mac OSX and Windows, we recommend using Anaconda. 
+For Mac OS X and Windows, we recommend using Anaconda.
 To obtain Mayavi for Anaconda you can write
 
 !bc sys
@@ -70,7 +70,7 @@ label{plot:surf:heq}
 !et
 $h(x,y)$ may model the height of an isolated circular mountain,
 $h$ being the height above sea level,
-while $x$ and $y$ are Cartesian coordinates,
+while $x$ and $y$ are Cartesian coordinates on the earth's surface,
 $h_0$ the height of the mountain, and $R$ the radius of the mountain.
 Since mountains are actually quite flat (or more precisely,
 their heights are small compared to the horizontal extent), we use
@@ -83,7 +83,7 @@ the following values:
 
 === Grid for 2D scalar fields ===
 
-Before we can plot $h(x,y)$, we need to create a rectangular grid in the $xy$ plane with all the points used for plotting. Regardless of which plotting package we will use later on, the grid can be created as follows:
+Before we can plot $h(x,y)$, we need to create a rectangular grid in the $xy$ plane with all the points used for plotting. Regardless of which plotting package we will use later on, the grid can be made as follows:
 
 @@@CODE plot3d_matplotlib.py fromto: # Grid for x, y@# endinitgrid
 The grid is based on equally spaced coordinates `x` and `y` in the
@@ -91,9 +91,9 @@ interval $[-10,10]$ km.
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinates to have the right order in mathematics.
 
 A surface plot of a 2D scalar field $h(x,y)$ is a visualization of the surface $z=h(x,y)$ in three-dimensional space.
-Most plotting packages have functions which can be used to create surface plots of 2D scalar fields. 
-These can be either *wireframe plots*, where only lines connecting the grid points are drawn, 
-or plots where the faces of the surface are colored. 
+Most plotting packages have functions which can be used to create surface plots of 2D scalar fields.
+These can be either *wireframe plots*, where only lines connecting the grid points are drawn,
+or plots where the faces of the surface are colored.
 In Figure ref{plotmatplotlib} we have shown two such plots of the surface $h(x,y)$. Section ref{matplotlibsurfaceplots} presents the code which generates these plots.
 
 FIGURE:[fig/plot_matplotlib] Two different plots of a mountain. The right plot also shows a trajectory to the top of the mountain. label{plotmatplotlib}
@@ -164,25 +164,25 @@ directions:
 The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
 
 @@@CODE plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
-The gradient field (ref{plot:surf:gradient:eq}) together with the contours appear in Figure ref{plot:surf:mpl:quiver:fig}, 
+The gradient field (ref{plot:surf:gradient:eq}) together with the contours appear in Figure ref{plot:surf:mpl:quiver:fig},
 from which the orthogonality can be easily seen.
 Section ref{plot:surf:mpl:quiver} explains the code needed to make this plot.
 
 FIGURE:[fig/quiver_matplotlib_advanced, frac=0.8] Gradient field with contour plot. label{plot:surf:mpl:quiver:fig}
 
-Note that the values in a scalar field may be of another magnitude than the values in its gradient field. 
-This is the case for the field here, even after using different units (meters and kilometers) in the horizontal and vertical directions. 
-We have to take this into account when plotting the two fields together. 
-Plotting packages have several attributes which can be set to address this. 
-In the code we have instead addressed this problem by scaling the mountain so that the values in the vertical and horizontal directions are of comparable magnitude, 
-resulting in values of comparable size in the scalar- and gradient fields. 
+Note that the values in a scalar field may be of another magnitude than the values in its gradient field.
+This is the case for the field here, even after using different units (meters and kilometers) in the horizontal and vertical directions.
+We have to take this into account when plotting the two fields together.
+Plotting packages have several attributes which can be set to address this.
+In the code we have instead addressed this problem by scaling the mountain so that the values in the vertical and horizontal directions are of comparable magnitude,
+resulting in values of comparable size in the scalar- and gradient fields.
 
 
 
 ===== A 3D scalar field =====
 label{sec:3Dscalar}
 
-Let us consider the 3D scalar field 
+Let us consider the 3D scalar field
 
 !bt
 \begin{equation} label{plot:surf:3D:surfeq}
@@ -192,9 +192,9 @@ g(x,y,z) = z-h(x,y).
 A three-dimensional grid for $g$ can be computed as follows.
 
 @@@CODE plot3d_mayavi.py fromto: # Define grid for 3D scalar field@# end define grid for 3D scalar field
-Contours are useful also for visualization of 3D scalar fields. 
-The contours are now defined by the implicit equation $g(x,y,z)=C$, 
-which is a surface in three-dimensional space, rather than a line in two-dimensional space. 
+Contours are useful also for visualization of 3D scalar fields.
+The contours are now three-dimensional curves defined by the implicit equation $g(x,y,z)=C$.
+
 
 
 
@@ -215,39 +215,48 @@ Gradient fields can be defined in higher dimensions also. In particular, the gra
 label{plot:surf:gradient:eq:3D}
 \end{equation}
 !et
-`numpy`'s gradient function can be used to compute a 3D gradient vector field as well. 
-You need a three-dimensional grid for the field as input. 
+`numpy`'s gradient function can be used to compute a 3D gradient vector field as well.
+You need a three-dimensional grid for the field as input.
 For the field (ref{plot:surf:3D:surfeq}), the gradient field is computed as follows.
 
 @@@CODE plot3d_matplotlib.py fromto: # Define grid for 3D gradient field@# end define grid for 3D gradient field
 Again we have used a coarser grid for the vector field.
-One learns in vector calculus that, also for dimensions higher than $2$, 
-the gradient field points in the direction of maximum increase, and is orthogonal to the contours. 
+
+[hpl: The text below does not make sense to me, because there is not
+intuitive justification of the usefullness of this 3D vector field, and
+I am not aware of any physical applications of it either. It's a math property,
+but when are students supposed to look up the recipe for plotting the
+normal vector field of a scalar field? There must be a motivation
+for bringing in a new concept.]
+One learns in vector calculus that, also for dimensions higher than $2$,
+the gradient field points in the direction of maximum increase, and is orthogonal to the contours.
 For $g$ this is an orthogonality in three-dimensional space.
-Clearly we have that 
+Clearly we have that
 
 !bt
 \[
 \nabla g(x,y,z) = -\frac{\partial h}{\partial x}\bm{i}  -\frac{\partial h}{\partial y}\bm{j} + \bm{k},
 \]
 !et
-and the contour defined by $g(x,y,z)=0$ corresponds to points on the form $(x,y,h(x,y))$, i.e. points on the surface $h$ 
-(the other contours are simply vertical shifts of $h$). 
-The stated result from calculus thus says that, for points on the surface, $\nabla g(x,y,z)$ is orthogonal to the surface. 
+and the contour defined by $g(x,y,z)=0$ corresponds to points on the form $(x,y,h(x,y))$, i.e. points on the surface $h$
+(the other contours are simply vertical shifts of $h$).
+The stated result from calculus thus says that, for points on the surface, $\nabla g(x,y,z)$ is orthogonal to the surface.
 The restriction of $\nabla g$ to the surface is therefore also called  the *normal vector field* of $h$.
 In Figure ref{quivercontoursurfmatplotlib} we have plotted the normal vector field, together with the contours and the surface.
 Again the code can be found in Section ref{plot:surf:mpl:quiver}.
 
 FIGURE:[fig/quiver_contour_surf_matplotlib, height=400 width=600 frac=1] Normal vector field with contours (left), with surface (right). label{quivercontoursurfmatplotlib}
 
-To visualize the field (ref{plot:surf:3D:surfeq}) and its gradient field together, 
-we draw enough contours, as we did in the 2D case in Figure ref{plot:surf:mpl:quiver:fig}. 
-The result is shown in Figure ref{fig:quiver:matplotlib}. 
-In Section ref{plot:surf:mpl:quiver} we go through the corresponding code.  
+[hpl: There are references to a field (ref{plot:surf:3D:surfeq}), but not formula. Is this the gravity field you removed? Need to search for and clean up references to it.]
+To visualize the field (ref{plot:surf:3D:surfeq}) and its gradient field together,
+we draw enough contours, as we did in the 2D case in Figure ref{plot:surf:mpl:quiver:fig}.
+The result is shown in Figure ref{fig:quiver:matplotlib}.
+In Section ref{plot:surf:mpl:quiver} we go through the corresponding code.
 Visualizing a 3D scalar field is clearly challenging, and we shall only touch the subject.
 
 FIGURE:[fig/quiver_matplotlib, frac=1] The 3D scalar field (ref{plot:surf:3D:surfeq}) and its gradient field. label{fig:quiver:matplotlib}
 
+[hpl: No references to Figure ref{fig:quiver:matplotlib}. Why is it included?]
 
 ======= Matplotlib =======
 
@@ -278,20 +287,20 @@ ax = fig.gca(projection='3d')
 ===== Surface plots =====
 label{matplotlibsurfaceplots}
 
-The Matplotlib functions for producing surface plots of 2D scalar fields  are 
-`ax.plot_wireframe` and `ax.plot_surface`. 
-The first one produces a wireframe plot, and the second one colors the faces of the surface. 
+The Matplotlib functions for producing surface plots of 2D scalar fields  are
+`ax.plot_wireframe` and `ax.plot_surface`.
+The first one produces a wireframe plot, and the second one colors the faces of the surface.
 The following code uses the functions to produce the plots shown in Figure
-ref{plotmatplotlib}, once the grid has been defined as in Section ref{plot:surf:mesh_surf}, 
+ref{plotmatplotlib}, once the grid has been defined as in Section ref{plot:surf:mesh_surf},
 and the coordinates of the parameterized curve have been computed as in Section ref{plot:surf:3Dcurve}.
 
 @@@CODE plot3d_matplotlib.py fromto:# Simple plot of mountain@# endsimpleplots
 Recall that a final
-`plt.show()` command is necessary to force Matplotlib to show a plot on the screen. 
+`plt.show()` command is necessary to force Matplotlib to show a plot on the screen.
 
-Note that the second plot in this figure is drawn using a finer grid. 
+Note that the second plot in this figure is drawn using a finer grid.
 This is controlled with the `rstride` and  `cstride` parameters, which sets the number of grid lines in each direction.
-Setting one of these to 1 means that a grid line is drawn for every value in the grid in the corresponding direction, 
+Setting one of these to 1 means that a grid line is drawn for every value in the grid in the corresponding direction,
 and setting to 2 means that a grid line will be drawn for every second value in the grid.
 
 A surface with colors reflecting the height of the surface (i.e. the
@@ -306,7 +315,7 @@ to the problem at hand.
 
 To the latter plot we also added the parameterized curve $\bm{r}(t)$,
 defined by (ref{plot:surf:req}), using the command `plot`.  The
-attribute `linewidth` was increased here in order to make the curve thicker and 
+attribute `linewidth` was increased here in order to make the curve thicker and
 more visible.  By default, Matplotlib adds plots to each other without
 any need for `plt.hold('on')`, although such a command can indeed be
 used.
@@ -327,7 +336,7 @@ ref{advancedcontourmatplotlib}.
 
 FIGURE:[fig/advanced_contour_matplotlib, height=400 width=600 frac=0.8] Some other contour plots with Matplotlib: 10 contour lines (upper left), 10 black contour lines (upper right), specified contour levels (lower left), and labeled levels (lower right). label{advancedcontourmatplotlib}
 
-
+[hpl: Problem: the coordinates are geographical so we should have some `plt.axis('equal')` for every plot in Figure ref{advancedcontourmatplotlib}. Agree? Now the plots are squeezed in $y$ direction and the mountain is not circular.]
 
 ===== Vector field plots =====
 label{plot:surf:mpl:quiver}
@@ -350,14 +359,14 @@ can be plotted as follows, with the grid defined as in Section ref{sec:3Dgradien
 The result was shown in Figure ref{fig:quiver:matplotlib}.
 
 @@@CODE plot3d_matplotlib.py fromto:# Draw 3D vector field with countours of 3D scalar field@# end draw 3D vector field with countours of 3D scalar field
-Matplotlib actually lacks functionality for drawing contours of 3D scalar fields, 
-so here we have improvised by using `ax.plot_surface()` to draw five contours, one at a time. 
-For the field $g$ we find an expression for each contour by solving $z-h((x,y)=C$. 
-Here a contour can be plotted as a surface $z=h(x,y)+C$, 
-but for other 3D scalar fields we do not get so simple expressions for the contours. 
+Matplotlib actually lacks functionality for drawing contours of 3D scalar fields,
+so here we have improvised by using `ax.plot_surface()` to draw five contours, one at a time.
+For the field $g$ we find an expression for each contour by solving $z-h((x,y)=C$.
+Here a contour can be plotted as a surface $z=h(x,y)+C$,
+but for other 3D scalar fields we do not get so simple expressions for the contours.
 Note that we manually set the lengths of the vectors here.
 
-We see that the different surface plots shadow for one-another. 
+We see that the different surface plots shadow for one-another.
 Unfortunately there is no way to make contours visible through each other in Matplotlib.
 
 
@@ -420,7 +429,7 @@ FIGURE:[fig/advanced_contour_scitools, height=400 width=600 frac=0.8] Some other
 
 ===== Vector field plots =====
 
-There is limited support for plotting three-dimensional vector fields in SciTools (the function is called `contour3`), 
+There is limited support for plotting three-dimensional vector fields in SciTools (the function is called `contour3`),
 so the following code only concerns the gradient field (ref{plot:surf:gradient:eq}).
 The code for plotting the gradient field together with contours goes as follows.
 
@@ -442,7 +451,7 @@ FIGURE:[fig/quiver_scitools, height=400 width=600 frac=0.8] Vector field plots w
 
 Mayavi is an advanced, free, easy to use, scientific data visualizer, with an emphasis on three-dimensional visualization techniques.
 The package is written in Python, and uses the Visualization Toolkit (VTK) in C++ for rendering graphics. Since VTK can be configured with different backends, so can Mayavi.
-Mayavi is cross platform and runs on most platforms, including Mac OSX, Windows, Linux.
+Mayavi is cross platform and runs on most platforms, including Mac OS X, Windows, Linux.
 
 The web page URL: "http://docs.enthought.com/mayavi/mayavi/" collects pointers to all relevant documentation of Mayavi.
 We shall primarily deal with the
@@ -454,19 +463,26 @@ Let us import this module under our usual name `plt` for a plotting package:
 import mayavi.mlab as plt
 !ec
 
-The official documentation of the `mlab` module is provided in two places, one for
-the "basic functionality": "http://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html" and one for "further functionality":
+The official documentation of the `mlab` module is provided in two
+places, one for the "basic functionality":
+"http://docs.enthought.com/mayavi/mayavi/auto/mlab_helper_functions.html"
+and one for "further functionality":
 "http://docs.enthought.com/mayavi/mayavi/auto/mlab_other_functions.html".
-Basic "figure handling":"http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html" is very similar as the one we know from Matplotlib.
-Just as for Matplotlib, plotting commands you do in `mlab` will go into the same figure, until you manually change to a new figure.
+Basic "figure
+handling":"http://docs.enthought.com/mayavi/mayavi/auto/mlab_figure.html"
+is very similar to the one we know from Matplotlib.  Just as for
+Matplotlib, all plotting commands you do in `mlab` will go into the
+same figure, until you manually change to a new figure.
 
 
 ===== Surface plots =====
 
-Mayavi has the functions `mesh` and `surf` for making surface plots. None of them produce wireframe plots, i.e. the faces of the surface are always colored. 
-The following code uses these two functions
-to plot the surface $h(x,y)$ in (ref{plot:surf:heq}), 
-as well as the parameterized curve $\bm{r}(t)$ in (ref{plot:surf:req}).
+Mayavi has the functions `mesh` and `surf` for making surface
+plots. None of them produce pure wireframe plots, i.e., the faces of
+the surface are always colored.  The following code uses these two
+functions to plot the surface $h(x,y)$ in (ref{plot:surf:heq}), as
+well as the parameterized curve $\bm{r}(t)$ in (ref{plot:surf:req}).
+The resulting graphics appears in Figure ref{plotmayavi}.
 
 @@@CODE plot3d_mayavi.py fromto:# Simple plot of mountain@# endsimpleplots
 The calls to `plt.figure()` take three parameters: First the usual index for the plot, then two tuples of numbers , representing the RGB-values to be used for the foreground (`fgcolor`) and the background (`bgcolor`).
@@ -474,23 +490,23 @@ White and black are  (1,1,1) and (0,0,0), respectively. The foreground color is 
 
 The `color` attribute in `plt.surf` adjusts the surface so that it is colored with small variations from the provided base color, here `(.5, .5, .5)`.
 Note also the extra parameter `extent`.
-Mayavi does no auto-scaling of the axes per default (contrary to Matplotlib),
+Mayavi does no auto-scaling of the axes by default (contrary to Matplotlib),
 so if the magnitudes in the vertical and horizontal directions are very different (as they are for $h(x,y)$), the plots may be very concentrated in one direction.
 The `extent` parameter ensures that the axes are auto-scaled to fit the contents of the surface.
 We will return to what the six values listed in `extent` mean when we have
 a more illustrating example.
 
 The command `plot3d` is used to plot the curve $\bm{r}(t)$.  The
-attribute `tube_radius` is explicitly set in order to make the curve thicker and 
-more visible.
-
-Figure ref{plotmayavi} shows the resulting plots.
-Rather unexpectedly we see that $\bm{r}(t)$ does not lie on the surface.
-The reason is that the ranges of the $x$-, $y$-, and $z$-values differ for the curve and the surface,
-so that auto-scaling will use different scales when placing them on the scene.
-We therefore have to be a bit cautious when applying the auto-scaling in Mayavi,
-and in the following contour plots we will avoid this auto-scaling problem by scaling everything
-first so that the coordinates already are of the same order of magnitude.
+attribute `tube_radius` is set to make the curve thicker and more
+visible.  Looking at the curve in Figure ref{plotmayavi} (right), we
+rather unexpectedly realize that $\bm{r}(t)$ does not lie on the
+surface.  The reason is that the ranges of the $x$-, $y$-, and
+$z$-values differ for the curve and the surface, so that auto-scaling
+will use different scales when placing them on the scene.  We
+therefore have to be a bit cautious when applying the auto-scaling in
+Mayavi, and in the following contour plots we will avoid this
+auto-scaling problem by scaling everything first so that the
+coordinates already are of the same order of magnitude.
 
 FIGURE:[fig/plot_mayavi] Two Mayavi surface plots: `mesh` (left) and `surf` (right). The curve $\bm{r}(t)$ is also shown in the right plot. label{plotmayavi}
 
@@ -502,16 +518,18 @@ The two plots in Figure ref{plotmayavi} were created as separate figures. One ca
 
 @@@CODE plot3d_mayavi.py fromto:# Create one figure with three subplots@# endsubplot
 The result is shown in Figure ref{subplot}.
-From the code it is hopefully clear that the six values listed in `extent` represent fractions of the cube `(0,1,0,1,0,1)`, where the corresponding plots are placed.
-The extents for the three plots are defined so that they do not overlap.
-
 Three separate `mesh` commands are run, each producing a new plot in the current figure.
-The commands use different values for the `colormap` attribute to color the surface in different ways. 
-When this attribute is not provided, as in the code producing the left plot in Figure ref{plotmayavi}, a default colormap is used. 
+The commands use different values for the `colormap` attribute to color the surface in different ways.
+When this attribute is not provided, as in the code producing the left plot in Figure ref{plotmayavi}, a default colormap is used.
 
-The two latter plot handles are sent as input to the `plt.outline` command, which produces the frames we see for two of the figures (for one of the plot handles `plt.outline` is not used, and consequently no frame is drawn).
-We see that one of the two frames has a different color. This is due to the `color`-attribute, which was added in the last call to `plt.outline`.
+The `plt.outline` command is used
+to create a frame around the subplots, and as seen, we exemplify this possibility
+for the last two subplots, but not the first one.
+We see that one of the two frames has a different color, obtained by
+setting the `color` attribute of the `plt.outline` command.
 
+From the computer code it is hopefully clear that the six values listed in `extent` represent fractions of the cube `(0,1,0,1,0,1)`, where the corresponding plots are placed.
+The extents for the three plots are here defined such that they do not overlap.
 
 FIGURE:[fig/subplot, frac=1] A plot with three subplots created with Mayavi. label{subplot}
 
@@ -528,10 +546,14 @@ number of levels, as well as the levels themselves:
 There is no function in Mayavi which labels the contours.
 The plots are shown in Figure ref{advancedcontourmayavi}.
 
-Contour plots in Mayavi are shown in three-dimensional space, but you can rotate and look at them from above if you want a two-dimensional plot.
-Their visual appearance may be enhanced by also including the surface plot itself. We have here done this for two of the contour plots.
-There is a clear difference in visual impression between the two. In the first one default surface- and contour coloring was used, resulting in less visible contours.
-As we see, the contours are more visible when a black color is used.
+Contour plots in Mayavi are shown in three-dimensional space, but you
+can rotate and look at them from above if you want a two-dimensional
+plot.  Their visual appearance may be enhanced by also including the
+surface plot itself. We have here done this for two of the contour
+plots.  There is a clear difference in visual impression between the
+two. In the first one, default surface- and contour coloring was used,
+resulting in less visible contours.  As we see, the contours are more
+visible when a black color is used.
 
 FIGURE:[fig/advanced_contour_mayavi, height=400 width=600 frac=0.8] Some contour plots with Mayavi. label{advancedcontourmayavi}
 
@@ -540,9 +562,9 @@ FIGURE:[fig/advanced_contour_mayavi, height=400 width=600 frac=0.8] Some contour
 ===== Vector field plots =====
 label{plot:surf:mayavi:quiver}
 
-Mayavi supports only vector fields in three-dimensional space. 
+Mayavi supports only vector fields in three-dimensional space.
 We will therefore visualize the two-dimensional gradient field (ref{plot:surf:gradient:eq}) by adding a third component of zero.
-The following code plots this gradient field  together with the contours of $h$. 
+The following code plots this gradient field  together with the contours of $h$.
 
 @@@CODE plot3d_mayavi_manual.py fromto:# Draw contours and gradient field of h@# end draw contours and gradient field of h
 This will produce a 3D view, which we again can rotate to obtain a 2D view.
@@ -557,8 +579,8 @@ The following code plots the normal vector field together with the contours of $
 
 @@@CODE plot3d_mayavi.py fromto:# Draw contours and normal vector field of h@# end draw contours and normal vector field of h
 The color of the vectors were here set to red, and the attribute `scale_factor` adjusted so that vectors do not collide.
-The corresponding plot is shown in Figure ref{quivercontoursurfmayavi}. 
-Still the plot looks a bit cluttered. If we replace contours with the surface itself, we can use the following code, 
+The corresponding plot is shown in Figure ref{quivercontoursurfmayavi}.
+Still the plot looks a bit cluttered. If we replace contours with the surface itself, we can use the following code,
 which perhaps gives a nicer impression, also shown in Figure ref{quivercontoursurfmayavi}.
 
 FIGURE:[fig/quiver_contour_surf_mayavi, height=400 width=600 frac=1] Normal vector field with contours (left), with surface (right). label{quivercontoursurfmayavi}
@@ -568,6 +590,8 @@ FIGURE:[fig/quiver_contour_surf_mayavi, height=400 width=600 frac=1] Normal vect
 
 
 
+[hpl: Maybe skip 3D fields, but say it is a challenging task and a
+scientific topic on its own?]
 Mayavi has functionality for drawing contours of 3D scalar fields.
 The 3D scalar field (ref{plot:surf:3D:surfeq}) and its gradient field
 can be plotted together as follows.
@@ -579,6 +603,8 @@ The vectors must not be too dense, and not too long.
 It is inevitable that contours shadow for one another. Fortunately Mayavi supports an opacity setting, which controls how contours are visible through each other.
 
 FIGURE:[fig/quiver_mayavi, frac=1] The 3D scalar field (ref{plot:surf:3D:surfeq}) and its gradient field. label{fig:quiver:mayavi}
+
+[hpl: No references to Figure ref{fig:quiver:mayavi}.]
 
 
 
