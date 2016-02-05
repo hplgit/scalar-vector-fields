@@ -13,11 +13,9 @@ R = 4.       # Radius of the mountain (km)
 #endinitvalues
 
 # Grid for x, y values (km)
-x = y = np.linspace(-10.,10.,41)
+x = y = np.linspace(-10., 10., 41)
 xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)
 
-# indexing='ij' means an xy-coordinate system
-# indexing='xy' means coordinates as row/column indices in a matrix
 hv = h0/(1 + (xv**2+yv**2)/(R**2))      # Elevation coordinates (m)
 # endinitgrid
 
@@ -31,8 +29,6 @@ curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
 
 
 # Simple plot of mountain
-from matplotlib import cm
-
 fig = plt.figure(1)
 ax = fig.gca(projection='3d')
 ax.plot_wireframe(xv, yv, hv, rstride=2, cstride=2)
@@ -40,6 +36,7 @@ ax.plot_wireframe(xv, yv, hv, rstride=2, cstride=2)
 # Simple plot of mountain and parametric curve
 fig = plt.figure(2)
 ax = fig.gca(projection='3d')
+from matplotlib import cm
 ax.plot_surface(xv, yv, hv, cmap=cm.coolwarm, rstride=1, cstride=1)
 
 # add the parametric curve. linewidth controls the width of the curve

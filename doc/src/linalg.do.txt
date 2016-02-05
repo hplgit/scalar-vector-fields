@@ -1,19 +1,19 @@
-========= Linear algebra =========
-
-Python has strong support for numerical linear algebra, much like the
-functionality found in Matlab.
-#Contrary to Matlab, where the fundamental data structure is the matrix,
-#the NumPy package in Python features arrays of any dimension.
-
 
 
 ======= Some common linear algebra operations =======
+
+Python has strong support for numerical linear algebra, much like the
+functionality found in Matlab. Some of the most widely used
+operations are exemplified below.
+#Contrary to Matlab, where the fundamental data structure is the matrix,
+#the NumPy package in Python features arrays of any dimension.
+
 
 ===== Inverse, determinant, and eigenvalues =====
 idx{eigenvalues} idx{eigenvectors}
 idx{inverse} idx{determinant}
 
-We start with exemplifying how to find the inverse and the determinant of a
+We start with showing how to find the inverse and the determinant of a
 matrix, and how to compute the eigenvalues and eigenvectors:
 
 !bc pyshell
@@ -43,7 +43,7 @@ idx{`dot` (from `numpy`)}
 idx{`cross` (from `numpy`)}
 
 The `np.dot` function is used for scalar or dot product as well as
-matrix-vector and matrix-matrix products:
+matrix-vector and matrix-matrix products *between array objects*:
 
 !bc pyshell
 >>> a = np.array([4, 0])
@@ -59,6 +59,13 @@ array([[ 2.,  2.],
        [ 5.,  5.]])
 !ec
 
+[hpl: Mention the matrix class here!! Need if-else and extra material if
+not in book?]
+
+Using the `matrix` class instead of plain arrays (see Section ref{})
+allows `*` to be used as operator for matrix-vector and matrix-matrix
+products.
+
 The cross product $a\times b$,
 between vectors $a$ and $b$ of length 3, is computed by
 
@@ -66,12 +73,12 @@ between vectors $a$ and $b$ of length 3, is computed by
 >>> np.cross([1, 1, 1], [0, 0, 1])
 array([ 1, -1,  0])
 !ec
-Finding the angle between vectors,
+Finding the angle between vectors $a$ and $b$,
 
 !bt
 \[ \theta = \cos^{-1}\left(\frac{a\cdot b}{||a||\,||b||}\right),\]
 !et
-go like
+goes like
 
 !bc pyshell
 >>> np.arccos(np.dot(a, b)/(np.linalg.norm(a)*np.linalg.norm(b)))
@@ -87,7 +94,7 @@ Some common examples are
 !bc pyshell
 >>> np.linalg.norm(A)        # Frobenius norm for matrices
 5.3851648071345037
->>> np.sqrt(np.sum(A**2))    # Frobenius norm, direct formula
+>>> np.sqrt(np.sum(A**2))    # Frobenius norm: direct formula
 5.3851648071345037
 >>> np.linalg.norm(a)        # l2 norm for vectors
 4.0
@@ -106,6 +113,8 @@ is computed by `np.sum`:
 !bc pyshell
 >>> np.sum(B)          # sum of all elements
 2.0
+>>> B.sum()            # sum of all elements; alternative syntax
+2.0
 >>> np.sum(B, axis=0)  # sum over index 0 (rows)
 array([ 4., -2.])
 >>> np.sum(B, axis=1)  # sum over index 1 (columns)
@@ -120,14 +129,13 @@ The maximum or minimum value of an array is also often needed:
 3.0
 >>> np.min(B)          # min over all elements
 -4.0
->>> B.min()            # min over all elements, alternative syntax
--4.0
 >>> np.abs(B).min()    # min absolute value
 1.0
 !ec
 A very frequent application of computing the minimum absolute value
 occurs in test functions where we want to verify a result, e.g.,
-that $AA^{-1}=I$, where $I$ is the identity matrix:
+that $AA^{-1}=I$, where $I$ is the identity matrix. We then want to
+check the smallest absolute value in $AA^{-1}-I$:
 
 !bc pyshell
 >>> I = np.eye(2)   # identity matrix of size 2
@@ -177,7 +185,7 @@ False
 
 ===== Indexing =====
 
-Indexing an element is done by `A[i,j]`, and a row or column
+Indexing an element is done by `A[i,j]`. A row or column
 is extracted as
 
 !bc pyshell
@@ -207,22 +215,23 @@ C[1:3, 0:4]
 gives a sub-matrix consisting of the two rows of `C` after the first, and the first four columns of `C` (recall that the upper limits, here `3` and `4`, are
 not included).
 
-If you are familiar with Matlab you should note that behavior may be a
-bit unexpected when referring to parts of a matrix. Writing `C[[0, 2],
-[0, 2]]` one would expect entries residing in rows/columns $0$ and
-$2$. The following code shows that in Python a special command with
-`np.ix_` is required for this:
+If you are familiar with Matlab you should note that the indexing may
+be a bit unexpected when referring to parts of a matrix: writing
+`C[[0, 2], [0, 2]]` one would expect entries residing in rows/columns
+$0$ and $2$, but that behavior requires in Python the `np.ix_`
+command:
 
 !bc pyshell
 >>> C = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
->>> C[[0, 2], [0, 2]]
-[1 9]
 >>> C[np.ix_([0, 2], [0, 2])]
 [[1 3]
  [7 9]]
+>>> # Grab row 0, 2, then column 0 from row 0 and column 2 from row 2
+>>> C[[0, 2], [0, 2]]
+[1 9]
 !ec
 
-===== Other frequent operations =====
+===== Other operations =====
 
 idx{transpose (in `numpy`)}
 The transpose of a matrix `B` is obtained by `B.T`:
@@ -234,7 +243,8 @@ array([[ 1.,  3.],
        [ 2., -4.]])
 !ec
 
-NumPy can also strip down a matrix to its upper or lower triangular parts:
+NumPy has rich functionality for doing operations on array objects.
+For example, one can strip down a matrix to its upper or lower triangular parts:
 
 !bc pyshell
 >>> np.triu(B)  # upper triangular part of B
@@ -254,17 +264,17 @@ The function `np.linalg.solve(A, b)` does the job:
 
 !bc pyshell
 >>> A = np.array([[1, 2], [-2, 2.5]])
->>> x = np.array([-1, 1], dtype=float)  # solution
->>> b = np.dot(A, x)                    # right-hand side
+>>> x = np.array([-1, 1], dtype=float)  # pick a solution
+>>> b = np.dot(A, x)                    # find the right-hand side
 
->>> np.linalg.solve(A, b)               # will it compute x?
+>>> np.linalg.solve(A, b)               # will this compute x?
 array([-1.,  1.])
 !ec
 
 ===== Matrix row and column operations =====
 
 Implementing Gaussian elimination constitutes a good pedagogical example on
-various row and column operations on a matrix. Some
+how to perform row and column operations on a matrix. Some
 needed functionality is
 
 !bc pycod
@@ -279,7 +289,7 @@ With these operations, Gaussian elimination is programmed as follows.
 m, n = shape(A)
 for j in range(n - 1):
     for i in range(j + 1, m):
-        A[i, j:] -= (A[i,j]/A[j,j])*A[j, j:]
+        A[i,j:] -= (A[i,j]/A[j,j])*A[j,j:]
 !ec
 Note the special syntax `j:`, which refers to indices from j and up to the end of the array.
 More generally, when referring to an array `a` with length `n`, the following are equivalent:
@@ -293,8 +303,8 @@ In the code for Gaussian elimination, we first eliminate the entries below the d
 first column, by adding a scaled version of the first row to the other
 rows, Then the same procedure is applied for the second row, and so
 on. The result is an upper triangular matrix. The code can fail if
-some of the entries `A[j, j]` become zero along the way. To avoid
-this, we can swap rows if the problem arises.  The following code
+some of the entries `A[j,j]` become zero along the way. To avoid
+this, we can swap rows when the problem arises.  The following code
 implements the idea and will not fail, even if some of the columns are zero.
 
 !bc pycod
@@ -314,21 +324,23 @@ def Gaussian_elimination(A):
             i += 1
         if i > m:
             break
-    return rank
+    return A, rank
 !ec
+Note that we stick to the habit of returning all results from a function,
+here the modified matrix `A` and its rank.
 
 ===== Computing the rank of a matrix =====
 
 idx{rank of a matrix}
 
-The rank of a matrix equals the number of pivot columns after Gaussian elimination.
-The variable `rank` counts these in the code above.
+The rank of a matrix equals the number of pivot columns after Gaussian
+elimination.  The variable `rank` counts these in the code above.
 
 Due to rounding errors, the computed rank may be higher than the
-actual rank: The rounding errors may imply that `A[i,j] != 0` is true,
-even if Gaussian elimination performed exactly gives exactly zero.
-These kinds of situations can be avoided by replacing `if A[i,j] !=0:`
-with `if abs(A[i, j]) > tol:`, where `tol` is some small
+actual rank: the rounding errors may imply that `A[i,j] != 0` is true,
+even if Gaussian elimination performed in exact arithmetics gives exactly zero.
+Such situations can be avoided by replacing `if A[i,j] !=0:`
+with `if abs(A[i,j]) > tol:`, where `tol` is some small
 tolerance.
 
 A more reliable way to compute the rank is to compute the
@@ -338,19 +350,18 @@ singular values which are larger than a threshold `epsilon`:
 !bc pyshell
 >>> A = np.array([[1, 2.01], [2.01, 4.0401]])
 >>> U, s, V = np.linalg.svd(A) # s are the singular values of A
->>> shape((abs(s) > tol).nonzero())[1]
-1
 # abs(s) > tol gives an array with True and False values
 # s.nonzero() lists indices k so that s[k] != 0
->>>  Gaussian_elimination(A)
+>>> shape((abs(s) > tol).nonzero())[1]  # rank
+1
+>>> A, rank = Gaussian_elimination(A)
+>>> rank
 2
 !ec
 If you use a tolerance check on the form `if abs(A[i,j]) > 1E-10:`
 in the function `Gaussian_elimination`, the code will say that the rank is 1,
 which is the correct value also found by using the singular value
-decomposition. It seems that `np.linalg.svd(A)` also rounds small
-singular values to zero, so that one can find the rank simply as
-`shape(s.nonzero())[1]` above.
+decomposition.
 
 It is known that the determinant is nonzero if and only if the rank equals the number of rows/columns.
 For the matrix $A$ we used above, the determinant should thus be $0$,
@@ -364,16 +375,15 @@ but also here roundoff errors come into play:
 8.92619311799e-16
 !ec
 
-Using Gaussian elimination for computing the rank may not be very
-efficient. The following code compares the computational time for a
-random $100\times 100$-matrix to that of using a singular value
-decomposition.
+Using our own Gaussian elimination function for computing the rank is
+less efficient than calling NumPy's singular value decomposition.
+Here are timings for a random $100\times 100$-matrix:
 
 !bc pycod
->>> A = np.random.rand(100, 100)
+>>> A = np.random.uniform(0, 1, (100, 100))
 >>> %timeit U, s, V = np.linalg.svd(A)
 100 loops, best of 3: 3.7 ms per loop
->>> %timeit Gauss_elimination(A)
+>>> %timeit A, rank = Gaussian_elimination(A)
 100 loops, best of 3: 22.3 ms per loop
 !ec
 
@@ -415,7 +425,8 @@ Eigenvalues can also be computed exactly:
 !ec
 The output is a dictionary (see Chapter 6) [hpl: need exact reference here]
 meaning here that 2 is an eigenvalue with multiplicity 1 and 5 is an
-eigenvalue with multiplicity 1. We can collect them in a list by
+eigenvalue with multiplicity 1. It is more convenient to have the eigenvalues
+in a list:
 
 !bc pyshell
 >>> e = list(A.eigenvals().keys())
@@ -452,7 +463,8 @@ vector elements in a plain list, we can do this:
 >>> v1
 [1, 0]
 !ec
-The following code extracts all eigenvectors as a list of 2-lists:
+The following code extracts all eigenvectors as a list of 2-lists, which may
+be a convenient data structure for the eigenvectors:
 
 !bc pyshell
 >>> v = [[t[2][0][i,0] for i in range(t[2][0].shape[0])]
@@ -466,7 +478,7 @@ The norm of a matrix or vector is an exact expression:
 !bc pyshell
 >>> A.norm()
 sqrt(29)
->>> a = sym.Matrix([1, 2])
+>>> a = sym.Matrix([1, 2])   # vector [1, 2]
 >>> a
 Matrix([
 [1],
@@ -479,11 +491,11 @@ The matrix-vector product and the dot product between vectors are
 done like this:
 
 !bc pyshell
->>> A*a
+>>> A*a                      # matrix*vector
 Matrix([
 [ 2],
 [10]])
->>> b = sym.Matrix([2, -1])
+>>> b = sym.Matrix([2, -1])  # vector [2, -1]
 >>> a.dot(b)
 0
 !ec

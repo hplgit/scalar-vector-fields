@@ -3,6 +3,7 @@ Matlab
 Matplotlib
 Mayavi
 NumPy
+NumPy's
 RGB
 SciTools
 Subplots

@@ -1,9 +1,32 @@
-2DO:
+TITLE: Computational linear algebra and visualization of scalar and vector fields
+AUTHOR: Øyvind Ryan {copyright} at Department of Mathematics, University of Oslo
+AUTHOR: Hans Petter Langtangen {copyright} at Center for Biomedical Computing, Simula Research Laboratory & Department of Informatics, University of Oslo
 
- * Follow Python programming standard, especially the use of spaces
+__Preface.__ This note gives an introduction to basic, numerical
+linear algebra operations and to visualization of two-dimensional
+scalar and vector fields. The material is taken from Chapter 5 in the
+forth-coming 5th edition of the book *A Primer on Scientific
+Programming with Python* cite{Langtangen_2014}, but provided here
+with some extensions.
 
+DATE: today
+
+!split
 TOC: on
+
+========= Computational linear algebra =========
+
+# Need to say something about required background,
+# cite{Langtangen_TCSE6_plot} for plotting, but what for matlab?
 
 # #include "linalg.do.txt"
 
+========= Visualization of scalar and vector fields =========
+
+# Also here, cite{Langtangen_TCSE6_plot} for plotting, but what for matlab?
+
 # #include "3dimplot.do.txt"
+
+======= References =======
+
+BIBFILE: papers.pub

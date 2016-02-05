@@ -78,7 +78,7 @@ plt.figure(7, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 levels = [5., 10., 15., 20.]
 plt.contour_surf(xv, yv, hv, contours=levels)
 
-# View the contours by displaying as an image
+# View the contours by displaying as an image.
 plt.figure(8, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 plt.imshow(hv)
 #end contourplots
@@ -103,7 +103,7 @@ for i in range(10):
     # s.mlab_source.scalars is a handle for the values of the surface,
     # and is updated here
     s.mlab_source.scalars = hv*0.1*(i+1)
-    plt.savefig('anim%04d.png' % i)
+    plt.savefig('tmp_%04d.png' % i)
 # end create animation
 
 # Define grid for 3D scalar field

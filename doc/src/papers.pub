@@ -1,0 +1,56 @@
+* articles
+** {Python} for Scientific Computing
+   key:       NumPy:paper
+   author:    T. E. Oliphant
+   year:      2007
+   journal:   Computing in Science \& Engineering
+   volume:    9
+   status:    published
+   entrytype: article
+** {Matplotlib}: a 2D Graphics Environment
+   key:       Matplotlib:paper
+   author:    J. D. Hunter
+   year:      2007
+   journal:   Computing in Science \& Engineering
+   volume:    9
+   status:    published
+   entrytype: article
+* books
+** A Primer on Scientific Programming With {P}ython
+   key:       Langtangen_2014
+   author:    H. P. Langtangen
+   year:      2014
+   publisher: Springer
+   status:    published
+   series:    Texts in Computational Science and Engineering
+   edition:   Fourth
+   entrytype: book
+** Programming for Computations
+   key:       Linge_Langtangen_2015
+   author:    S. Linge, H. P. Langtangen
+   year:      2015
+   status:    published
+   entrytype: book
+   url:       http://hplgit.github.io/Programming-for-Computations/pub/p4c/
+* misc
+** {Python} Programming Language
+   key:       Python
+   url:       http://python.org
+   status:    published
+   sortkey:   Python
+   note:      \url{http://python.org}
+   entrytype: misc
+** Array computing and curve plotting
+   key:       Langtangen_TCSE6_plot
+   author:    H. P. Langtangen
+   status:    published
+   note:      \emph{http://hplgit.github.io/primer.html/doc/pub/plot}
+   url:       http://hplgit.github.io/primer.html/doc/pub/plot
+   entrytype: misc
+** Debugging in {Python}
+   key:       Langtangen_TCSE6_debug
+   author:    H. P. Langtangen
+   status:    published
+   note:      \emph{http://hplgit.github.io/primer.html/doc/pub/debug}
+   url:       http://hplgit.github.io/primer.html/doc/pub/debug
+   entrytype: misc
