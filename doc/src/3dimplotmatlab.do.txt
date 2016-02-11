@@ -1,0 +1,154 @@
+======= Examples on plotting of scalar and vector fields =======
+label{matlab:plot:surf}
+
+To exemplify visualization of scalar and vector fields with Matlab, 
+we use a common set of examples. A scalar function of $x$
+and $y$ is visualized either as a flat two-dimensional plot with
+contour lines of the field, or as a three-dimensional surface where
+the height of the surface corresponds to the function value of the
+field. In the latter case we also add a three-dimensional
+parameterized curve to the plot.
+
+To illustrate plotting of vector fields, we simply plot the gradient of the scalar field, together with the scalar field.
+Our convention for variable names goes as follows:
+
+* `x`, `y` for one-dimensional coordinates along each axis direction.
+* `xv`, `yv` for the corresponding
+  vectorized coordinates in a 2D.
+* `u`, `v` for the components of a vector field
+  at points corresponding to `xv`, `yv`.
+
+The following sections contain more mathematical details on the various
+scalar and vector fields we aim to plot.
+
+
+
+
+===== Surface plots =====
+label{matlab:plot:surf:mesh_surf}
+
+We consider the 2D scalar field defined by
+
+!bt
+\begin{equation}
+h(x,y) = \frac{h_0}{1+ \frac{x^2+y^2}{R^2}}.
+label{matlab:plot:surf:heq}
+\end{equation}
+!et
+$h(x,y)$ may model the height of an isolated circular mountain,
+$h$ being the height above sea level,
+while $x$ and $y$ are Cartesian coordinates on the earth's surface,
+$h_0$ the height of the mountain, and $R$ the radius of the mountain.
+Since mountains are actually quite flat (or more precisely,
+their heights are small compared to the horizontal extent), we use
+meter as length unit for vertical distances ($z$ direction) and km as length
+unit for horizontal distances ($x$ and $y$ coordinates).
+Prior to all code below we have initialized $h_0$ and $R$ with
+the following values:
+
+@@@CODE plot3d_matlab.m fromto: h0 =@%endinitvalues
+
+=== Grid for 2D scalar fields ===
+
+Before we can plot $h(x,y)$, we need to create a rectangular grid in the $xy$ plane with all the points used for plotting. The grid can be made as follows:
+
+@@@CODE plot3d_matlab.m from-to: % Grid for x, y@% endinitgrid
+The grid is based on equally spaced coordinates `x` and `y` in the
+interval $[-10,10]$ km. This expression computes the
+surface value at the $41\times 41$ grid points in one vectorized operation.
+
+A surface plot of a 2D scalar field $h(x,y)$ is a visualization of the surface $z=h(x,y)$ in three-dimensional space.
+
+The Matlab functions for producing surface plots of 2D scalar fields  are
+`mesh` and `surf`. The first one produces a *wireframe plot*, where only lines connecting the grid points are drawn. 
+The second one colors the faces of the surface. 
+The following code uses these functions to plot the surface, once the grid has been defined as above.
+
+@@@CODE plot3d_matlab.m fromto:% Simple plot of mountain@colormap winter
+The corresponding plots are shown in Figure ref{plotmatlab}.
+
+FIGURE:[fig/plot_matlab] Two different plots of a mountain. The right plot also shows a trajectory to the top of the mountain. label{plotmatlab}
+
+===== Parameterized curve =====
+label{matlab:plot:surf:3Dcurve}
+
+To illustrate the plotting of three-dimensional parameterized curves,
+we consider a trajectory that represents a circular climb to the top
+of the mountain:
+
+!bt
+\begin{equation}
+\bm{r}(t) = \left( 10\left(1 - \frac{t}{2\pi}\right)\cos(t) \right) \bm{i} + \left( 10\left(1 - \frac{t}{2\pi}\right)\sin(t) \right) \bm{j} + \frac{h_0}{1 + \frac{100(1 - t/(2\pi))^2}{R^2}} \bm{k}. label{matlab:plot:surf:req}
+\end{equation}
+!et
+Here $\bm{i}$, $\bm{j}$, and $\bm{k}$ denote the unit vectors in the $x$-, $y$-, and $z$-directions, respectively.
+The coordinates of $\bm{r}(t)$ can be produced by
+
+@@@CODE plot3d_matlab.m fromto: s = linspace@% endparamcurve
+Once the coordinates have been defined like this, the curve can be added to a  surface plot with the following code.
+
+@@@CODE plot3d_matlab.m from-to:% add the parametric curve@% endsimpleplots
+The curve is shown together with the surface $h(x,y)$ in the right plot in Figure ref{plotmatlab}.
+
+
+
+===== Contour plots =====
+label{matlab:plot:surf:contours}
+
+Contour lines are lines defined by the implicit equation $h(x,y)=C$, where
+$C$ is some constant representing the contour level.
+Normally, we let $C$ run over some equally spaced values, and very often, the
+plotting program computes the $C$ values.
+To distinguish contours, one often associates each contour level $C$ with its own color.
+
+The following code exemplifies different ways contour plots
+can be used to visualize the surface $h(x,y)$.  
+
+@@@CODE plot3d_matlab.m fromto: % Default two-dimensional contour plot@%end contourplots
+The first three plots are shown in Figure
+ref{simplecontourmatlab}. The first two are default 2D- and 3D visualizations. The third
+displays the surface as an image, whose colors reflect the values of
+the field, or equivalently, the height of the surface. 
+The next four plots appear in Figure
+ref{advancedcontourmatlab}. They manually set the number of contours, their color, and their levels. 
+The last plot shows ho to label the contours.
+
+
+FIGURE:[fig/simple_contour_matlab, frac=1]  Different types of contour plots of a 2D scalar field in two and three dimensions. label{simplecontourmatlab}
+
+FIGURE:[fig/advanced_contour_matlab, height=400 width=600 frac=1] Some other contour plots: 10 contour lines (upper left), 10 black contour lines (upper right), specified contour levels (lower left), and labeled levels (lower right). label{advancedcontourmatlab}
+
+
+===== The gradient vector field of $h$ =====
+label{matlab:plot:surf:gradient}
+
+The *gradient vector field* $\nabla h$ of a 2D scalar field $h(x,y)$ is defined by
+
+!bt
+\begin{equation}
+\nabla h = \frac{\partial h}{\partial x}\bm{i} +  \frac{\partial h}{\partial y}\bm{j}.
+label{matlab:plot:surf:gradient:eq}
+\end{equation}
+!et
+One learns in vector calculus that the gradient points in the direction where $h$ increases most, and
+that the gradients are orthogonal to the contour lines.
+This is something we can easily illustrate by creating 2D plots of the contours and the gradient field.
+A challenge in making such plots is to get the right arrow lengths so
+that the arrows are well visible, but they do not collide and make a
+cluttered visual impression. Since the arrows are drawn at each point in
+a 2D grid, one way of controlling the number of arrows is to control
+the resolution of the grid.
+So, let us create a grid with 20 instead of 40 intervals in the horizontal
+directions:
+
+@@@CODE plot3d_matlab.m from-to: % Define a coarser grid for the vector field@% endcoarsergrid
+The gradient vector field of $h(x,y)$ can be computed using the function `gradient`:
+
+@@@CODE plot3d_matlab.m from-to: % startgradient@% endgradient
+The gradient field (ref{matlab:plot:surf:gradient:eq}) can now be plotted together with the contours as follows
+
+@@@CODE plot3d_matlab.m from-to:% Draw contours and gradient field of h@% end draw contours and gradient field of h
+This resulting plot is shown in Figure ref{plot:surf:matlab:quiver:fig},
+from which the orthogonality can be easily seen.
+
+FIGURE:[fig/quiver_matlab_advanced, frac=0.8] Gradient field with contour plot. label{plot:surf:matlab:quiver:fig}
