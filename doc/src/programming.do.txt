@@ -27,6 +27,10 @@ TOC: on
 
 # #include "3dimplot.do.txt"
 
+# ========= Visualization of scalar and vector fields with Matlab =========
+
+# include "3dimplotmatlab.do.txt"
+
 ======= References =======
 
 BIBFILE: papers.pub
