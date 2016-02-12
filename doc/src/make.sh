@@ -11,22 +11,20 @@ function system {
 }
 
 name=programming
+namematlab=programmingmatlab
 
 system doconce spellcheck -d .dict4spell.txt 3dimplot.do.txt linalg.do.txt
 
-#MATLAB_TOO=False
-
-#system doconce format pdflatex $name --latex_code_style=vrb-blue1 MATLAB=$MATLAB
 system doconce format pdflatex $name --latex_code_style=vrb-blue1 MATLAB_TOO=True --encoding=utf-8
 doconce replace 'section*{Preface}' '' $name.tex
-system pdflatex $name
-pdflatex $name
-mv $name.pdf programmmingmatlab.pdf
+mv $name.tex $namematlab.tex
+system pdflatex $namematlab
+system pdflatex $namematlab
 
 system doconce format pdflatex $name --latex_code_style=vrb-blue1 MATLAB_TOO=False --encoding=utf-8
 doconce replace 'section*{Preface}' '' $name.tex
 system pdflatex $name
-pdflatex $name
+system pdflatex $name
 
-system doconce format ipynb plot3d_matplotlib.do.txt  --replace_ref_by_latex_auxno=programming.aux --encoding=utf-8 --allow_refs_to_external_docs
-system doconce format matlabnb plot3d_matlabnb.do.txt --replace_ref_by_latex_auxno=programming.aux --encoding=utf-8 --allow_refs_to_external_docs
+system doconce format ipynb plot3d_matplotlib.do.txt  --replace_ref_by_latex_auxno=$name.aux --encoding=utf-8 --allow_refs_to_external_docs
+system doconce format matlabnb plot3d_matlabnb.do.txt --replace_ref_by_latex_auxno=$namematlab.aux --encoding=utf-8 --allow_refs_to_external_docs
