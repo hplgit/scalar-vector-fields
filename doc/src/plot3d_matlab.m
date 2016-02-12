@@ -58,8 +58,6 @@ axis equal
 figure(4)
 contour3(xv, yv, hv);
 
-
-
 % View the contours by displaying as an image
 figure(6)
 pcolor(hv/max(max(abs(hv))));

@@ -47,7 +47,7 @@ ax.plot(curve_x, curve_y, curve_z, linewidth=5)
 
 #h0 = 22.77
 #R = 4.
-
+    
 #hv = h0/(1 + (xv**2+yv**2)/(R**2))
 
 # Define a coarser grid for the vector field
