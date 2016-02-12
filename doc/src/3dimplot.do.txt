@@ -21,7 +21,7 @@ offers a convenient Matlab-style set of commands to operate Gnuplot.
 % endif
 
 To exemplify visualization of scalar and vector fields with
-% if MATLAB_TOO::
+% if MATLAB_TOO:
 various tools,
 % else:
 Matplotlib and Mayavi,
@@ -100,19 +100,17 @@ With Matplotlib and Mayavi we need the code
 @@@CODE plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
 while in Matlab we must write
 
-@@@CODE plot3d_matlab.m from-to: % Grid for x, y@# endinitgrid
+@@@CODE plot3d_matlab.m from-to: % Grid for x, y@% endinitgrid
 % else:
 Regardless of which plotting package we will use later on, the grid can be made as follows:
 
 @@@CODE plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
 % endif
-[hpl: Stopped incorporating Matlab here, but you see the constructions.
-It's not so much to add to get a text that works for two different
-purposes.]
 The grid is based on equally spaced coordinates `x` and `y` in the
 interval $[-10,10]$ km.
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinates to have the right order such that the arithmetics
-in the expression for `hv` becomes correct. This expression computes the
+in the expression for `hv` becomes correct. 
+The expression computes the
 surface value at the $41\times 41$ grid points in one vectorized operation.
 
 A surface plot of a 2D scalar field $h(x,y)$ is a visualization of the surface $z=h(x,y)$ in three-dimensional space.
@@ -136,10 +134,22 @@ of the mountain:
 \end{equation}
 !et
 Here $\bm{i}$, $\bm{j}$, and $\bm{k}$ denote the unit vectors in the $x$-, $y$-, and $z$-directions, respectively.
+% if not MATLAB_TOO:
 The coordinates of $\bm{r}(t)$ can be produced by
 
 @@@CODE plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
+% else:
+In Python the coordinates of $\bm{r}(t)$ can be produced by
+
+@@@CODE plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
+while in Matlab we must write
+
+@@@CODE plot3d_matlab.m fromto: s = linspace@% endparamcurve
+% endif
 The parameterized curve is shown together with the surface $h(x,y)$ in the right plot in Figure ref{plotmatplotlib}.
+
+
+
 
 
 ===== Contour lines =====
@@ -183,13 +193,29 @@ that the arrows are well visible, but they do not collide and make a
 cluttered visual impression. Since the arrows are drawn at each point in
 a 2D grid, one way of controlling the number of arrows is to control
 the resolution of the grid.
-So, let us create a grid with 20 instead of 40 intervals in the horizontal
-directions::
 
+% if not MATLAB_TOO:
+So, let us create a grid with 20 instead of 40 intervals in the horizontal
+directions:
 @@@CODE plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
 The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
 
 @@@CODE plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
+% else:
+So, let us create a grid with 20 instead of 40 intervals in the horizontal
+directions:
+In Python we write 
+@@@CODE plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
+The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
+
+@@@CODE plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
+In Matlab we instead write 
+
+@@@CODE plot3d_matlab.m from-to: % Define a coarser grid for the vector field@% endcoarsergrid
+The corresponding function for computing the gradient field in Matlab is called `gradient`:
+
+@@@CODE plot3d_matlab.m from-to: % startgradient@% endgradient
+% endif
 The gradient field (ref{plot:surf:gradient:eq}) together with the contours appear in Figure ref{plot:surf:mpl:quiver:fig},
 from which the orthogonality can be easily seen.
 Section ref{plot:surf:mpl:quiver} explains the code needed to make this plot.
@@ -274,7 +300,8 @@ The following code exemplifies different types of
 contour plots.  The first two plots (default two-dimensional and
 three-dimensional contour plots) are shown in Figure
 ref{simplecontourmatplotlib}. The next four plots appear in Figure
-ref{advancedcontourmatplotlib}.
+ref{advancedcontourmatplotlib}. Note that, when we asked Matplotlib to plot 10 contours, 
+the response was, surprisingly, 9 contour lines, where one of the contours was incomplete.
 
 
 @@@CODE plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
@@ -563,8 +590,66 @@ subject.
 
 It is straightforward to create animations with Mayavi.
 In the following code the function $h(x,y)$ is scaled vertically,
-for different scaling constants	 between $0$ and $1$,
+for different scaling constants between $0$ and $1$,
 and each plot is saved in its own file.
 The files can then be combined to one video, using appropriate software.
 
 @@@CODE plot3d_mayavi.py from-to:# Create animation@# end create animation
+
+
+% if MATLAB_TOO:
+
+======= Matlab =======
+
+===== Surface plots =====
+
+
+The Matlab functions for producing surface plots of 2D scalar fields  are
+`mesh` and `surf`. `mesh` produces a wireframe plot, while `surf` 
+colors the faces of the surface. 
+The function `plot3` can be used to plot parameterized curves.
+The following code uses these functions to plot the surface and the curve.
+
+@@@CODE plot3d_matlab.m fromto:% Simple plot of mountain@% endsimpleplots
+We now needed to `hold` the plot, in order to place the plots in the same figure.
+The code also illustrates how one can set a color map, and how we can adjust the thickness of a parametric curve. 
+The corresponding plots are shown in Figure ref{plotmatlab}. 
+
+
+FIGURE:[fig/plot_matlab] Two different plots of a mountain. The right plot also shows a trajectory to the top of the mountain. label{plotmatlab}
+
+
+
+
+===== Contour plots =====
+label{matlab:plot:surf:contours}
+
+The following code exemplifies different ways contour plots
+can be used to visualize the surface $h(x,y)$.  
+
+@@@CODE plot3d_matlab.m fromto: % Default two-dimensional contour plot@%end contourplots
+The first three plots are shown in Figure
+ref{simplecontourmatlab}. The first two are default 2D- and 3D visualizations. The third
+displays the surface as an image, whose colors reflect the values of
+the field, or equivalently, the height of the surface. 
+The next four plots appear in Figure
+ref{advancedcontourmatlab}. They manually set the number of contours, their color, and their levels. 
+The last plot shows ho to label the contours.
+
+FIGURE:[fig/simple_contour_matlab, frac=1]  Different types of contour plots of a 2D scalar field in two and three dimensions. label{simplecontourmatlab}
+
+FIGURE:[fig/advanced_contour_matlab, height=400 width=600 frac=1] Some other contour plots: 10 contour lines (upper left), 10 black contour lines (upper right), specified contour levels (lower left), and labeled levels (lower right). label{advancedcontourmatlab}
+
+
+
+===== Vector field plots =====
+label{plot:surf:matlab:quiver}
+
+The gradient field (ref{plot:surf:gradient:eq}) can be plotted together with the contours as follows
+
+@@@CODE plot3d_matlab.m from-to:% Draw contours and gradient field of h@% end draw contours and gradient field of h
+This resulting plot is shown in Figure ref{plot:surf:matlab:quiver:fig}.
+
+FIGURE:[fig/quiver_matlab_advanced, frac=0.8] Gradient field with contour plot. label{plot:surf:matlab:quiver:fig}
+
+% endif
