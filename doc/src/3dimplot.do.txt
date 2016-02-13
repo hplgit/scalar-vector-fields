@@ -1,3 +1,4 @@
+
 ======= Examples on plotting of scalar and vector fields =======
 label{plot:surf}
 
@@ -109,7 +110,7 @@ Regardless of which plotting package we will use later on, the grid can be made 
 The grid is based on equally spaced coordinates `x` and `y` in the
 interval $[-10,10]$ km.
 Note the mysterious extra parameters to `meshgrid` here, which are needed in order for the coordinates to have the right order such that the arithmetics
-in the expression for `hv` becomes correct. 
+in the expression for `hv` becomes correct.
 The expression computes the
 surface value at the $41\times 41$ grid points in one vectorized operation.
 
@@ -204,12 +205,12 @@ The gradient vector field of $h(x,y)$ can now be computed using the function `np
 % else:
 So, let us create a grid with 20 instead of 40 intervals in the horizontal
 directions:
-In Python we write 
+In Python we write
 @@@CODE plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
 The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
 
 @@@CODE plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
-In Matlab we instead write 
+In Matlab we instead write
 
 @@@CODE plot3d_matlab.m from-to: % Define a coarser grid for the vector field@% endcoarsergrid
 The corresponding function for computing the gradient field in Matlab is called `gradient`:
@@ -300,7 +301,7 @@ The following code exemplifies different types of
 contour plots.  The first two plots (default two-dimensional and
 three-dimensional contour plots) are shown in Figure
 ref{simplecontourmatplotlib}. The next four plots appear in Figure
-ref{advancedcontourmatplotlib}. Note that, when we asked Matplotlib to plot 10 contours, 
+ref{advancedcontourmatplotlib}. Note that, when we asked Matplotlib to plot 10 contours,
 the response was, surprisingly, 9 contour lines, where one of the contours was incomplete.
 
 
@@ -605,15 +606,15 @@ The files can then be combined to one video, using appropriate software.
 
 
 The Matlab functions for producing surface plots of 2D scalar fields  are
-`mesh` and `surf`. `mesh` produces a wireframe plot, while `surf` 
-colors the faces of the surface. 
+`mesh` and `surf`. `mesh` produces a wireframe plot, while `surf`
+colors the faces of the surface.
 The function `plot3` can be used to plot parameterized curves.
 The following code uses these functions to plot the surface and the curve.
 
 @@@CODE plot3d_matlab.m fromto:% Simple plot of mountain@% endsimpleplots
 We now needed to `hold` the plot, in order to place the plots in the same figure.
-The code also illustrates how one can set a color map, and how we can adjust the thickness of a parametric curve. 
-The corresponding plots are shown in Figure ref{plotmatlab}. 
+The code also illustrates how one can set a color map, and how we can adjust the thickness of a parametric curve.
+The corresponding plots are shown in Figure ref{plotmatlab}.
 
 
 FIGURE:[fig/plot_matlab] Two different plots of a mountain. The right plot also shows a trajectory to the top of the mountain. label{plotmatlab}
@@ -625,15 +626,15 @@ FIGURE:[fig/plot_matlab] Two different plots of a mountain. The right plot also 
 label{matlab:plot:surf:contours}
 
 The following code exemplifies different ways contour plots
-can be used to visualize the surface $h(x,y)$.  
+can be used to visualize the surface $h(x,y)$.
 
 @@@CODE plot3d_matlab.m fromto: % Default two-dimensional contour plot@%end contourplots
 The first three plots are shown in Figure
 ref{simplecontourmatlab}. The first two are default 2D- and 3D visualizations. The third
 displays the surface as an image, whose colors reflect the values of
-the field, or equivalently, the height of the surface. 
+the field, or equivalently, the height of the surface.
 The next four plots appear in Figure
-ref{advancedcontourmatlab}. They manually set the number of contours, their color, and their levels. 
+ref{advancedcontourmatlab}. They manually set the number of contours, their color, and their levels.
 The last plot shows ho to label the contours.
 
 FIGURE:[fig/simple_contour_matlab, frac=1]  Different types of contour plots of a 2D scalar field in two and three dimensions. label{simplecontourmatlab}

@@ -14,6 +14,19 @@ DATE: today
 !split
 TOC: on
 
+<%
+def codecomment(pycomment, mcomment):
+    """Provide inline comment for Python code (pycomment) and
+    Matlab comment (mcomment). If MATLAB_TOO is False, only
+    the Python comment appears. Both appears, after each other,
+    if MATLAB_TOO is True.
+    """
+    r = pycomment
+    if MATLAB_TOO:
+        r += mcomment
+    return r
+%>
+
 ========= Computational linear algebra =========
 
 # Need to say something about required background,
