@@ -10,6 +10,13 @@ exit 1
 fi
 }
 
+# The scripts are in src, run from there, place results in images dir
+# (approved images can then be moved to fig for inclusion in the document)
+cd src
+rm -rf *.png *.pdf
+#system octave ./plot3d_matlab.m
+mv -f *.png *.pdf ../images
+
 system pdfcrop --margins 10 images/simple_plot_matlab_tocrop.pdf images/simple_plot_matlab.pdf
 system pdfcrop --margins 10 images/simple_plot_colours_matlab_tocrop.pdf images/simple_plot_colours_matlab.pdf
 
@@ -32,6 +39,3 @@ system doconce combine_images png -2 images/default_contour_matlab images/defaul
 
 system doconce combine_images pdf -2 images/contour_10levels_matlab images/contour_10levels_black_matlab images/contour_speclevels_matlab images/contour_clabel_matlab images/advanced_contour_matlab
 system doconce combine_images png -2 images/contour_10levels_matlab images/contour_10levels_black_matlab images/contour_speclevels_matlab images/contour_clabel_matlab images/advanced_contour_matlab
-
-
-

@@ -16,14 +16,14 @@ curve_x = 10*(1 - s/(2*np.pi))*np.cos(s)
 curve_y = 10*(1 - s/(2*np.pi))*np.sin(s)
 curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
 
-@@@CODE plot3d_mayavi.py from-to:# Simple plot of mountain@# endsimpleplots
+@@@CODE src/plot3d_mayavi.py from-to:# Simple plot of mountain@# endsimpleplots
 
 
 
-@@@CODE plot3d_mayavi.py from-to:# Create one figure with three subplots@# endsubplot
+@@@CODE src/plot3d_mayavi.py from-to:# Create one figure with three subplots@# endsubplot
 
 
-@@@CODE plot3d_mayavi.py fromto:# Default contour plot plotted together with surf@#end contourplots
+@@@CODE src/plot3d_mayavi.py fromto:# Default contour plot plotted together with surf@#end contourplots
 
 
 # Define a coarser grid for the vector field
@@ -48,8 +48,8 @@ for i in range(10):
     plt.savefig('tmp_%04d.png' % i)
 # end create animation
 
-@@@CODE plot3d_mayavi.py from-to: # Define grid for 3D scalar field@# end define grid for 3D scalar field
+@@@CODE src/plot3d_mayavi.py from-to: # Define grid for 3D scalar field@# end define grid for 3D scalar field
 
-@@@CODE plot3d_mayavi.py from-to: # Define grid for 3D gradient field@# end define grid for 3D gradient field
+@@@CODE src/plot3d_mayavi.py from-to: # Define grid for 3D gradient field@# end define grid for 3D gradient field
 
-@@@CODE plot3d_mayavi.py from-to:# Draw 3D vector field with countours of 3D scalar field@# end draw 3D vector field with countours of 3D scalar field
+@@@CODE src/plot3d_mayavi.py from-to:# Draw 3D vector field with countours of 3D scalar field@# end draw 3D vector field with countours of 3D scalar field

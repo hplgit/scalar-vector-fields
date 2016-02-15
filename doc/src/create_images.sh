@@ -10,10 +10,17 @@ exit 1
 fi
 }
 
+# The scripts are in src, run from there, place results in images dir
+# (approved images can then be moved to fig for inclusion in the document)
+cd src
+rm -rf *.png *.pdf
+
 # system python plot3d_scitools.py
 system python plot3d_mayavi.py
 # system python plot3d_scitools_gnuplot.py --SCITOOLS_easyviz_backend gnuplot
 system python plot3d_matplotlib.py
+mv -f *.png *.pdf ../images
+cd ..
 
 system doconce combine_images pdf -2 images/simple_plot_matplotlib images/simple_plot_colours_matplotlib images/plot_matplotlib
 system doconce combine_images png -2 images/simple_plot_matplotlib images/simple_plot_colours_matplotlib images/plot_matplotlib
@@ -28,8 +35,6 @@ system doconce combine_images pdf -2 images/quiver_contour_matplotlib images/qui
 system doconce combine_images png -2 images/quiver_contour_matplotlib images/quiver_surf_matplotlib images/quiver_contour_surf_matplotlib
 
 
-
-
 system doconce combine_images png -2 images/simple_plot_scitools images/simple_plot_colours_scitools images/plot_scitools
 system doconce combine_images pdf -2 images/simple_plot_scitools images/simple_plot_colours_scitools images/plot_scitools
 
@@ -42,10 +47,6 @@ system doconce combine_images png -2 images/contour_10levels_scitools images/con
 system doconce combine_images pdf -2 images/quiver_scitools_advanced images/quiver_scitools_simple images/quiver_scitools
 system doconce combine_images png -2 images/quiver_scitools_advanced images/quiver_scitools_simple images/quiver_scitools
 
-
-
-
 system doconce combine_images png -2 images/simple_plot_mayavi images/simple_plot_colours_mayavi images/simple_plot_colours_mayavi_2 images/plot_mayavi
 system doconce combine_images png -2 images/simple_contour_mayavi images/contour_10levels_mayavi images/contour_10levels_black_mayavi images/contour_speclevels_mayavi images/contour_imshow_mayavi images/advanced_contour_mayavi
 system doconce combine_images png -2 images/quiver_contour_mayavi images/quiver_surf_mayavi images/quiver_contour_surf_mayavi
-

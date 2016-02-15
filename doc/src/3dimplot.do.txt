@@ -98,14 +98,14 @@ Before we can plot $h(x,y)$, we need to create a rectangular grid in the $xy$ pl
 % if MATLAB_TOO:
 With Matplotlib and Mayavi we need the code
 
-@@@CODE plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
+@@@CODE src/plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
 while in Matlab we must write
 
-@@@CODE plot3d_matlab.m from-to: % Grid for x, y@% endinitgrid
+@@@CODE src/plot3d_matlab.m from-to: % Grid for x, y@% endinitgrid
 % else:
 Regardless of which plotting package we will use later on, the grid can be made as follows:
 
-@@@CODE plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
+@@@CODE src/plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
 % endif
 The grid is based on equally spaced coordinates `x` and `y` in the
 interval $[-10,10]$ km.
@@ -138,14 +138,14 @@ Here $\bm{i}$, $\bm{j}$, and $\bm{k}$ denote the unit vectors in the $x$-, $y$-,
 % if not MATLAB_TOO:
 The coordinates of $\bm{r}(t)$ can be produced by
 
-@@@CODE plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
+@@@CODE src/plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
 % else:
 In Python the coordinates of $\bm{r}(t)$ can be produced by
 
-@@@CODE plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
+@@@CODE src/plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
 while in Matlab we must write
 
-@@@CODE plot3d_matlab.m fromto: s = linspace@% endparamcurve
+@@@CODE src/plot3d_matlab.m fromto: s = linspace@% endparamcurve
 % endif
 The parameterized curve is shown together with the surface $h(x,y)$ in the right plot in Figure ref{plotmatplotlib}.
 
@@ -198,24 +198,24 @@ the resolution of the grid.
 % if not MATLAB_TOO:
 So, let us create a grid with 20 instead of 40 intervals in the horizontal
 directions:
-@@@CODE plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
+@@@CODE src/plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
 The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
 
-@@@CODE plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
+@@@CODE src/plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
 % else:
 So, let us create a grid with 20 instead of 40 intervals in the horizontal
 directions:
 In Python we write
-@@@CODE plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
+@@@CODE src/plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
 The gradient vector field of $h(x,y)$ can now be computed using the function `np.gradient`:
 
-@@@CODE plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
+@@@CODE src/plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
 In Matlab we instead write
 
-@@@CODE plot3d_matlab.m from-to: % Define a coarser grid for the vector field@% endcoarsergrid
+@@@CODE src/plot3d_matlab.m from-to: % Define a coarser grid for the vector field@% endcoarsergrid
 The corresponding function for computing the gradient field in Matlab is called `gradient`:
 
-@@@CODE plot3d_matlab.m from-to: % startgradient@% endgradient
+@@@CODE src/plot3d_matlab.m from-to: % startgradient@% endgradient
 % endif
 The gradient field (ref{plot:surf:gradient:eq}) together with the contours appear in Figure ref{plot:surf:mpl:quiver:fig},
 from which the orthogonality can be easily seen.
@@ -263,7 +263,7 @@ The following code uses the functions to produce the plots shown in Figure
 ref{plotmatplotlib}, once the grid has been defined as in Section ref{plot:surf:mesh_surf},
 and the coordinates of the parameterized curve have been computed as in Section ref{plot:surf:3Dcurve}.
 
-@@@CODE plot3d_matplotlib.py from-to:# Simple plot of mountain@# endsimpleplots
+@@@CODE src/plot3d_matplotlib.py from-to:# Simple plot of mountain@# endsimpleplots
 Recall that a final
 `plt.show()` command is necessary to force Matplotlib to show a plot on the screen.
 
@@ -308,7 +308,7 @@ The package will do its best to plot the requested number of complete contour li
 but there is no guarantee that this number is achieved exactly.
 
 
-@@@CODE plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
+@@@CODE src/plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
 
 FIGURE:[fig/advanced_contour_matplotlib, height=400 width=600 frac=1] Some other contour plots with Matplotlib: 10 contour lines (upper left), 10 black contour lines (upper right), specified contour levels (lower left), and labeled levels (lower right). label{advancedcontourmatplotlib}
 
@@ -321,7 +321,7 @@ with contours goes as explained below, once the grid has been defined as in
 Section ref{plot:surf:gradient}.
 The corresponding plot is shown in Figure ref{plot:surf:mpl:quiver:fig}.
 
-@@@CODE plot3d_matplotlib.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+@@@CODE src/plot3d_matplotlib.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
 
 
 
@@ -358,7 +358,7 @@ Also, I have not had much luck with the VTK backend]
 
 [or: I changed backend to gnuplot for contour plots, but it seems then that I cannot set the color of the labels anymore, see the plot. I think Scitools is simply not tested enough for 3D here]
 
-@@@CODE plot3d_scitools_gnuplot.py from-to:# Simple plot of mountain@# endsimpleplots
+@@@CODE src/plot3d_scitools_gnuplot.py from-to:# Simple plot of mountain@# endsimpleplots
 
 The results are shown in Figure ref{plotscitools}. A Gnuplot backend is used here.
 
@@ -372,7 +372,7 @@ FIGURE:[fig/plot_scitools, height=400 width=600 frac=0.8] Two SciTools surface p
 
 The following code exemplifies how one can create different contour plots with SciTools. As is seen, there are only minor differences in how the parameters (color, levels, labeling) to the plot are set.
 
-@@@CODE plot3d_scitools_gnuplot.py from-to: # Default two-dimensional contour plot@#end contourplots
+@@@CODE src/plot3d_scitools_gnuplot.py from-to: # Default two-dimensional contour plot@#end contourplots
 
 The first two plots (default two-dimensional and three-dimensional contour plots) are shown in Figure ref{simplecontourscitools}. The next 4 plots are shown in Figure ref{advancedcontourscitools}.
 
@@ -388,14 +388,14 @@ There is limited support for plotting three-dimensional vector fields in SciTool
 so the following code only concerns the gradient field (ref{plot:surf:gradient:eq}).
 The code for plotting the gradient field together with contours goes as follows.
 
-@@@CODE plot3d_scitools.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+@@@CODE src/plot3d_scitools.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
 The two-dimensional vector field (ref{plot:surf:another:vec:eq}) can be plotted as follows.
 [hpl: I don't see why we need a different field here. Why not just plot $\nabla h$ with the commands one wants to illustrate? You seem to want to illustrate
 how to set units for the vectors, but that should be explicitly explained
 in the text, and I think the example is clearer if we use the same field but
 different units or scalings.]
 
-@@@CODE plot3d_scitools.py from-to:# Draw 2D-field@# end draw 2D-field.
+@@@CODE src/plot3d_scitools.py from-to:# Draw 2D-field@# end draw 2D-field.
 The results are shown in Figure ref{quiverscitools}.
 
 FIGURE:[fig/quiver_scitools, height=400 width=600 frac=0.8] Vector field plots with SciTools. Gradient field with contour plot (left). 2D vector field (right). label{quiverscitools}
@@ -440,7 +440,7 @@ The following code plots the surface $h(x,y)$ in (ref{plot:surf:heq}), as
 well as the parameterized curve $\bm{r}(t)$ in (ref{plot:surf:req}).
 The resulting graphics appears in Figure ref{plotmayavi}.
 
-@@@CODE plot3d_mayavi.py from-to:# Simple plot of mountain@# endsimpleplots
+@@@CODE src/plot3d_mayavi.py from-to:# Simple plot of mountain@# endsimpleplots
 `surf` can produce wireframe plots,
 as well as plots where the faces of the surface are colored.
 The parameter `representation` controls this,
@@ -478,7 +478,7 @@ In the following we will use the `warp_scale` parameter to avoid such auto-scali
 
 The two plots in Figure ref{plotmayavi} were created as separate figures. One can also create them as subplots within one figure:
 
-@@@CODE plot3d_mayavi.py from-to:# Create one figure with three subplots@# endsubplot
+@@@CODE src/plot3d_mayavi.py from-to:# Create one figure with three subplots@# endsubplot
 The result is shown in Figure ref{subplot}.
 Three separate `mesh` commands are run, each producing a new plot in the current figure.
 The commands use different values for the `colormap` attribute to color the surface in different ways.
@@ -505,7 +505,7 @@ difference is that the attribute `contours` now can represent the
 number of levels, as well as the levels themselves.
 The plots are shown in Figure ref{advancedcontourmayavi}.
 
-@@@CODE plot3d_mayavi.py fromto:# Default contour plot plotted together with surf@#end contourplots
+@@@CODE src/plot3d_mayavi.py fromto:# Default contour plot plotted together with surf@#end contourplots
 Note that there is no function in Mayavi which labels the contours.
 
 
@@ -529,7 +529,7 @@ Mayavi supports only vector fields in three-dimensional space.
 We will therefore visualize the two-dimensional gradient field (ref{plot:surf:gradient:eq}) by adding a third component of zero.
 The following code plots this gradient field  together with the contours of $h$.
 
-@@@CODE plot3d_mayavi_manual.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+@@@CODE src/plot3d_mayavi_manual.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
 This will produce a 3D view, which we again can rotate to obtain a 2D view.
 The result is shown in Figure ref{plot:surf:may:quiver:fig}, which is similar to Figure ref{plot:surf:mpl:quiver:fig}.
 
@@ -557,7 +557,7 @@ g(x,y,z) = z-h(x,y).
 !et
 A three-dimensional grid for $g$ can be computed as follows.
 
-@@@CODE plot3d_mayavi.py from-to: # Define grid for 3D scalar field@# end define grid for 3D scalar field
+@@@CODE src/plot3d_mayavi.py from-to: # Define grid for 3D scalar field@# end define grid for 3D scalar field
 The contours are now surfaces defined by the implicit equation $g(x,y,z)=C$,
 corresponding to vertical shifts of the surface $h(x,y)$.
 
@@ -574,14 +574,14 @@ label{plot:surf:gradient:eq:3D}
 need a three-dimensional grid for the field as input.
 For the field (ref{plot:surf:3D:surfeq}), the gradient field is computed as follows.
 
-@@@CODE plot3d_mayavi.py from-to: # Define grid for 3D gradient field@# end define grid for 3D gradient field
+@@@CODE src/plot3d_mayavi.py from-to: # Define grid for 3D gradient field@# end define grid for 3D gradient field
 Again we have used a coarser grid for the vector field.
 
 To visualize the field (ref{plot:surf:3D:surfeq}) and its gradient field together,
 we draw enough contours, as we did in the 2D case in Figure ref{plot:surf:mpl:quiver:fig}.
 The following code can be used.
 
-@@@CODE plot3d_mayavi.py from-to:# Draw 3D vector field with countours of 3D scalar field@# end draw 3D vector field with countours of 3D scalar field
+@@@CODE src/plot3d_mayavi.py from-to:# Draw 3D vector field with countours of 3D scalar field@# end draw 3D vector field with countours of 3D scalar field
 The result is shown in Figure ref{fig:quiver:mayavi}.
 
 FIGURE:[fig/quiver_mayavi, frac=1] The 3D scalar field (ref{plot:surf:3D:surfeq}) and its gradient field. label{fig:quiver:mayavi}
@@ -606,7 +606,7 @@ for different scaling constants between $0$ and $1$,
 and each plot is saved in its own file.
 The files can then be combined to a standard video file.
 
-@@@CODE plot3d_mayavi.py from-to:# Create animation@# end create animation
+@@@CODE src/plot3d_mayavi.py from-to:# Create animation@# end create animation
 
 
 % if MATLAB_TOO:
@@ -622,7 +622,7 @@ colors the faces of the surface.
 The function `plot3` can be used to plot parameterized curves.
 The following code uses these functions to plot the surface and the curve.
 
-@@@CODE plot3d_matlab.m fromto:% Simple plot of mountain@% endsimpleplots
+@@@CODE src/plot3d_matlab.m fromto:% Simple plot of mountain@% endsimpleplots
 We now needed to `hold` the plot, in order to place the plots in the same figure.
 The code also illustrates how one can set a color map, and how we can adjust the thickness of a parametric curve.
 The corresponding plots are shown in Figure ref{plotmatlab}.
@@ -639,7 +639,7 @@ label{matlab:plot:surf:contours}
 The following code exemplifies different ways contour plots
 can be used to visualize the surface $h(x,y)$.
 
-@@@CODE plot3d_matlab.m fromto: % Default two-dimensional contour plot@%end contourplots
+@@@CODE src/plot3d_matlab.m fromto: % Default two-dimensional contour plot@%end contourplots
 The first three plots are shown in Figure
 ref{simplecontourmatlab}. The first two are default 2D- and 3D visualizations. The third
 displays the surface as an image, whose colors reflect the values of
@@ -659,7 +659,7 @@ label{plot:surf:matlab:quiver}
 
 The gradient field (ref{plot:surf:gradient:eq}) can be plotted together with the contours as follows
 
-@@@CODE plot3d_matlab.m from-to:% Draw contours and gradient field of h@% end draw contours and gradient field of h
+@@@CODE src/plot3d_matlab.m from-to:% Draw contours and gradient field of h@% end draw contours and gradient field of h
 This resulting plot is shown in Figure ref{plot:surf:matlab:quiver:fig}.
 
 FIGURE:[fig/quiver_matlab_advanced, frac=0.8] Gradient field with contour plot. label{plot:surf:matlab:quiver:fig}

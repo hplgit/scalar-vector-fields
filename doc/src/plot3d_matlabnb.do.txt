@@ -3,28 +3,28 @@ h0 = 2277;   % Height of the top of the mountain (m)
 R = 4;      % Radius of the mountain (km)
 !ec
 
-@@@CODE plot3d_matlab.m from-to: % Grid for x, y@% endinitgrid
+@@@CODE src/plot3d_matlab.m from-to: % Grid for x, y@% endinitgrid
 
-@@@CODE plot3d_matlab.m fromto: s = linspace@% endparamcurve
+@@@CODE src/plot3d_matlab.m fromto: s = linspace@% endparamcurve
 
 
 ===== Figure ref{plotmatlab} =====
 
-@@@CODE plot3d_matlab.m fromto:% Simple plot of mountain@% endsimpleplots
+@@@CODE src/plot3d_matlab.m fromto:% Simple plot of mountain@% endsimpleplots
 
 
 
-@@@CODE plot3d_matlab.m from-to: % Define a coarser grid for the vector field@% endcoarsergrid
+@@@CODE src/plot3d_matlab.m from-to: % Define a coarser grid for the vector field@% endcoarsergrid
 
-@@@CODE plot3d_matlab.m from-to: % startgradient@% endgradient
+@@@CODE src/plot3d_matlab.m from-to: % startgradient@% endgradient
 
 
 ===== Figure ref{simplecontourmatlab} and Figure ref{advancedcontourmatlab} =====
 
-@@@CODE plot3d_matlab.m fromto: % Default two-dimensional contour plot@%end contourplots
+@@@CODE src/plot3d_matlab.m fromto: % Default two-dimensional contour plot@%end contourplots
 
 
 
 ===== Figure ref{plot:surf:matlab:quiver:fig} =====
 
-@@@CODE plot3d_matlab.m from-to:% Draw contours and gradient field of h@% end draw contours and gradient field of h
+@@@CODE src/plot3d_matlab.m from-to:% Draw contours and gradient field of h@% end draw contours and gradient field of h

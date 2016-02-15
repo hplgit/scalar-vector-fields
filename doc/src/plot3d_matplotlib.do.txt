@@ -11,32 +11,32 @@ R = 4.       # Radius of the mountain (km)
 #endinitvalues
 !ec
 
-@@@CODE plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
+@@@CODE src/plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
 
-@@@CODE plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
+@@@CODE src/plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
 
 
 
 ===== Figure ref{plotmatplotlib} =====
 
 
-@@@CODE plot3d_matplotlib.py from-to:# Simple plot of mountain@# endsimpleplots
+@@@CODE src/plot3d_matplotlib.py from-to:# Simple plot of mountain@# endsimpleplots
 
 
 
 
-@@@CODE plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
+@@@CODE src/plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
 
-@@@CODE plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
+@@@CODE src/plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
 
 
 ===== Figure ref{simplecontourmatplotlib} and Figure ref{advancedcontourmatplotlib} =====
 
-@@@CODE plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
+@@@CODE src/plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
 
 
 
 
 ===== Figure ref{plot:surf:mpl:quiver:fig} =====
 
-@@@CODE plot3d_matplotlib.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+@@@CODE src/plot3d_matplotlib.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
