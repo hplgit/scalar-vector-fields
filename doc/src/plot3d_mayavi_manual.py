@@ -3,7 +3,7 @@ import os
 from math import *
 import numpy as np
 
-h0 = 22.77
+h0 = 2277.
 R = 4.
 
 x = y = np.linspace(-10.,10.,41)
@@ -20,12 +20,12 @@ dhdx, dhdy = np.gradient(h2v)
 
 # Draw contours and gradient field of h
 plt.figure(11, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-plt.contour_surf(xv, yv, hv, contours=20)
+plt.contour_surf(xv, yv, hv, contours=20, warp_scale=0.01)
 
 # mode controls the style how vectors are drawn
 # color controls the colors of the vectors
 # scale_mode='none' ensures that vectors are drawn with the same length
-plt.quiver3d(x2v, y2v, h2v, dhdx, dhdy, np.zeros_like(dhdx),
+plt.quiver3d(x2v, y2v, 0.01*h2v, dhdx, dhdy, np.zeros_like(dhdx),
              mode='arrow', color=(1,0,0), scale_mode='none')
 # end draw contours and gradient field of h
 raw_input('Press any key to continue')
