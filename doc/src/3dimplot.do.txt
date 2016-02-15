@@ -429,37 +429,45 @@ same figure, until you manually change to a new figure.
 
 ===== Surface plots =====
 
-Mayavi has the functions `mesh` and `surf` for making surface
-plots. None of them produce pure wireframe plots, i.e., the
-surface is always colored.  The following code uses these two
-functions to plot the surface $h(x,y)$ in (ref{plot:surf:heq}), as
+Mayavi has the functions `mesh` and `surf` for producing surface plots. 
+These are similar, but `surf` assumes an orthogonal grid, and uses this assumption to make efficient data structures. 
+`mesh` makes no such assumptions on the grid. 
+We will only use orthogonal grids, so we will always use `surf`.  
+The following code plots the surface $h(x,y)$ in (ref{plot:surf:heq}), as
 well as the parameterized curve $\bm{r}(t)$ in (ref{plot:surf:req}).
 The resulting graphics appears in Figure ref{plotmayavi}.
 
 @@@CODE plot3d_mayavi.py from-to:# Simple plot of mountain@# endsimpleplots
-The calls to `plt.figure()` take three parameters: First the usual index for the plot, then two tuples of numbers , representing the RGB-values to be used for the foreground (`fgcolor`) and the background (`bgcolor`).
+`surf` can produce wireframe plots, 
+as well as plots where the faces of the surface are colored. 
+The parameter `representation` controls this, 
+as exemplified in the first two plots.
+The first plot was also decorated with axes and a title.
+
+FIGURE:[fig/plot_mayavi] Surface plots produced with the `surf` function of Mayavi: The curve $\bm{r}(t)$ is also shown in the two last plots. label{plotmayavi}
+
+The calls to `plt.figure()` take three parameters: First the usual index for the plot, then two tuples of numbers , 
+representing the RGB-values to be used for the foreground (`fgcolor`) and the background (`bgcolor`).
 White and black are  (1,1,1) and (0,0,0), respectively. The foreground color is used for text and labels included in the plot.
-
 The `color` attribute in `plt.surf` adjusts the surface so that it is colored with small variations from the provided base color, here `(.5, .5, .5)`.
-Note also the extra parameter `extent`.
+
+The command `plot3d` is used to plot the curve $\bm{r}(t)$.  We have here increased the
+attribute `tube_radius` to make the curve thicker and more visible.
+
 Mayavi does no auto-scaling of the axes by default (contrary to Matplotlib),
-so if the magnitudes in the vertical and horizontal directions are very different (as they are for $h(x,y)$), the plots may be very concentrated in one direction.
-The `extent` parameter ensures that the axes are auto-scaled to fit the contents of the surface.
-We will return to what the six values listed in `extent` mean when we have
-a more illustrating example.
-
-The command `plot3d` is used to plot the curve $\bm{r}(t)$.  The
-attribute `tube_radius` is set to make the curve thicker and more
-visible.  Looking at the curve in Figure ref{plotmayavi} (right), we
-rather unexpectedly realize that $\bm{r}(t)$ does not lie on the
-surface.  The reason is that the ranges of the $x$-, $y$-, and
-$z$-values differ for the curve and the surface. To avoid undesired
-auto-scaling problems, one is recommended to scale the objects
-beforehand such that the extent in the spatial coordinates is of the
-same order of magnitude.
-
-
-FIGURE:[fig/plot_mayavi] Two Mayavi surface plots: `mesh` (left) and `surf` (right). The curve $\bm{r}(t)$ is also shown in the right plot. label{plotmayavi}
+so if the magnitudes in the vertical and horizontal directions are very different, as they are for $h(x,y)$, 
+the plots may be very concentrated in one direction. 
+We therefore need to apply some auto-scaling procedure. 
+In Figure ref{plotmayavi} two such procedures are exemplified.
+In the first two plots the parameter `extent` is used. 
+It tells Mayavi to auto-scale the surface and curve to fit the contents described 
+by the six listed values (we will return to what these values mean when we have a more illustrating example).
+Since the curve and the surface span different areas in space, we see that they are auto-scaled differently in the second plot, 
+with the undesired effect that $\bm{r}(t)$ is not drawn on the surface. 
+The last plot has avoided this problem by using the `warp_scale` parameter to scale in the vertical direction. 
+Not all Mayavi functions accept this parameter. A remedy for this is to scale the $z$-coordinates manually, 
+as here exemplified in the last `plot3d`-call. As is seen, the curve is drawn correctly with respect to the surface in the last plot. 
+In the following we will use the `warp_scale` parameter to avoid such auto-scaling problems.
 
 
 
@@ -471,7 +479,7 @@ The two plots in Figure ref{plotmayavi} were created as separate figures. One ca
 The result is shown in Figure ref{subplot}.
 Three separate `mesh` commands are run, each producing a new plot in the current figure.
 The commands use different values for the `colormap` attribute to color the surface in different ways.
-When this attribute is not provided, as in the code producing the left plot in Figure ref{plotmayavi}, a default colormap is used.
+When this attribute is not provided, as in the code producing the two first plots in Figure ref{plotmayavi}, a default colormap is used.
 
 The `plt.outline` command is used to create a frame around the
 subplots, and as seen, we exemplify this possibility for the last two
