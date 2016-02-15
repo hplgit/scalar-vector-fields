@@ -1,0 +1,55 @@
+!bc pypro
+import mayavi.mlab as plt
+import os
+from math import *
+import numpy as np
+
+h0 = 2277.
+R = 4.
+
+x = y = np.linspace(-10.,10.,41)
+xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)
+hv = h0/(1 + (xv**2+yv**2)/(R**2))
+
+s = np.linspace(0, 2*np.pi, 100)
+curve_x = 10*(1 - s/(2*np.pi))*np.cos(s)
+curve_y = 10*(1 - s/(2*np.pi))*np.sin(s)
+curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
+
+@@@CODE plot3d_mayavi.py from-to:# Simple plot of mountain@# endsimpleplots
+
+
+
+@@@CODE plot3d_mayavi.py from-to:# Create one figure with three subplots@# endsubplot
+
+
+@@@CODE plot3d_mayavi.py fromto:# Default contour plot plotted together with surf@#end contourplots
+
+
+# Define a coarser grid for the vector field
+x2 = y2 = np.linspace(-10.,10.,11)
+x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
+h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
+# endcoarsergrid
+
+dhdx, dhdy = np.gradient(h2v)
+
+
+
+
+# Create animation
+plt.figure(13, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
+s = plt.surf(xv, yv, hv)
+
+for i in range(10):
+    # s.mlab_source.scalars is a handle for the values of the surface,
+    # and is updated here
+    s.mlab_source.scalars = hv*0.1*(i+1)
+    plt.savefig('tmp_%04d.png' % i)
+# end create animation
+
+@@@CODE plot3d_mayavi.py from-to: # Define grid for 3D scalar field@# end define grid for 3D scalar field
+
+@@@CODE plot3d_mayavi.py from-to: # Define grid for 3D gradient field@# end define grid for 3D gradient field
+
+@@@CODE plot3d_mayavi.py from-to:# Draw 3D vector field with countours of 3D scalar field@# end draw 3D vector field with countours of 3D scalar field
