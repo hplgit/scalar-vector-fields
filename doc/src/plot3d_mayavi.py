@@ -19,7 +19,7 @@ curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
 
 # Create a figure with white background and black foreground
 plt.figure(1, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-# 'representation' controls the plot type, here a wireframe plot.
+# 'representation' controls the plot type, here a wireframe plot
 plt.surf(xv, yv, hv, extent=(0,1,0,1,0,1), representation='wireframe')
 # Decorate axes (nb_labels is the number of labels in each direction)
 plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5,
@@ -28,16 +28,16 @@ plt.axes(xlabel='x', ylabel='y', zlabel='z', nb_labels=5,
 plt.title('h(x,y)', size=0.4)
 
 # Simple plot of mountain and parametric curve.
-# Use 'extent' for auto-scaling
 plt.figure(2, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
 # The default for 'representation' is to color the surface elements.
 plt.surf(xv, yv, hv, extent=(0,1,0,1,0,1))
 # Add the parametric curve. tube_radius is the width of the curve
+# (use 'extent' for auto-scaling)
 plt.plot3d(curve_x, curve_y, curve_z, tube_radius=0.2,
            extent=(0,1,0,1,0,1))
 
-# Use 'warp_scale' for vertical scaling
 plt.figure(3, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
+# Use 'warp_scale' for vertical scaling
 plt.surf(xv, yv, hv, warp_scale=0.01, color=(.5, .5, .5))
 plt.plot3d(curve_x, curve_y, 0.01*curve_z, tube_radius=0.2)
 # endsimpleplots

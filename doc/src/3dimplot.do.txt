@@ -175,7 +175,7 @@ presented in Section ref{matplotlibcontourplots}.
 
 FIGURE:[fig/simple_contour_matplotlib, frac=1]  Different types of contour plots of a 2D scalar field in two and three dimensions. label{simplecontourmatplotlib}
 
-===== The gradient vector field of $h$ =====
+===== The gradient vector field =====
 label{plot:surf:gradient}
 
 The *gradient vector field* $\nabla h$ of a 2D scalar field $h(x,y)$ is defined by
@@ -302,9 +302,9 @@ contour plots.  The first two plots (default two-dimensional and
 three-dimensional contour plots) are shown in Figure
 ref{simplecontourmatplotlib}. The next four plots appear in Figure
 ref{advancedcontourmatplotlib}. Note that, when we asked Matplotlib to plot 10 contours,
-the response was, surprisingly, 9 contour lines, where one of the contours was incomplete. 
-This kind of behavior may also be found in other plotting packages: 
-The package will do its best to plot the requested number of complete contour lines, 
+the response was, surprisingly, 9 contour lines, where one of the contours was incomplete.
+This kind of behavior may also be found in other plotting packages:
+The package will do its best to plot the requested number of complete contour lines,
 but there is no guarantee that this number is achieved exactly.
 
 
@@ -432,24 +432,24 @@ same figure, until you manually change to a new figure.
 
 ===== Surface plots =====
 
-Mayavi has the functions `mesh` and `surf` for producing surface plots. 
-These are similar, but `surf` assumes an orthogonal grid, and uses this assumption to make efficient data structures. 
-`mesh` makes no such assumptions on the grid. 
-We will only use orthogonal grids, so we will always use `surf`.  
+Mayavi has the functions `mesh` and `surf` for producing surface plots.
+These are similar, but `surf` assumes an orthogonal grid, and uses this assumption to make efficient data structures, while
+`mesh` makes no such assumptions on the grid.
+Here we only use orthogonal grids and hence apply `surf`.
 The following code plots the surface $h(x,y)$ in (ref{plot:surf:heq}), as
 well as the parameterized curve $\bm{r}(t)$ in (ref{plot:surf:req}).
 The resulting graphics appears in Figure ref{plotmayavi}.
 
 @@@CODE plot3d_mayavi.py from-to:# Simple plot of mountain@# endsimpleplots
-`surf` can produce wireframe plots, 
-as well as plots where the faces of the surface are colored. 
-The parameter `representation` controls this, 
+`surf` can produce wireframe plots,
+as well as plots where the faces of the surface are colored.
+The parameter `representation` controls this,
 as exemplified in the first two plots.
 The first plot was also decorated with axes and a title.
 
 FIGURE:[fig/plot_mayavi] Surface plots produced with the `surf` function of Mayavi: The curve $\bm{r}(t)$ is also shown in the two last plots. label{plotmayavi}
 
-The calls to `plt.figure()` take three parameters: First the usual index for the plot, then two tuples of numbers , 
+The calls to `plt.figure()` take three parameters: First the usual index for the plot, then two tuples of numbers ,
 representing the RGB-values to be used for the foreground (`fgcolor`) and the background (`bgcolor`).
 White and black are  (1,1,1) and (0,0,0), respectively. The foreground color is used for text and labels included in the plot.
 The `color` attribute in `plt.surf` adjusts the surface so that it is colored with small variations from the provided base color, here `(.5, .5, .5)`.
@@ -458,18 +458,18 @@ The command `plot3d` is used to plot the curve $\bm{r}(t)$.  We have here increa
 attribute `tube_radius` to make the curve thicker and more visible.
 
 Mayavi does no auto-scaling of the axes by default (contrary to Matplotlib),
-so if the magnitudes in the vertical and horizontal directions are very different, as they are for $h(x,y)$, 
-the plots may be very concentrated in one direction. 
-We therefore need to apply some auto-scaling procedure. 
+so if the magnitudes in the vertical and horizontal directions are very different, as they are for $h(x,y)$,
+the plots may be very concentrated in one direction.
+We therefore need to apply some auto-scaling procedure.
 In Figure ref{plotmayavi} two such procedures are exemplified.
-In the first two plots the parameter `extent` is used. 
-It tells Mayavi to auto-scale the surface and curve to fit the contents described 
+In the first two plots the parameter `extent` is used.
+It tells Mayavi to auto-scale the surface and curve to fit the contents described
 by the six listed values (we will return to what these values mean when we have a more illustrating example).
-Since the curve and the surface span different areas in space, we see that they are auto-scaled differently in the second plot, 
-with the undesired effect that $\bm{r}(t)$ is not drawn on the surface. 
-The last plot has avoided this problem by using the `warp_scale` parameter to scale in the vertical direction. 
-Not all Mayavi functions accept this parameter. A remedy for this is to scale the $z$-coordinates manually, 
-as here exemplified in the last `plot3d`-call. As is seen, the curve is drawn correctly with respect to the surface in the last plot. 
+Since the curve and the surface span different areas in space, we see that they are auto-scaled differently in the second plot,
+with the undesired effect that $\bm{r}(t)$ is not drawn on the surface.
+The last plot has avoided this problem by using the `warp_scale` parameter for scaling the vertical direction.
+Not all Mayavi functions accept this parameter. A remedy for this is to scale the $z$-coordinates manually,
+as here exemplified in the last `plot3d`-call. As is seen, the curve is drawn correctly with respect to the surface in the last plot.
 In the following we will use the `warp_scale` parameter to avoid such auto-scaling problems.
 
 
@@ -547,7 +547,7 @@ FIGURE:[fig/quiver_mayavi_advanced, frac=1] Gradient field with contour plot. la
 
 ===== A 3D scalar field and its gradient field =====
 
-Contrary to Matplotlib, Mayavi has functionality for drawing contours of 3D scalar fields.
+Mayavi has functionality for drawing contour surfaces of 3D scalar fields.
 Let us consider the 3D scalar field
 
 !bt
@@ -604,7 +604,7 @@ It is straightforward to create animations with Mayavi.
 In the following code the function $h(x,y)$ is scaled vertically,
 for different scaling constants between $0$ and $1$,
 and each plot is saved in its own file.
-The files can then be combined to one video, using appropriate software.
+The files can then be combined to a standard video file.
 
 @@@CODE plot3d_mayavi.py from-to:# Create animation@# end create animation
 
