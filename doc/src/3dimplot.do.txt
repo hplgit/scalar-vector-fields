@@ -302,7 +302,10 @@ contour plots.  The first two plots (default two-dimensional and
 three-dimensional contour plots) are shown in Figure
 ref{simplecontourmatplotlib}. The next four plots appear in Figure
 ref{advancedcontourmatplotlib}. Note that, when we asked Matplotlib to plot 10 contours,
-the response was, surprisingly, 9 contour lines, where one of the contours was incomplete.
+the response was, surprisingly, 9 contour lines, where one of the contours was incomplete. 
+This kind of behavior may also be found in other plotting packages: 
+The package will do its best to plot the requested number of complete contour lines, 
+but there is no guarantee that this number is achieved exactly.
 
 
 @@@CODE plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
