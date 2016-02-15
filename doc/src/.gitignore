@@ -1,10 +1,11 @@
-programming.aux
-programming.toc
-programming.idx
-programming.log
-programming.out
-programming.tex
+*.aux
+*.toc
+*.idx
+*.log
+*.log
+*.tex
 programming.pdf
+programmingmatlab.pdf
 .programming.exerinfo
 .DS_Store
 tmp_preprocess__programming.do.txt
@@ -14,3 +15,8 @@ test4.py
 test5.py
 quiver_demo.py
 plot3test.py
+plot3d_mayavi.ipynb
+plot3d_matplotlib.ipynb
+plot3d_matlabnb.m
+temp*.png
+anim*.png
