@@ -1,3 +1,7 @@
+======= ipython notebook for producing the Matplotlib plots =======
+
+We need the following import statements.
+
 !bc pypro
 import os
 from math import *
@@ -5,38 +9,47 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+!ec
+We then initialize the height and radius of the mountain.
 
-h0 = 2277.   # Height of the top of the mountain (m)
-R = 4.       # Radius of the mountain (km)
-#endinitvalues
+!bc pypro
+h0 = 2277. 
+R = 4.     
 !ec
 
+The following code defines the grid for the function $h(x,y)$ defined by Equation (ref{plot:surf:heq}) in Section ref{plot:surf:mesh_surf}.
+
 @@@CODE src/plot3d_matplotlib.py from-to: # Grid for x, y@# endinitgrid
+The coordinates of the parameterized curve $\bm{r}(t)$ defined by Equation ref{plot:surf:req} 
+in Section ref{plot:surf:3Dcurve} are computed as follows.
 
 @@@CODE src/plot3d_matplotlib.py fromto: s = np.linspace@# endparamcurve
-
-
-
-===== Figure ref{plotmatplotlib} =====
-
-
-@@@CODE src/plot3d_matplotlib.py from-to:# Simple plot of mountain@# endsimpleplots
-
-
-
+The gradient field of $h(x,y)$ and its grid are produced as follows.
 
 @@@CODE src/plot3d_matplotlib.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
 
 @@@CODE src/plot3d_matplotlib.py fromto: dhdx, dhdy@# endgradient
 
 
-===== Figure ref{simplecontourmatplotlib} and Figure ref{advancedcontourmatplotlib} =====
+
+=====  Surface plots =====
+
+Figure ref{plotmatplotlib} is produced as follows
+
+@@@CODE src/plot3d_matplotlib.py from-to:# Simple plot of mountain@# endsimpleplots
+
+
+
+=====  Contour plots =====
+
+The following code produces the plots in Figure ref{simplecontourmatplotlib} and Figure ref{advancedcontourmatplotlib}.
 
 @@@CODE src/plot3d_matplotlib.py fromto: # Default two-dimensional contour plot@#end contourplots
 
 
 
+===== Vector field plots =====
 
-===== Figure ref{plot:surf:mpl:quiver:fig} =====
+Figure ref{plot:surf:mpl:quiver:fig} is produced as follows.
 
 @@@CODE src/plot3d_matplotlib.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h

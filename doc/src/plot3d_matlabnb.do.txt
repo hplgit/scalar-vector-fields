@@ -1,30 +1,46 @@
+======= Matlab notebook for producing the Matlab plots =======
+
+We first initialize the height and radius of the mountain.
+
 !bc mpro
-h0 = 2277;   % Height of the top of the mountain (m)
-R = 4;      % Radius of the mountain (km)
+h0 = 2277;   
+R = 4;  
 !ec
 
+The following code defines the grid for the function $h(x,y)$ defined by Equation (ref{plot:surf:heq}) in Section ref{plot:surf:mesh_surf}.
+
 @@@CODE src/plot3d_matlab.m from-to: % Grid for x, y@% endinitgrid
+The coordinates of the parameterized curve $\bm{r}(t)$ defined by Equation ref{plot:surf:req} 
+in Section ref{plot:surf:3Dcurve} are computed as follows.
 
 @@@CODE src/plot3d_matlab.m fromto: s = linspace@% endparamcurve
 
-
-===== Figure ref{plotmatlab} =====
-
-@@@CODE src/plot3d_matlab.m fromto:% Simple plot of mountain@% endsimpleplots
-
-
+The gradient field of $h(x,y)$ and its grid are produced as follows.
 
 @@@CODE src/plot3d_matlab.m from-to: % Define a coarser grid for the vector field@% endcoarsergrid
 
 @@@CODE src/plot3d_matlab.m from-to: % startgradient@% endgradient
 
 
-===== Figure ref{simplecontourmatlab} and Figure ref{advancedcontourmatlab} =====
+
+===== Surface plots =====
+
+Figure ref{plotmatlab} is produced as follows
+
+@@@CODE src/plot3d_matlab.m fromto:% Simple plot of mountain@% endsimpleplots
+
+
+
+=====  Contour plots =====
+
+The following code produces the plots in Figure ref{simplecontourmatlab} and Figure ref{advancedcontourmatlab}.
 
 @@@CODE src/plot3d_matlab.m fromto: % Default two-dimensional contour plot@%end contourplots
 
 
 
-===== Figure ref{plot:surf:matlab:quiver:fig} =====
+===== Vector field plots =====
+
+Figure ref{plot:surf:matlab:quiver:fig} is produced as follows.
 
 @@@CODE src/plot3d_matlab.m from-to:% Draw contours and gradient field of h@% end draw contours and gradient field of h

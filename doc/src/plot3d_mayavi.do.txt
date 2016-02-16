@@ -1,55 +1,116 @@
+======= ipython notebook for producing the Mayavi plots =======
+
+We need the following import statements.
+
 !bc pypro
 import mayavi.mlab as plt
 import os
 from math import *
 import numpy as np
 
+import matplotlib.pyplot as plt2
+from mpl_toolkits.mplot3d import Axes3D
+!ec
+
+This is a utility function for showing Mayavi plots through Matplotlib
+
+!bc pypro
+def show_may_mpl(k):
+    plt.figure(k)
+    arr = plt.screenshot()
+    fig = plt2.figure(k)
+    ax=fig.gca()
+    ax.imshow(arr)
+!ec
+
+We now initialize the height and radius of the mountain.
+
+!bc pypro
 h0 = 2277.
 R = 4.
+!ec
 
-x = y = np.linspace(-10.,10.,41)
-xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)
-hv = h0/(1 + (xv**2+yv**2)/(R**2))
+The following code defines the grid for the function $h(x,y)$ defined by Equation (ref{plot:surf:heq}) in Section ref{plot:surf:mesh_surf}.
 
-s = np.linspace(0, 2*np.pi, 100)
-curve_x = 10*(1 - s/(2*np.pi))*np.cos(s)
-curve_y = 10*(1 - s/(2*np.pi))*np.sin(s)
-curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
+@@@CODE src/plot3d_mayavi.py from-to: # Grid for x, y@# endinitgrid
+The coordinates of the parameterized curve $\bm{r}(t)$ defined by Equation ref{plot:surf:req} 
+in Section ref{plot:surf:3Dcurve} are computed as follows.
+
+@@@CODE src/plot3d_mayavi.py fromto: s = np.linspace@# endparamcurve
+The gradient field of $h(x,y)$ and its grid are produced as follows.
+
+@@@CODE src/plot3d_mayavi.py from-to: # Define a coarser grid for the vector field@# endcoarsergrid
+
+@@@CODE src/plot3d_mayavi.py fromto: dhdx, dhdy@# endgradient
+
+
+=====  Surface plots =====
+
+Figure ref{plotmayavi} is produced as follows.
 
 @@@CODE src/plot3d_mayavi.py from-to:# Simple plot of mountain@# endsimpleplots
 
+!bc pypro
+for k in range(1,4):
+    show_may_mpl(k)
+!ec
 
+=== Subplots ===
+
+Figure ref{subplot} is produced by the following code.
 
 @@@CODE src/plot3d_mayavi.py from-to:# Create one figure with three subplots@# endsubplot
 
+!bc pypro
+show_may_mpl(4)
+!ec
+
+
+===== Contour plots =====
+
+The following code produces Figure ref{advancedcontourmayavi}
 
 @@@CODE src/plot3d_mayavi.py fromto:# Default contour plot plotted together with surf@#end contourplots
 
-
-# Define a coarser grid for the vector field
-x2 = y2 = np.linspace(-10.,10.,11)
-x2v, y2v = np.meshgrid(x2, y2, indexing='ij', sparse=False)
-h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
-# endcoarsergrid
-
-dhdx, dhdy = np.gradient(h2v)
+!bc pypro
+for k in range(5,10):
+    show_may_mpl(k)
+!ec
 
 
+===== Vector field plots =====
+
+Figure ref{plot:surf:may:quiver:fig} is produced as follows. The figure in the book is a rotated version of this.
+
+@@@CODE src/plot3d_mayavi.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+
+!bc pypro
+show_may_mpl(11)
+!ec
 
 
-# Create animation
-plt.figure(13, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
-s = plt.surf(xv, yv, hv)
+===== Animations =====
 
-for i in range(10):
-    # s.mlab_source.scalars is a handle for the values of the surface,
-    # and is updated here
-    s.mlab_source.scalars = hv*0.1*(i+1)
-    plt.savefig('tmp_%04d.png' % i)
-# end create animation
+In the following code the function $h(x,y)$ is scaled vertically,
+for different scaling constants between $0$ and $1$,
+and each plot is saved in its own file.
+The files can then be combined to a standard video file.
+
+@@@CODE src/plot3d_mayavi.py from-to:# Create animation@# end create animation
+
+
+===== A 3D scalar field and its gradient field =====
+
+A three-dimensional grid for $g(x,y,z)=z - h(x,y)$ can be computed as follows.
 
 @@@CODE src/plot3d_mayavi.py from-to: # Define grid for 3D scalar field@# end define grid for 3D scalar field
+The gradient field of $g$ can be computed as follows.
 
 @@@CODE src/plot3d_mayavi.py from-to: # Define grid for 3D gradient field@# end define grid for 3D gradient field
+The following code produces Figure ref{fig:quiver:mayavi}.
 
 @@@CODE src/plot3d_mayavi.py from-to:# Draw 3D vector field with countours of 3D scalar field@# end draw 3D vector field with countours of 3D scalar field
+
+!bc pypro
+show_may_mpl(12)
+!ec
