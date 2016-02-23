@@ -107,16 +107,16 @@ ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
 ax.ZAxis.FontSize = 24;
-print('images/simple_plot_matlab_tocrop','-dpdf')
-print('images/simple_plot_matlab','-dpng')
+print('simple_plot_matlab_tocrop','-dpdf')
+print('simple_plot_matlab','-dpng')
 
 figure(2)
 ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
 ax.ZAxis.FontSize = 24;
-print('images/simple_plot_colours_matlab_tocrop','-dpdf')
-print('images/simple_plot_colours_matlab','-dpng')
+print('simple_plot_colours_matlab_tocrop','-dpdf')
+print('simple_plot_colours_matlab','-dpng')
 
 % Save contour plots
 
@@ -124,51 +124,51 @@ figure(3)
 ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
-print('images/default_contour_matlab_tocrop','-dpdf')
-print('images/default_contour_matlab','-dpng')
+print('default_contour_matlab_tocrop','-dpdf')
+print('default_contour_matlab','-dpng')
 
 figure(4)
 ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
 ax.ZAxis.FontSize = 24;
-print('images/default_contour3_matlab_tocrop','-dpdf')
-print('images/default_contour3_matlab','-dpng')
+print('default_contour3_matlab_tocrop','-dpdf')
+print('default_contour3_matlab','-dpng')
 
 figure(6)
 ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
-print('images/contour_imshow_matlab_tocrop','-dpdf')
-print('images/contour_imshow_matlab','-dpng')
+print('contour_imshow_matlab_tocrop','-dpdf')
+print('contour_imshow_matlab','-dpng')
 
 figure(7)
 ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
-print('images/contour_10levels_matlab_tocrop','-dpdf')
-print('images/contour_10levels_matlab','-dpng')
+print('contour_10levels_matlab_tocrop','-dpdf')
+print('contour_10levels_matlab','-dpng')
 
 figure(8)
 ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
-print('images/contour_10levels_black_matlab_tocrop','-dpdf')
-print('images/contour_10levels_black_matlab','-dpng')
+print('contour_10levels_black_matlab_tocrop','-dpdf')
+print('contour_10levels_black_matlab','-dpng')
 
 figure(9)
 ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
-print('images/contour_speclevels_matlab_tocrop','-dpdf')
-print('images/contour_speclevels_matlab','-dpng')
+print('contour_speclevels_matlab_tocrop','-dpdf')
+print('contour_speclevels_matlab','-dpng')
 
 figure(10)
 ax = gca;
 ax.XAxis.FontSize = 24;
 ax.YAxis.FontSize = 24;
-print('images/contour_clabel_matlab_tocrop','-dpdf')
-print('images/contour_clabel_matlab','-dpng')
+print('contour_clabel_matlab_tocrop','-dpdf')
+print('contour_clabel_matlab','-dpng')
 
 
 % Save vector field plots
@@ -177,5 +177,5 @@ figure(11)
 ax = gca;
 ax.XAxis.FontSize = 12;
 ax.YAxis.FontSize = 12;
-print('images/quiver_matlab_advanced_tocrop','-dpdf')
-print('images/quiver_matlab_advanced','-dpng')
+print('quiver_matlab_advanced_tocrop','-dpdf')
+print('quiver_matlab_advanced','-dpng')

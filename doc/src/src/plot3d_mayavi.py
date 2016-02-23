@@ -5,15 +5,20 @@ import numpy as np
 
 h0 = 2277.
 R = 4.
+#endinitvalues
 
+# Grid for x, y values (km)
 x = y = np.linspace(-10.,10.,41)
 xv, yv = np.meshgrid(x, y, indexing='ij', sparse=False)
+
 hv = h0/(1 + (xv**2+yv**2)/(R**2))
+# endinitgrid
 
 s = np.linspace(0, 2*np.pi, 100)
 curve_x = 10*(1 - s/(2*np.pi))*np.cos(s)
 curve_y = 10*(1 - s/(2*np.pi))*np.sin(s)
 curve_z = h0/(1 + 100*(1 - s/(2*np.pi))**2/(R**2))
+# endparamcurve
 
 # Simple plot of mountain
 
@@ -92,8 +97,22 @@ h2v = h0/(1 + (x2v**2 + y2v**2)/(R**2)) # Surface on coarse grid
 # endcoarsergrid
 
 dhdx, dhdy = np.gradient(h2v)
+# endgradient
 
 
+
+# Draw contours and gradient field of h
+plt.figure(11, fgcolor=(.0, .0, .0), bgcolor=(1.0, 1.0, 1.0))
+plt.contour_surf(xv, yv, hv, contours=20, warp_scale=0.01)
+
+# mode controls the style how vectors are drawn
+# color controls the colors of the vectors
+# scale_mode='none' ensures that vectors are drawn with the same length
+plt.quiver3d(x2v, y2v, 0.01*h2v, dhdx, dhdy, np.zeros_like(dhdx),
+             mode='arrow', color=(1,0,0), scale_mode='none')
+# end draw contours and gradient field of h
+raw_input('Rotate the figure so that it is viewed from above, and then press any key to continue')
+plt.savefig('quiver_mayavi_advanced.png')
 
 
 # Create animation
@@ -135,35 +154,35 @@ plt.quiver3d(x2v, y2v, z2v, dhdx, dhdy, dhdz, mode='arrow',\
 
 # Save figures to files
 plt.figure(1)
-plt.savefig('images/simple_plot_mayavi.png')
+plt.savefig('simple_plot_mayavi.png')
 
 plt.figure(2)
-plt.savefig('images/simple_plot_colours_mayavi.png')
+plt.savefig('simple_plot_colours_mayavi.png')
 
 plt.figure(3)
-plt.savefig('images/simple_plot_colours_mayavi_2.png')
+plt.savefig('simple_plot_colours_mayavi_2.png')
 
 plt.figure(4)
-plt.savefig('images/subplot.png')
+plt.savefig('subplot.png')
 
 # Save contours plots
 
 plt.figure(5)
-plt.savefig('images/simple_contour_mayavi.png')
+plt.savefig('simple_contour_mayavi.png')
 
 plt.figure(6)
-plt.savefig('images/contour_10levels_mayavi.png')
+plt.savefig('contour_10levels_mayavi.png')
 
 plt.figure(7)
-plt.savefig('images/contour_10levels_black_mayavi.png')
+plt.savefig('contour_10levels_black_mayavi.png')
 
 plt.figure(8)
-plt.savefig('images/contour_speclevels_mayavi.png')
+plt.savefig('contour_speclevels_mayavi.png')
 
 plt.figure(9)
-plt.savefig('images/contour_imshow_mayavi.png')
+plt.savefig('contour_imshow_mayavi.png')
 
 # Save vector field plots
 
 plt.figure(12)
-plt.savefig('images/quiver_mayavi.png')
+plt.savefig('quiver_mayavi.png')

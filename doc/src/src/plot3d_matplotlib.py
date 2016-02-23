@@ -134,46 +134,46 @@ plt.axis('equal')
 plt.rc('font', **font)
 
 plt.figure(1)
-plt.savefig('images/simple_plot_matplotlib.pdf')
-plt.savefig('images/simple_plot_matplotlib.png')
+plt.savefig('simple_plot_matplotlib.pdf')
+plt.savefig('simple_plot_matplotlib.png')
 
 plt.figure(2)
-plt.savefig('images/simple_plot_colours_matplotlib.pdf')
-plt.savefig('images/simple_plot_colours_matplotlib.png')
+plt.savefig('simple_plot_colours_matplotlib.pdf')
+plt.savefig('simple_plot_colours_matplotlib.png')
 
 # Save contour plots
 
 plt.figure(3)
-plt.savefig('images/default_contour_matplotlib.pdf')
-plt.savefig('images/default_contour_matplotlib.png')
+plt.savefig('default_contour_matplotlib.pdf')
+plt.savefig('default_contour_matplotlib.png')
 
 plt.figure(4)
-plt.savefig('images/default_contour3_matplotlib.pdf')
-plt.savefig('images/default_contour3_matplotlib.png')
+plt.savefig('default_contour3_matplotlib.pdf')
+plt.savefig('default_contour3_matplotlib.png')
 
 plt.figure(5)
-plt.savefig('images/contour3_dims_matplotlib.png')
-plt.savefig('images/contour3_dims_matplotlib.pdf')
+plt.savefig('contour3_dims_matplotlib.png')
+plt.savefig('contour3_dims_matplotlib.pdf')
 
 plt.figure(6)
-plt.savefig('images/contour_imshow_matplotlib.pdf')
-plt.savefig('images/contour_imshow_matplotlib.png')
+plt.savefig('contour_imshow_matplotlib.pdf')
+plt.savefig('contour_imshow_matplotlib.png')
 
 plt.figure(7)
-plt.savefig('images/contour_10levels_matplotlib.pdf')
-plt.savefig('images/contour_10levels_matplotlib.png')
+plt.savefig('contour_10levels_matplotlib.pdf')
+plt.savefig('contour_10levels_matplotlib.png')
 
 plt.figure(8)
-plt.savefig('images/contour_10levels_black_matplotlib.pdf')
-plt.savefig('images/contour_10levels_black_matplotlib.png')
+plt.savefig('contour_10levels_black_matplotlib.pdf')
+plt.savefig('contour_10levels_black_matplotlib.png')
 
 plt.figure(9)
-plt.savefig('images/contour_speclevels_matplotlib.pdf')
-plt.savefig('images/contour_speclevels_matplotlib.png')
+plt.savefig('contour_speclevels_matplotlib.pdf')
+plt.savefig('contour_speclevels_matplotlib.png')
 
 plt.figure(10)
-plt.savefig('images/contour_clabel_matplotlib.pdf')
-plt.savefig('images/contour_clabel_matplotlib.png')
+plt.savefig('contour_clabel_matplotlib.pdf')
+plt.savefig('contour_clabel_matplotlib.png')
 
 
 # Save vector field plots
@@ -181,5 +181,5 @@ plt.savefig('images/contour_clabel_matplotlib.png')
 plt.rc('font', **font2)
 
 plt.figure(11)
-plt.savefig('images/quiver_matplotlib_advanced.pdf')
-plt.savefig('images/quiver_matplotlib_advanced.png')
+plt.savefig('quiver_matplotlib_advanced.pdf')
+plt.savefig('quiver_matplotlib_advanced.png')
