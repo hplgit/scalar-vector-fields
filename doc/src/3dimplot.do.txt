@@ -529,7 +529,7 @@ Mayavi supports only vector fields in three-dimensional space.
 We will therefore visualize the two-dimensional gradient field (ref{plot:surf:gradient:eq}) by adding a third component of zero.
 The following code plots this gradient field  together with the contours of $h$.
 
-@@@CODE src/plot3d_mayavi_manual.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
+@@@CODE src/plot3d_mayavi.py from-to:# Draw contours and gradient field of h@# end draw contours and gradient field of h
 This will produce a 3D view, which we again can rotate to obtain a 2D view.
 The result is shown in Figure ref{plot:surf:may:quiver:fig}, which is similar to Figure ref{plot:surf:mpl:quiver:fig}.
 
