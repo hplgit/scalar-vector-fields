@@ -13,9 +13,13 @@ fi
 # The scripts are in src, run from there, place results in images dir
 # (approved images can then be moved to fig for inclusion in the document)
 cd src
-rm -rf *.png *.pdf
+#rm -rf *.png *.pdf
 #system octave ./plot3d_matlab.m
 mv -f *.png *.pdf ../images
+cd ..
+
+
+
 
 system pdfcrop --margins 10 images/simple_plot_matlab_tocrop.pdf images/simple_plot_matlab.pdf
 system pdfcrop --margins 10 images/simple_plot_colours_matlab_tocrop.pdf images/simple_plot_colours_matlab.pdf
