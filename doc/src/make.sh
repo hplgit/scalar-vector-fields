@@ -28,4 +28,5 @@ system pdflatex $namematlab
 system pdflatex $namematlab
 
 system doconce format ipynb plot3d_matplotlib.do.txt  --replace_ref_by_latex_auxno=$name.aux --encoding=utf-8 --allow_refs_to_external_docs
+system doconce format ipynb plot3d_mayavi.do.txt  --replace_ref_by_latex_auxno=$name.aux --encoding=utf-8 --allow_refs_to_external_docs
 system doconce format matlabnb plot3d_matlabnb.do.txt --replace_ref_by_latex_auxno=$namematlab.aux --encoding=utf-8 --allow_refs_to_external_docs
