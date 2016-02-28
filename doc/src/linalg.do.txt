@@ -301,7 +301,7 @@ a[:]
 !ec
 In the code for Gaussian elimination, we first eliminate the entries below the diagonal in the
 first column, by adding a scaled version of the first row to the other
-rows, Then the same procedure is applied for the second row, and so
+rows. Then the same procedure is applied for the second row, and so
 on. The result is an upper triangular matrix. The code can fail if
 some of the entries `A[j,j]` become zero along the way. To avoid
 this, we can swap rows when the problem arises.  The following code
@@ -345,7 +345,7 @@ tolerance.
 
 A more reliable way to compute the rank is to compute the
 singular value decomposition of `A`, and check how many of the
-singular values which are larger than a threshold `epsilon`:
+singular values that are larger than a threshold `epsilon`:
 
 !bc pyshell
 >>> A = np.array([[1, 2.01], [2.01, 4.0401]])
@@ -423,7 +423,7 @@ Eigenvalues can also be computed exactly:
 >>> A.eigenvals()
 {2: 1, 5: 1}
 !ec
-The output is a dictionary (see Chapter 6) [hpl: need exact reference here]
+The output is a dictionary
 meaning here that 2 is an eigenvalue with multiplicity 1 and 5 is an
 eigenvalue with multiplicity 1. It is more convenient to have the eigenvalues
 in a list:
@@ -433,7 +433,7 @@ in a list:
 >>> e
 [2, 5]
 !ec
-Eigenvector computations has a somewhat complicated output:
+Eigenvector computations have a somewhat complicated output:
 
 !bc pyshell
 >>> A.eigenvects()
